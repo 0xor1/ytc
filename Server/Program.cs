@@ -23,7 +23,8 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.UseRouting();
-app.MapGrpcService<CounterService>().EnableGrpcWeb();
+app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+app.MapGrpcService<CounterService>();
 app.MapFallbackToFile("index.html");
 
 app.Run();
