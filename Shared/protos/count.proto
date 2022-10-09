@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "DnskGrpc";
+
+package count;
+
+service Counter {
+  rpc Count (CountRequest) returns (CountReply);
+}
+
+message CountRequest {}
+
+message CountReply {
+  uint32 count = 1;
+}
