@@ -16,7 +16,7 @@ public class CounterService : Counter.CounterBase
 
     public override Task<CountReply> Count(CountRequest request, ServerCallContext context)
     {
-        _logger.LogInformation("counting...");
+        _logger.LogError("counting...");
         return Task.FromResult(new CountReply
         {
             Count = _count++
