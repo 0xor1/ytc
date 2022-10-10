@@ -8,3 +8,7 @@ revolving around the primary technologies:
 * Server - Aspnet core Grpc
 * DB - Ef core
 
+```bash
+./bin/pre
+```
+to start docker containers
