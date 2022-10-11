@@ -22,5 +22,9 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Db\Dnsk.Db.csproj" />
+  </ItemGroup>
   
 </Project>

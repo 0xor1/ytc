@@ -1,5 +1,7 @@
-﻿using DnskGrpc;
+﻿using Dnsk.Db;
+using DnskGrpc;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Dnsk.Shared.Services;
@@ -8,18 +10,25 @@ public class CounterService : Counter.CounterBase
 {
     private static uint _count = 0;
     private readonly ILogger<CounterService> _logger;
+    private readonly DnskDb _db;
     
-    public CounterService(ILogger<CounterService> logger)
+    public CounterService(ILogger<CounterService> logger, DnskDb db)
     {
         _logger = logger;
+        _db = db;
     }
 
-    public override Task<CountReply> Count(CountRequest request, ServerCallContext context)
+    public override async  Task<CountReply> Count(CountRequest request, ServerCallContext context)
     {
         _logger.LogError("counting...");
-        return Task.FromResult(new CountReply
+        await _db.Auths.AddAsync(new Auth()
         {
-            Count = _count++
+            Id = Ulid.NewUlid()
         });
+        await _db.SaveChangesAsync();
+        return new CountReply
+        {
+            Count = (uint)await _db.Auths.CountAsync()
+        };
     }
 }

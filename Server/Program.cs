@@ -1,8 +1,21 @@
+using Dnsk.Db;
 using Dnsk.Shared.Services;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddGrpc();
-
+builder.Services.AddGrpc(); 
+builder.Services.AddDbContext<DnskDb>(
+    dbContextOptions =>
+    {
+        var cnnStrBldr = new MySqlConnectionStringBuilder("Server=localhost;Database=Dnsk;Uid=Dnsk;Pwd=C0-Mm-0n-Dnsk");
+        cnnStrBldr.Pooling = true;
+        cnnStrBldr.MaximumPoolSize = 100;
+        cnnStrBldr.MinimumPoolSize = 1;
+        var version = new MariaDbServerVersion(new Version(10, 8));
+        dbContextOptions
+            .UseMySql(cnnStrBldr.ToString(), version, opts => { opts.CommandTimeout(1); });
+    });
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
