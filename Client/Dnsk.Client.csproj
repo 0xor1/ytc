@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Dnsk.Shared.csproj" />
+    <ProjectReference Include="..\Shared\Dnsk.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

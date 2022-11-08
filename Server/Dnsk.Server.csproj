@@ -17,7 +17,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\Dnsk.Client.csproj" />
     <ProjectReference Include="..\Db\Dnsk.Db.csproj" />
-    <ProjectReference Include="..\Shared\Dnsk.Shared.csproj" />
+    <ProjectReference Include="..\Dnsk.Common\Dnsk.Common.csproj" />
+    <ProjectReference Include="..\Shared\Dnsk.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Session.cs" />
   </ItemGroup>
 
 </Project>
