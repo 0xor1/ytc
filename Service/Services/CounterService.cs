@@ -1,10 +1,10 @@
 ﻿using Dnsk.Db;
-using DnskGrpc;
+using Dnsk.Service;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Dnsk.Shared.Services;
+namespace Dnsk.Service.Services;
 
 public class CounterService : Counter.CounterBase
 {

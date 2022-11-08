@@ -1,5 +1,5 @@
 using Dnsk.Db;
-using Dnsk.Shared.Services;
+using Dnsk.Service.Services;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
