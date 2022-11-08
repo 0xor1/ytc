@@ -6,7 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Server", "Server\Dnsk.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Client", "Client\Dnsk.Client.csproj", "{9A214248-6D1D-42D6-BC42-4A3338D73D8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Service", "Shared\Dnsk.Service.csproj", "{78970BC0-CD11-4DB2-BF9E-D9F7D33F3AAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Service", "Service\Dnsk.Service.csproj", "{78970BC0-CD11-4DB2-BF9E-D9F7D33F3AAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnsk.Db", "Db\Dnsk.Db.csproj", "{470BC0E0-52BE-4530-9AA6-6EA273E76698}"
 EndProject
