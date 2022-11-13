@@ -21,14 +21,14 @@ public class CounterService : Counter.CounterBase
     public override async  Task<CountReply> Count(CountRequest request, ServerCallContext context)
     {
         _logger.LogError("counting...");
-        await _db.Auths.AddAsync(new Auth()
-        {
-            Id = Ulid.NewUlid()
-        });
-        await _db.SaveChangesAsync();
+        // await _db.Auths.AddAsync(new Auth()
+        // {
+        //     Id = Ulid.NewUlid()
+        // });
+        // await _db.SaveChangesAsync();
         return new CountReply
         {
-            Count = (uint)await _db.Auths.CountAsync()
+            Count = (uint)_count++
         };
     }
 }
