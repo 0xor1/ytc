@@ -7,23 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SupportedPlatform Include="browser" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="protos\count.proto" />
+    <Protobuf Include="..\Proto\protos\count.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.21.7" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.49.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.49.0" />
     <PackageReference Include="Grpc.Tools" Version="2.49.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MessagePack" Version="2.4.35" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common\Dnsk.Common.csproj" />
     <ProjectReference Include="..\Db\Dnsk.Db.csproj" />
   </ItemGroup>
   

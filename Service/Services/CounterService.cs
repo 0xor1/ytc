@@ -1,7 +1,7 @@
 ﻿using Dnsk.Db;
-using Dnsk.Service;
+using Dnsk.Proto;
+using Dnsk.Service.Util;
 using Grpc.Core;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Dnsk.Service.Services;
@@ -18,7 +18,7 @@ public class CounterService : Counter.CounterBase
         _db = db;
     }
 
-    public override async  Task<CountReply> Count(CountRequest request, ServerCallContext context)
+    public override async  Task<CountReply> Count(CountRequest req, ServerCallContext stx)
     {
         _logger.LogError("counting...");
         // await _db.Auths.AddAsync(new Auth()
@@ -26,6 +26,8 @@ public class CounterService : Counter.CounterBase
         //     Id = Ulid.NewUlid()
         // });
         // await _db.SaveChangesAsync();
+        var ses = stx.GetSession();
+        
         return new CountReply
         {
             Count = (uint)_count++

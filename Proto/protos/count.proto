@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Dnsk.Service";
+option csharp_namespace = "Dnsk.Proto";
 
 package count;
 

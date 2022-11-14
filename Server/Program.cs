@@ -30,16 +30,6 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.UseRouting();
-app.Use(async (ctx, fn) =>
-{
-    var log = ctx.RequestServices.GetRequiredService<ILogger>();
-    foreach (var c in ctx.Request.Headers.Cookie)
-    {
-        log.LogError(c);
-    }
-    await fn();
-    ctx.Response.Cookies.Append("yolo", "nolo");
-});
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 app.MapGrpcService<CounterService>();
 app.MapFallbackToFile("index.html");
