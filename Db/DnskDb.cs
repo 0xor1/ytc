@@ -1,4 +1,3 @@
-using Dnsk.Db.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Db;
@@ -8,17 +7,11 @@ public class DnskDb : DbContext
 
     public DbSet<Auth> Auths { get; set; } = null!;
     
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        configurationBuilder
-            .Properties<Ulid>()
-            .HaveConversion<UlidConverter>();
-    }
 }
 
 public class Auth
 {
-    public Ulid Id { get; set; }
+    public string Id { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
     public DateTime LastAuthedOn { get; set; }
