@@ -1,10 +1,12 @@
 using Dnsk.Db;
 using Dnsk.Service.Services;
+using Dnsk.Service.Util;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddGrpc(); 
+builder.Services.AddGrpc();
+builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddDbContext<DnskDb>(
     dbContextOptions =>
     {
