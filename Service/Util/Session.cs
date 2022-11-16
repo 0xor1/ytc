@@ -1,8 +1,9 @@
-﻿using Dnsk.Common;
+﻿using System.Security;
+using System.Security.Cryptography;
+using Dnsk.Common;
 using Grpc.Core;
 using MessagePack;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Dnsk.Service.Util;
 
@@ -25,6 +26,8 @@ public record Session
 public class SessionManager: ISessionManager
 {
     private const string SessionName = "dnsk";
+    private static readonly HashAlgorithmName HashAlgo = HashAlgorithmName.SHA256;
+    private static readonly RSASignaturePadding SigPadding = RSASignaturePadding.Pkcs1;
     private Session? _cache { get; set; }
 
     public Session Get(ServerCallContext stx)
@@ -40,7 +43,7 @@ public class SessionManager: ISessionManager
     {
         var ses = new Session()
         {
-            Id = Ulid.NewUlid().ToBase64(),
+            Id = Id.New(),
             AuthedOn = DateTime.UtcNow
         };
         _cache = ses;
@@ -63,7 +66,7 @@ public class SessionManager: ISessionManager
         {
             var ses = new Session()
             {
-                Id = Ulid.NewUlid().ToBase64(),
+                Id = Id.New(),
                 AuthedOn = null
             };
             SetCookie(stx, ses);
@@ -72,19 +75,40 @@ public class SessionManager: ISessionManager
         else
         {
             // there is a session so lets get it from the cookie
-            var bytes = Convert.FromBase64String(c);
-            var ses = MessagePackSerializer.Deserialize<Session>(bytes);
-            return ses;
+            var signedSessionBytes = Convert.FromBase64String(c);
+            var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
+            using (RSA rsa = RSA.Create())
+            {
+                var isValid = rsa.VerifyData(signedSes.Session, signedSes.Signature, HashAlgo, SigPadding);
+                if (!isValid)
+                {
+                    throw new SecurityException("Session signature verification failed");
+                } 
+            }
+            return MessagePackSerializer.Deserialize<Session>(signedSes.Session);
         }
     }
     
     private static void SetCookie(ServerCallContext stx, Session ses)
     {
-        var bytes = MessagePackSerializer.Serialize(ses);
-        // use messagepack to convert session to bytes
-        // then sign the bytes, then encrypt the bytes
-        // then write the bytes in base64 format to the session cookie
-        stx.GetHttpContext().Response.Cookies.Append(SessionName, Convert.ToBase64String(bytes), new CookieOptions()
+        // turn session into bytes
+        var sesBytes = MessagePackSerializer.Serialize(ses);
+        // sign the session
+        byte[] sesSig;
+        using (RSA rsa = RSA.Create())
+        {
+            sesSig = rsa.SignData(sesBytes, HashAlgo, SigPadding);
+        }
+        // create the cookie value with the session and signature
+        var signedSes = new SignedSession()
+        {
+            Session = sesBytes,
+            Signature = sesSig
+        };
+        // get final cookie bytes
+        var cookieBytes = MessagePackSerializer.Serialize(signedSes);
+        // create cookie
+        stx.GetHttpContext().Response.Cookies.Append(SessionName, Convert.ToBase64String(cookieBytes), new CookieOptions()
         {
             Secure = true,
             HttpOnly = true,
@@ -95,6 +119,15 @@ public class SessionManager: ISessionManager
     private static void DeleteCookie(ServerCallContext stx)
     {
         stx.GetHttpContext().Response.Cookies.Delete(SessionName);
+    }
+
+    [MessagePackObject]
+    public record SignedSession
+    {
+        [Key(0)] 
+        public byte[] Session { get; init; }
+        [Key(1)] 
+        public byte[] Signature { get; init; }
     }
 }
 
