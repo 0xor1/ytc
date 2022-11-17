@@ -14,11 +14,11 @@ public record Session
     public string Id { get; init; }
     
     [Key(1)]
-    public DateTime? AuthedOn { get; init; }
-
-    [IgnoreMember]
-    public bool IsAuthed => AuthedOn.IsntNull();
+    public DateTime? StartedOn { get; init; }
     
+    [Key(2)]
+    public bool IsAuthed { get; init; }
+
     [IgnoreMember]
     public bool IsAnon => !IsAuthed;
 }
@@ -26,8 +26,6 @@ public record Session
 public class SessionManager: ISessionManager
 {
     private const string SessionName = "dnsk";
-    private static readonly HashAlgorithmName HashAlgo = HashAlgorithmName.SHA256;
-    private static readonly RSASignaturePadding SigPadding = RSASignaturePadding.Pkcs1;
     private Session? _cache { get; set; }
 
     public Session Get(ServerCallContext stx)
@@ -39,12 +37,13 @@ public class SessionManager: ISessionManager
         return _cache;
     }
 
-    public Session Login(ServerCallContext stx)
+    public Session Login(ServerCallContext stx, string userId)
     {
         var ses = new Session()
         {
-            Id = Id.New(),
-            AuthedOn = DateTime.UtcNow
+            Id = userId,
+            StartedOn = DateTime.UtcNow,
+            IsAuthed = true
         };
         _cache = ses;
         SetCookie(stx, ses);
@@ -67,7 +66,8 @@ public class SessionManager: ISessionManager
             var ses = new Session()
             {
                 Id = Id.New(),
-                AuthedOn = null
+                StartedOn = DateTime.UtcNow,
+                IsAuthed = false
             };
             SetCookie(stx, ses);
             return ses;
@@ -77,13 +77,13 @@ public class SessionManager: ISessionManager
             // there is a session so lets get it from the cookie
             var signedSessionBytes = Convert.FromBase64String(c);
             var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
-            using (RSA rsa = RSA.Create())
+            using (var hmac = new HMACSHA256(new byte[]{1,1,1}))
             {
-                var isValid = rsa.VerifyData(signedSes.Session, signedSes.Signature, HashAlgo, SigPadding);
-                if (!isValid)
+                var sesSig = hmac.ComputeHash(signedSes.Session);
+                if (!sesSig.SequenceEqual(signedSes.Signature))
                 {
                     throw new SecurityException("Session signature verification failed");
-                } 
+                }
             }
             return MessagePackSerializer.Deserialize<Session>(signedSes.Session);
         }
@@ -95,9 +95,9 @@ public class SessionManager: ISessionManager
         var sesBytes = MessagePackSerializer.Serialize(ses);
         // sign the session
         byte[] sesSig;
-        using (RSA rsa = RSA.Create())
+        using (var hmac = new HMACSHA256(new byte[]{1,1,1}))
         {
-            sesSig = rsa.SignData(sesBytes, HashAlgo, SigPadding);
+            sesSig = hmac.ComputeHash(sesBytes);
         }
         // create the cookie value with the session and signature
         var signedSes = new SignedSession()
@@ -134,6 +134,6 @@ public class SessionManager: ISessionManager
 public interface ISessionManager
 {
     public Session Get(ServerCallContext stx);
-    public Session Login(ServerCallContext stx);
+    public Session Login(ServerCallContext stx, string userId);
     public Session Logout(ServerCallContext stx);
 }
