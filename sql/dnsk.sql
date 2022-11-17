@@ -6,7 +6,7 @@ USE Dnsk;
 
 DROP TABLE IF EXISTS Auths;
 CREATE TABLE Auths (
-    Id VARCHAR(24) NOT NULL,
+    Id CHAR(22) NOT NULL,
     Email VARCHAR(250) NULL,
     Phone VARCHAR(20) NULL,
     LastAuthedOn DATETIME(3) NOT NULL,
