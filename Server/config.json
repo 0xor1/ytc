@@ -1,4 +1,7 @@
 ﻿{
+  "server": {
+    "listen": "https://localhost:9500"
+  },
   "db": {
     "connection": "Server=localhost;Database=Dnsk;Uid=Dnsk;Pwd=C0-Mm-0n-Dnsk"
   },

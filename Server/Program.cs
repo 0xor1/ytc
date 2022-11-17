@@ -35,4 +35,4 @@ app.UseRouting();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 app.MapGrpcService<CounterService>();
 app.MapFallbackToFile("index.html");
-app.Run();
+app.Run(Config.Server.Listen);
