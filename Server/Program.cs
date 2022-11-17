@@ -10,7 +10,7 @@ builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddDbContext<DnskDb>(
     dbContextOptions =>
     {
-        var cnnStrBldr = new MySqlConnectionStringBuilder("Server=localhost;Database=Dnsk;Uid=Dnsk;Pwd=C0-Mm-0n-Dnsk");
+        var cnnStrBldr = new MySqlConnectionStringBuilder(Config.Db.Connection);
         cnnStrBldr.Pooling = true;
         cnnStrBldr.MaximumPoolSize = 100;
         cnnStrBldr.MinimumPoolSize = 1;

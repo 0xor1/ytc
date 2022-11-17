@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Collections.Immutable;
+using System.Security;
 using System.Security.Cryptography;
 using Dnsk.Common;
 using Grpc.Core;
@@ -26,6 +27,22 @@ public record Session
 public class SessionManager: ISessionManager
 {
     private const string SessionName = "dnsk";
+    private static readonly byte[][] SignatureKeys;
+
+    static SessionManager()
+    {
+        SignatureKeys = Config.Session.SignatureKeys.Select(x => Base64.UrlDecode(x)).ToArray();
+        if (SignatureKeys.Count(x => x.Length != 64) > 0)
+        {
+            throw new InvalidDataException("config: all session signature keys must be 64 bytes long");
+        }
+
+        if (SignatureKeys.Length == 0)
+        {
+            throw new InvalidDataException("config: there must be at least 1 session signature key");
+        }
+    }
+    
     private Session? _cache { get; set; }
 
     public Session Get(ServerCallContext stx)
@@ -75,17 +92,28 @@ public class SessionManager: ISessionManager
         else
         {
             // there is a session so lets get it from the cookie
-            var signedSessionBytes = Convert.FromBase64String(c);
+            var signedSessionBytes = Base64.UrlDecode(c);
             var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
-            using (var hmac = new HMACSHA256(new byte[]{1,1,1}))
+            var i = 0;
+            foreach (var signatureKey in SignatureKeys)
             {
-                var sesSig = hmac.ComputeHash(signedSes.Session);
-                if (!sesSig.SequenceEqual(signedSes.Signature))
+                using (var hmac = new HMACSHA256(signatureKey))
                 {
-                    throw new SecurityException("Session signature verification failed");
+                    var sesSig = hmac.ComputeHash(signedSes.Session);
+                    if (sesSig.SequenceEqual(signedSes.Signature))
+                    {
+                        var ses = MessagePackSerializer.Deserialize<Session>(signedSes.Session);
+                        if (i > 0)
+                        {
+                            // if it wasnt signed using the latest key, resign the cookie using the latest key
+                            SetCookie(stx, ses);
+                        }
+                        return ses;
+                    }
+                    i++;
                 }
             }
-            return MessagePackSerializer.Deserialize<Session>(signedSes.Session);
+            throw new SecurityException("Session signature verification failed");
         }
     }
     
@@ -95,7 +123,7 @@ public class SessionManager: ISessionManager
         var sesBytes = MessagePackSerializer.Serialize(ses);
         // sign the session
         byte[] sesSig;
-        using (var hmac = new HMACSHA256(new byte[]{1,1,1}))
+        using (var hmac = new HMACSHA256(SignatureKeys.First()))
         {
             sesSig = hmac.ComputeHash(sesBytes);
         }
@@ -108,7 +136,7 @@ public class SessionManager: ISessionManager
         // get final cookie bytes
         var cookieBytes = MessagePackSerializer.Serialize(signedSes);
         // create cookie
-        stx.GetHttpContext().Response.Cookies.Append(SessionName, Convert.ToBase64String(cookieBytes), new CookieOptions()
+        stx.GetHttpContext().Response.Cookies.Append(SessionName, Base64.UrlEncode(cookieBytes), new CookieOptions()
         {
             Secure = true,
             HttpOnly = true,
