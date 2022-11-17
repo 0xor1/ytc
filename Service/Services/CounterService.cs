@@ -11,13 +11,13 @@ public class CounterService : Counter.CounterBase
     private static uint _count = 0;
     private readonly ILogger<CounterService> _logger;
     private readonly DnskDb _db;
-    private readonly ISessionManager _sessionManager;
+    private readonly ISessionManager _session;
     
-    public CounterService(ILogger<CounterService> logger, DnskDb db, ISessionManager sessionManager)
+    public CounterService(ILogger<CounterService> logger, DnskDb db, ISessionManager session)
     {
         _logger = logger;
         _db = db;
-        _sessionManager = sessionManager;
+        _session = session;
     }
 
     public override async  Task<CountReply> Count(CountRequest req, ServerCallContext stx)
@@ -28,7 +28,7 @@ public class CounterService : Counter.CounterBase
         //     Id = Ulid.NewUlid()
         // });
         // await _db.SaveChangesAsync();
-        var ses = _sessionManager.Get(stx);
+        var ses = _session.Get(stx);
         
         return new CountReply
         {
