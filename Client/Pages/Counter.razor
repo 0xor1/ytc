@@ -1,6 +1,6 @@
 ﻿@page "/counter"
 @using Dnsk.Proto
-@inject Dnsk.Proto.Counter.CounterClient Client;
+@inject Dnsk.Proto.Api.ApiClient Client;
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
@@ -14,7 +14,13 @@
 
     private async Task IncrementCount()
     {
-        var res = await Client.CountAsync(new CountRequest());
-        currentCount = res.Count;
+        try
+        {
+            var res = await Client.AuthRegisterAsync(new AuthRegisterReq() { Email = "mcbobbins", Pwd = "yolo" });
+        }
+        catch (Exception ex)
+        {
+            currentCount++;
+        }
     }
 }

@@ -33,6 +33,6 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
-app.MapGrpcService<CounterService>();
+app.MapGrpcService<ApiService>();
 app.MapFallbackToFile("index.html");
 app.Run(Config.Server.Listen);

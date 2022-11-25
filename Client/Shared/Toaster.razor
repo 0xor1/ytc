@@ -1,0 +1,26 @@
+﻿@using Dnsk.Client.Error
+<div>
+    @foreach (var t in _toasts)
+    {
+        <p>@t.Message</p>
+    }
+</div>
+
+@inject IToasterService _ts;
+@implements IToaster;
+@code {
+    
+    private readonly List<Toast> _toasts = new ();
+    
+    protected override void OnInitialized()
+    {
+        _ts.Init(this);
+        base.OnInitialized();
+    }
+
+    public void Show(Toast t)
+    {
+        _toasts.Add(t);
+    }
+
+}

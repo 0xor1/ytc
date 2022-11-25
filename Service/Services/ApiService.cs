@@ -6,33 +6,29 @@ using Microsoft.Extensions.Logging;
 
 namespace Dnsk.Service.Services;
 
-public class CounterService : Counter.CounterBase
+public class ApiService : Api.ApiBase
 {
-    private static uint _count = 0;
-    private readonly ILogger<CounterService> _logger;
+    private readonly ILogger<ApiService> _log;
     private readonly DnskDb _db;
     private readonly ISessionManager _session;
     
-    public CounterService(ILogger<CounterService> logger, DnskDb db, ISessionManager session)
+    public ApiService(ILogger<ApiService> log, DnskDb db, ISessionManager session)
     {
-        _logger = logger;
+        _log = log;
         _db = db;
         _session = session;
     }
 
-    public override async  Task<CountReply> Count(CountRequest req, ServerCallContext stx)
+    public override async  Task<Nothing> AuthRegister(AuthRegisterReq req, ServerCallContext stx)
     {
-        _logger.LogError("counting...");
+        _log.LogError("registering. ..");
         // await _db.Auths.AddAsync(new Auth()
         // {
         //     Id = Ulid.NewUlid()
         // });
         // await _db.SaveChangesAsync();
         var ses = _session.Get(stx);
-        
-        return new CountReply
-        {
-            Count = (uint)_count++
-        };
+        throw new RpcException(new Status(StatusCode.PermissionDenied, "get dafuq ahta heer"));
+        return new Nothing();
     }
 }

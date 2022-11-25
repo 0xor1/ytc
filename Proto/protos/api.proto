@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "Dnsk.Proto";
+
+package api;
+
+message Nothing {}
+
+enum ToastLevel {
+    Debug = 0;
+    Info = 1;
+    Warning = 2;
+    Error = 3;
+    Fatal = 4;
+}
+
+service Api {
+  rpc AuthRegister (AuthRegisterReq) returns (Nothing);
+}
+
+message AuthRegisterReq {
+    string email = 1;
+    string pwd = 2;
+}
+
