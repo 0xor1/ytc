@@ -18,9 +18,13 @@
         base.OnInitialized();
     }
 
-    public void Show(Toast t)
+    public async Task Show(Toast t)
     {
         _toasts.Add(t);
+        StateHasChanged();
+        await Task.Delay(5000);
+        _toasts.Remove(t);
+        StateHasChanged();
     }
 
 }

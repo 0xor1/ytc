@@ -1,10 +1,10 @@
 ﻿using Dnsk.Proto;
 
 namespace Dnsk.Client.Error;
-public record Toast(ToastLevel Level, string Message);
+public record Toast(MessageLevel Level, string Message);
 public interface IToaster
 {
-    void Show(Toast t);
+    Task Show(Toast t);
 }
 public interface IToasterService : IToaster
 {
@@ -19,8 +19,8 @@ public class ToasterService: IToasterService
     {
         _toaster = t;
     }
-    public void Show(Toast t)
+    public async Task Show(Toast t)
     {
-        _toaster?.Show(t);
+        await (_toaster?.Show(t) ?? Task.CompletedTask);
     }
 }

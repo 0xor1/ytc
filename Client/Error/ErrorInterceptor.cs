@@ -1,11 +1,16 @@
-﻿using Dnsk.Proto;
+﻿using Dnsk.Common;
+using Dnsk.Proto;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
+using Humanizer;
 
 namespace Dnsk.Client.Error;
 
 public class ErrorInterceptor : Interceptor
 {
+    private const string level = "level";
+    private const string message = "message";
+    
     private readonly IToasterService _ts;
     
     public ErrorInterceptor(IToasterService ts)
@@ -31,9 +36,10 @@ public class ErrorInterceptor : Interceptor
         }
         catch (RpcException ex)
         {
+            var l = ex.Trailers.GetValue(level);
+            var msg = ex.Trailers.GetValue(message);
             // if an exception happened pop up a toast notification to inform the user
-            _ts.Show(new Toast(ToastLevel.Debug, "yolo" ));
-            // then rethrow in case anything else needs to know
+            await Do.IfAsync(level != null && msg != null, async () => await _ts.Show(new Toast(l.DehumanizeTo<MessageLevel>(), msg)));
             throw;
         }
     }

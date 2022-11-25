@@ -2,6 +2,7 @@
 using Dnsk.Proto;
 using Dnsk.Service.Util;
 using Grpc.Core;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 
 namespace Dnsk.Service.Services;
@@ -28,7 +29,11 @@ public class ApiService : Api.ApiBase
         // });
         // await _db.SaveChangesAsync();
         var ses = _session.Get(stx);
-        throw new RpcException(new Status(StatusCode.PermissionDenied, "get dafuq ahta heer"));
+        throw new RpcException(new Status(StatusCode.Internal, "message"), new Metadata()
+        {
+            {"level", MessageLevel.Debug.Humanize()},
+            {"message", "yolo"},
+        });
         return new Nothing();
     }
 }

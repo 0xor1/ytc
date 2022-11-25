@@ -6,7 +6,7 @@ package api;
 
 message Nothing {}
 
-enum ToastLevel {
+enum MessageLevel {
     Debug = 0;
     Info = 1;
     Warning = 2;
