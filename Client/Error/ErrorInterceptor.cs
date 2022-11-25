@@ -8,8 +8,8 @@ namespace Dnsk.Client.Error;
 
 public class ErrorInterceptor : Interceptor
 {
-    private const string level = "level";
-    private const string message = "message";
+    private const string LEVEL = "level";
+    private const string MESSAGE = "message";
     
     private readonly IToasterService _ts;
     
@@ -31,15 +31,26 @@ public class ErrorInterceptor : Interceptor
     {
         try
         {
-            var response = await t;
-            return response;
+            return await t;
         }
-        catch (RpcException ex)
+        catch (Exception ex)
         {
-            var l = ex.Trailers.GetValue(level);
-            var msg = ex.Trailers.GetValue(message);
-            // if an exception happened pop up a toast notification to inform the user
-            await Do.IfAsync(level != null && msg != null, async () => await _ts.Show(new Toast(l.DehumanizeTo<MessageLevel>(), msg)));
+            var level = MessageLevel.Error;
+            var msg = "an unexpected error happened";
+            if (ex.GetType() == typeof(RpcException))
+            {
+                var rpc = (RpcException)ex;
+                var l = rpc.Trailers.GetValue(LEVEL);
+                var msgStr = rpc.Trailers.GetValue(MESSAGE);
+                if (l != null && msgStr != null)
+                {
+                    level = l.DehumanizeTo<MessageLevel>();
+                    msg = msgStr;
+                }
+            }
+            
+            await _ts.Show(new Toast(level, msg));
+            // rethrow in case any other specific components need to handle it too.
             throw;
         }
     }
