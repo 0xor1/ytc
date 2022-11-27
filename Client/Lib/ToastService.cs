@@ -1,7 +1,18 @@
 ﻿using Dnsk.Proto;
 
 namespace Dnsk.Client.Lib;
-public record Toast(MessageLevel Level, string Message);
+
+public enum ToastLevel
+{
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Fatal
+}
+public record Toast(ToastLevel Level, string Message)
+{
+}
 public interface IToaster
 {
     Task Show(Toast t);

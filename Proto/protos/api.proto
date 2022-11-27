@@ -6,14 +6,6 @@ package api;
 
 message Nothing {}
 
-enum MessageLevel {
-    Debug = 0;
-    Info = 1;
-    Warning = 2;
-    Error = 3;
-    Fatal = 4;
-}
-
 service Api {
   rpc AuthRegister (AuthRegisterReq) returns (Nothing);
 }

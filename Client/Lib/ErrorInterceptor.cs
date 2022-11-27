@@ -33,7 +33,7 @@ public class ErrorInterceptor : Interceptor
         catch (Exception ex)
         {
             var code = StatusCode.Internal;
-            var level = MessageLevel.Error;
+            var level = ToastLevel.Error;
             var message = "an unexpected error happened";
             if (ex.GetType() == typeof(RpcException))
             {

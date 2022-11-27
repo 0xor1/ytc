@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(opts =>
+{
+    opts.Interceptors.Add<ErrorInterceptor>();
+});
 builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddDbContext<DnskDb>(
     dbContextOptions =>
