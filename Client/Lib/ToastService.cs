@@ -1,6 +1,6 @@
 ﻿using Dnsk.Proto;
 
-namespace Dnsk.Client.Error;
+namespace Dnsk.Client.Lib;
 public record Toast(MessageLevel Level, string Message);
 public interface IToaster
 {

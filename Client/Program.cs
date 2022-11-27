@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Dnsk.Client;
-using Dnsk.Client.Error;
+using Dnsk.Client.Lib;
 using Dnsk.Proto;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;

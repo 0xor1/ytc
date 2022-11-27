@@ -1,13 +1,14 @@
-﻿@using Dnsk.Client.Error
-<div>
+﻿<div>
     @foreach (var t in _toasts)
     {
         <p>@t.Message</p>
     }
 </div>
 
+@using Dnsk.Client.Lib
 @inject IToasterService _ts;
 @implements IToaster;
+
 @code {
     
     private readonly List<Toast> _toasts = new ();

@@ -4,13 +4,10 @@ using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Humanizer;
 
-namespace Dnsk.Client.Error;
+namespace Dnsk.Client.Lib;
 
 public class ErrorInterceptor : Interceptor
 {
-    private const string LEVEL = "level";
-    private const string MESSAGE = "message";
-    
     private readonly IToasterService _ts;
     
     public ErrorInterceptor(IToasterService ts)
@@ -35,23 +32,24 @@ public class ErrorInterceptor : Interceptor
         }
         catch (Exception ex)
         {
+            var code = StatusCode.Internal;
             var level = MessageLevel.Error;
-            var msg = "an unexpected error happened";
+            var message = "an unexpected error happened";
             if (ex.GetType() == typeof(RpcException))
             {
                 var rpc = (RpcException)ex;
-                var l = rpc.Trailers.GetValue(LEVEL);
-                var msgStr = rpc.Trailers.GetValue(MESSAGE);
-                if (l != null && msgStr != null)
-                {
-                    level = l.DehumanizeTo<MessageLevel>();
-                    msg = msgStr;
-                }
+                code = rpc.Status.StatusCode;
+                message = rpc.Status.Detail;
+                Console.WriteLine($"{DateTime.UtcNow.ToString("s")} {code} - {message}");
             }
-            
-            await _ts.Show(new Toast(level, msg));
+            else
+            {
+                Console.WriteLine($"{DateTime.UtcNow.ToString("s")} {ex.Message}");
+            }
+
+            await _ts.Show(new Toast(level, message));
             // rethrow in case any other specific components need to handle it too.
-            throw;
+            throw new ApiException(code, message);
         }
     }
 }
