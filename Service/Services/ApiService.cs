@@ -29,10 +29,7 @@ public class ApiService : Api.ApiBase
         // });
         // await _db.SaveChangesAsync();
         var ses = _session.Get(stx);
-        throw new RpcException(new Status(StatusCode.Internal, "status detail"), new Metadata()
-        {
-            {"level", MessageLevel.Debug.Humanize()}
-        }, "exception message");
+        Error.If(true, StatusCode.Internal, "status detail");
         return new Nothing();
     }
 }
