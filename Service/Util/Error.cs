@@ -8,12 +8,7 @@ namespace Dnsk.Service.Util;
 public static class Error
 {
     public static void If(bool condition, StatusCode code, string message, bool @public = false, bool log = false)
-    {
-        if (condition)
-        {
-            throw new ApiException(code, message, @public, log);
-        }
-    }
+        => Throw.If(condition, () => new ApiException(code, message, @public, log));
 }
 
 public class ApiException : Exception

@@ -10,4 +10,8 @@
         <Protobuf Include="protos\api.proto" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="obj" />
+    </ItemGroup>
+
 </Project>

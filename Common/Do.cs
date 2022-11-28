@@ -23,8 +23,8 @@ public static class Do
 
 public static class Throw
 {
-    public static void If<T>(bool condition, T ex) where T : Exception
+    public static void If<T>(bool condition, Func<T> ex) where T : Exception
     {
-        Do.If(condition, () => throw ex);
+        Do.If(condition, () => throw ex());
     }
 }

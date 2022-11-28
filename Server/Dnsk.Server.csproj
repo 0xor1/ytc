@@ -25,4 +25,8 @@
     <Compile Remove="Session.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="obj" />
+  </ItemGroup>
+
 </Project>

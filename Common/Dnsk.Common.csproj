@@ -9,5 +9,9 @@
     <ItemGroup>
         <PackageReference Include="Ulid" Version="1.2.6" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="obj" />
+    </ItemGroup>
 
 </Project>
