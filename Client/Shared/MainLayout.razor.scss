@@ -1,0 +1,32 @@
+.top-bar {
+  height: 3em;
+  background: red;
+  align-items: center;
+}
+
+.top-bar-content {
+  flex-grow: 1;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  .side-bar {
+    width: 8em;
+    background: blue;
+    flex-shrink: 0;
+  }
+
+  .main{
+    flex-direction: column;
+    flex-grow: 1;
+    background: azure;
+  }
+
+  .toaster {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: red;
+  }
+}

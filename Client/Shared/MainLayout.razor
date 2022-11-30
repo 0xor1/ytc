@@ -1,20 +1,24 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="root">
-    <div class="sidebar">
-        <NavMenu />
+<div class="root flx">
+    
+    <div class="top-bar flx row">
+        
     </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+    
+    <div class="top-bar-content flx row">
+    
+        <div class="side-bar flx">
+            <NavMenu/>
         </div>
 
-        <article class="content px-4">
+        <div class="main">
             @Body
-        </article>
-    </main>
-    <div class="toaster">
-        <Toaster/>
+        </div>
+        
+        <div class="toaster">
+            <Toaster/>
+        </div>
+        
     </div>
 </div>
