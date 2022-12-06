@@ -4,26 +4,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-.flx {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  
-  &.rev{
-    flex-direction: column-reverse;
-  }
-  &.row{
-    flex-direction: row;
-    > * {
-      display: inline-flex;
-    }
-  }
-  &.row-rev{
-    flex-direction: row-reverse;
-    > * {
-      display: inline-flex;
-    }
-  }
 }
