@@ -4,21 +4,16 @@
     
     <div class="top">
         <button class="left-tog" @onclick="@ToggleLeft">left</button>
-        <button class="right-tog" @onclick="@ToggleRight">right</button>
     </div>
     
     <div class="bot">
     
-        <div class="menu left @(Left? "show": "")">
+        <div class="left @(Left? "show": "")">
             <LeftMenu/>
         </div>
 
-        <div class="main">
+        <div class="right">
             @Body
-        </div>
-    
-        <div class="menu right @(Right? "show": "")">
-            <LeftMenu/>
         </div>
         
         <div class="toaster">
@@ -31,9 +26,7 @@
 @code{
 
     private bool Left { get; set; }
-    private bool Right { get; set; }
 
     private void ToggleLeft() => Left = !Left;
-    private void ToggleRight() => Right = !Right;
-
+    
 }

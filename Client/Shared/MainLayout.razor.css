@@ -19,31 +19,31 @@
     height: 100%;
 }
 
-.menu {
+.left {
     width: 0;
     background: blue;
     flex-shrink: 0;
 }
 
 @container (min-width: 0) {
-    .menu.show{
+    .left.show{
         width: 100%;
     }
 }
 
 @container (min-width: 30em) {
-    .menu.show {
+    .left.show {
         width: var(--top-ht);
     }
 }
 
 @container (min-width: 75em) {
-    .menu.show {
+    .left.show {
         width: 15em;
     }
 }
 
-.main {
+.right {
     flex-grow: 1;
     background: azure;
 }
