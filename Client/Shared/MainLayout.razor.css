@@ -1,0 +1,58 @@
+.root {
+    --top-ht: 3.5em;
+}
+
+.top {
+    height: var(--top-ht);
+    background: red;
+    flex-shrink: 0;
+}
+
+.bot {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.bot > * {
+    height: 100%;
+}
+
+.menu {
+    width: 0;
+    background: blue;
+    flex-shrink: 0;
+}
+
+@container (min-width: 0) {
+    .menu.show{
+        width: 100%;
+    }
+}
+
+@container (min-width: 30em) {
+    .menu.show {
+        width: var(--top-ht);
+    }
+}
+
+@container (min-width: 75em) {
+    .menu.show {
+        width: 15em;
+    }
+}
+
+.main {
+    flex-grow: 1;
+    background: azure;
+}
+
+.toaster {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: red;
+}
