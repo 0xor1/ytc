@@ -57,7 +57,7 @@
     overflow: auto;
     background: transparent;
 }
-
+ 
 @container (min-width: 0) {
     .toaster{
         width: 100%;
