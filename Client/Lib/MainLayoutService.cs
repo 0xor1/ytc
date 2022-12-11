@@ -2,9 +2,28 @@
 
 namespace Dnsk.Client.Lib;
 
+public enum ToastLevel
+{
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Fatal
+}
+
+public record Toast(ToastLevel Level, string Message);
+
+public enum Theme
+{
+    Light,
+    Dark,
+    // ColorBlind
+}
 public interface IMainLayout
 {
     void Left(bool? show = null);
+    void PopToast(Toast t);
+    void SetTheme(Theme t);
 }
 public interface IMainLayoutService : IMainLayout
 {
@@ -22,5 +41,7 @@ public class MainLayoutService: IMainLayoutService
     }
 
     public void Left(bool? show = null) => _impl?.Left(show);
+    public void PopToast(Toast t) => _impl?.PopToast(t);
+    public void SetTheme(Theme t) => _impl?.SetTheme(t);
 
 }

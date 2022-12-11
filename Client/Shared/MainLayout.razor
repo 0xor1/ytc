@@ -1,4 +1,4 @@
-﻿<div class="root">
+﻿<div class="root @(_theme.Humanize().ToLower())">
     
     <div class="top">
         <TopBar></TopBar>
@@ -6,7 +6,7 @@
     
     <div class="bot">
     
-        <div class="left @(ShowLeft? "show": "")">
+        <div class="left @(_showLeft? "show": "")">
             <LeftMenu/>
         </div>
 
@@ -15,19 +15,28 @@
         </div>
         
         <div class="toaster">
-            <Toaster/>
+            @foreach (var t in _toasts)
+            {
+                <p @onclick="@(() => RemoveToast(t))" class="toast @(t.Level.Humanize().ToLower())">@t.Message</p>
+            }
         </div>
         
     </div>
 </div>
 
 @using Dnsk.Client.Lib
+@using System.Timers
+@using Humanizer
 @inherits LayoutComponentBase
 @implements IMainLayout;
 @inject IMainLayoutService _mls;
 @code{
 
-    private bool ShowLeft { get; set; }
+    private bool _showLeft = false;
+    
+    private readonly List<Toast> _toasts = new ();
+
+    private Theme _theme = Theme.Dark;
     
     protected override void OnInitialized()
     {
@@ -37,11 +46,39 @@
 
     public void Left(bool? show = null)
     {
-        if (show is null || ShowLeft != show)
+        if (show is null || _showLeft != show)
         {
-            ShowLeft = show ?? !ShowLeft;
+            _showLeft = show ?? !_showLeft;
             StateHasChanged();
         }
+    }
+    
+    public void PopToast(Toast t)
+    {
+        _toasts.Add(t);
+        StateHasChanged();
+        Timer timer = new Timer();
+        timer.Interval = 10000;
+        timer.AutoReset = false;
+        timer.Elapsed += (_, _) =>
+        {
+            if (_toasts.Remove(t))
+            {
+                StateHasChanged();
+            }
+        };
+        timer.Start();
+    }
+
+    private void RemoveToast(Toast t)
+    {
+        _toasts.Remove(t);
+    }
+
+    public void SetTheme(Theme theme)
+    {
+        _theme = theme;
+        StateHasChanged();
     }
 
 }

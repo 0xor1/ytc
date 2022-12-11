@@ -8,11 +8,11 @@ namespace Dnsk.Client.Lib;
 
 public class ErrorInterceptor : Interceptor
 {
-    private readonly IToaster _t;
+    private readonly IMainLayout _mls;
     
-    public ErrorInterceptor(IToasterService t)
+    public ErrorInterceptor(IMainLayoutService mls)
     {
-        _t = t;
+        _mls = mls;
     }
     
     public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(
@@ -47,7 +47,7 @@ public class ErrorInterceptor : Interceptor
                 Console.WriteLine($"{DateTime.UtcNow.ToString("s")} {ex.Message}");
             }
 
-            _t.Show(new Toast(level, message));
+            _mls.PopToast(new Toast(level, message));
             // rethrow in case any other specific components need to handle it too.
             throw new ApiException(code, message);
         }
