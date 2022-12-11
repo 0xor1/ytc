@@ -13,6 +13,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddSingleton<IToasterService, ToasterService>();
+builder.Services.AddSingleton<IMainLayoutService, MainLayoutService>();
 builder.Services.AddSingleton<ErrorInterceptor>();
 builder.Services.AddSingleton(services => 
 {

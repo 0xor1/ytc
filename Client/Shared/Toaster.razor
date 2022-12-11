@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div class="root">
     @foreach (var t in _toasts)
     {
         <p>@t.Message</p>
@@ -7,8 +7,8 @@
 
 @using Dnsk.Client.Lib
 @using System.Timers
-@inject IToasterService _ts;
 @implements IToaster;
+@inject IToasterService _ts;
 
 @code {
     
@@ -20,19 +20,21 @@
         base.OnInitialized();
     }
 
-    public async Task Show(Toast t)
+    public void Show(Toast t)
     {
         _toasts.Add(t);
         StateHasChanged();
-        Timer timer = new Timer();
-        timer.Interval = 5000;
-        timer.AutoReset = false;
-        timer.Elapsed += (_, _) =>
-        {
-            _toasts.Remove(t);
-            StateHasChanged();
-        };
-        timer.Start();
+        // Timer timer = new Timer();
+        // timer.Interval = 10000;
+        // timer.AutoReset = false;
+        // timer.Elapsed += (_, _) =>
+        // {
+        //     if (_toasts.Remove(t))
+        //     {
+        //         StateHasChanged();
+        //     }
+        // };
+        // timer.Start();
     }
 
 }

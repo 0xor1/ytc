@@ -1,4 +1,5 @@
-﻿using Dnsk.Proto;
+﻿using Dnsk.Common;
+using Dnsk.Proto;
 
 namespace Dnsk.Client.Lib;
 
@@ -15,23 +16,22 @@ public record Toast(ToastLevel Level, string Message)
 }
 public interface IToaster
 {
-    Task Show(Toast t);
+    void Show(Toast t);
 }
 public interface IToasterService : IToaster
 {
-    void Init(IToaster t);
+    void Init(IToaster i);
 }
 
 public class ToasterService: IToasterService
 {
-    private IToaster? _toaster;
+    private IToaster? _impl;
 
-    public void Init(IToaster t)
+    public void Init(IToaster i)
     {
-        _toaster = t;
+        SelfService.Check(this, i);
+        _impl ??= i;
     }
-    public async Task Show(Toast t)
-    {
-        await (_toaster?.Show(t) ?? Task.CompletedTask);
-    }
+
+    public void Show(Toast t) => _impl?.Show(t);
 }

@@ -1,14 +1,12 @@
-﻿@inherits LayoutComponentBase
-
-<div class="root">
+﻿<div class="root">
     
     <div class="top">
-        <button class="left-tog" @onclick="@ToggleLeft">left</button>
+        <TopBar></TopBar>
     </div>
     
     <div class="bot">
     
-        <div class="left @(Left? "show": "")">
+        <div class="left @(ShowLeft? "show": "")">
             <LeftMenu/>
         </div>
 
@@ -23,10 +21,27 @@
     </div>
 </div>
 
+@using Dnsk.Client.Lib
+@inherits LayoutComponentBase
+@implements IMainLayout;
+@inject IMainLayoutService _mls;
 @code{
 
-    private bool Left { get; set; }
-
-    private void ToggleLeft() => Left = !Left;
+    private bool ShowLeft { get; set; }
     
+    protected override void OnInitialized()
+    {
+        _mls.Init(this);
+        base.OnInitialized();
+    }
+
+    public void Left(bool? show = null)
+    {
+        if (show is null || ShowLeft != show)
+        {
+            ShowLeft = show ?? !ShowLeft;
+            StateHasChanged();
+        }
+    }
+
 }

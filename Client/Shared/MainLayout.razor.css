@@ -15,7 +15,7 @@
     flex-grow: 1;
 }
 
-.bot > * {
+.bot > *:not(.toaster) {
     height: 100%;
 }
 
@@ -52,7 +52,20 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 10px;
-    height: 10px;
-    background: red;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: auto;
+    background: transparent;
+}
+
+@container (min-width: 0) {
+    .toaster{
+        width: 100%;
+    }
+}
+
+@container (min-width: 30em) {
+    .toaster {
+        width: 30em;
+    }
 }

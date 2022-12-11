@@ -1,0 +1,14 @@
+﻿@using Dnsk.Client.Lib
+<div class="root">
+    <div>
+        <button class="left-tog" @onclick="@ToggleLeft">left</button>
+    </div>
+</div>
+
+@inject IMainLayoutService _mls;
+
+@code{
+    
+    private void ToggleLeft() => _mls.Left();
+
+}
