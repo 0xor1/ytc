@@ -9,6 +9,9 @@ message Nothing {}
 service Api {
   rpc Auth_GetSession (Nothing) returns (Auth_Session);
   rpc Auth_Register (Auth_RegisterReq) returns (Nothing);
+  rpc Auth_VerifyEmail (Auth_VerifyEmailReq) returns (Nothing);
+  rpc Auth_Login (Auth_LoginReq) returns (Auth_Session);
+  rpc Auth_Logout (Nothing) returns (Auth_Session);
 }
 
 message Auth_Session {
@@ -19,5 +22,15 @@ message Auth_Session {
 message Auth_RegisterReq {
     string email = 1;
     string pwd = 2;
+}
+
+message Auth_LoginReq {
+    string email = 1;
+    string pwd = 2;
+}
+
+message Auth_VerifyEmailReq {
+    string email = 1;
+    string code = 2;
 }
 

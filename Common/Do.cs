@@ -27,4 +27,12 @@ public static class Throw
     {
         Do.If(condition, () => throw ex());
     }
+    public static void DataIf(bool condition, string msg)
+    {
+        If(condition, () => new InvalidDataException(msg));
+    }
+    public static void OpIf(bool condition, string msg)
+    {
+        If(condition, () => new InvalidOperationException(msg));
+    }
 }
