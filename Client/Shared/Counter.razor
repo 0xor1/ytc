@@ -1,5 +1,5 @@
 ﻿@using Dnsk.Proto
-@inject Dnsk.Proto.Api.ApiClient Client;
+@inject Dnsk.Proto.Api.ApiClient Api;
 
 <div class="root">
    <h1>Counter</h1>
@@ -16,7 +16,7 @@
     {
         try
         {
-            var res = await Client.AuthRegisterAsync(new AuthRegisterReq() { Email = "mcbobbins", Pwd = "yolo" });
+            var res = await Api.Auth_RegisterAsync(new Auth_RegisterReq() { Email = "mcbobbins", Pwd = "yolo" });
         }
         catch (Exception ex)
         {

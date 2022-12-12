@@ -7,10 +7,16 @@ package api;
 message Nothing {}
 
 service Api {
-  rpc AuthRegister (AuthRegisterReq) returns (Nothing);
+  rpc Auth_GetSession (Nothing) returns (Auth_Session);
+  rpc Auth_Register (Auth_RegisterReq) returns (Nothing);
 }
 
-message AuthRegisterReq {
+message Auth_Session {
+    string id = 1;
+    bool isAuthed = 2;
+}
+
+message Auth_RegisterReq {
     string email = 1;
     string pwd = 2;
 }

@@ -1,4 +1,5 @@
-﻿using Dnsk.Db;
+﻿using Dnsk.Common;
+using Dnsk.Db;
 using Dnsk.Proto;
 using Dnsk.Service.Util;
 using Grpc.Core;
@@ -20,9 +21,19 @@ public class ApiService : Api.ApiBase
         _session = session;
     }
 
-    public override async  Task<Nothing> AuthRegister(AuthRegisterReq req, ServerCallContext stx)
+    public override Task<Auth_Session> Auth_GetSession(Nothing req, ServerCallContext stx)
     {
-        _log.LogError("registering. ..");
+        var ses = _session.Get(stx);
+        return new Auth_Session()
+        {
+            Id = ses.Id,
+            IsAuthed = ses.IsAuthed
+        }.Task();
+    }
+
+    public override async Task<Nothing> Auth_Register(Auth_RegisterReq req, ServerCallContext stx)
+    {
+        _log.LogError("registering...");
         // await _db.Auths.AddAsync(new Auth()
         // {
         //     Id = Ulid.NewUlid()
