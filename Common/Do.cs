@@ -35,4 +35,13 @@ public static class Throw
     {
         If(condition, () => new InvalidOperationException(msg));
     }
+    public static void SetupIf(bool condition, string msg)
+    {
+        If(condition, () => new InvalidSetupException(msg));
+    }
+}
+
+public class InvalidSetupException : Exception
+{
+    public InvalidSetupException(string msg) : base(msg) { }
 }

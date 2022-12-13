@@ -1,0 +1,191 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Dnsk.Common
+@using Humanizer
+@using System.ComponentModel
+<div>
+    @if (!Label.IsNullOrWhiteSpace() && Type is not (InputType.Checkbox or InputType.Radio))
+    {
+        /* non radio/checkbox controls have labels before on the line above */
+        <div class="label">
+            <label for="@Name">@Label</label>
+        </div>
+    }
+    <div class="input">
+        @if (Required)
+        {
+            @switch (Type)
+            {
+                case InputType.TextArea:
+                    <textarea class="@Status.Humanize().ToLower()" name="@Name" rows="@TextAreaRows" minlength="@Min" maxlength="@Max" required></textarea>
+                    break;
+                case InputType.Select:
+                    <select class="@Status.Humanize().ToLower()" name="@Name" required>
+                        @foreach (var opt in SelectOptions.NotNull())
+                        {
+                            <option value="@opt.Key">@opt.Display</option>
+                        }
+                    </select>
+                    break;
+                case InputType.Date:
+                case InputType.DateTime:
+                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@(Type == InputType.DateTime ? "datetime-local" : Type.Humanize().ToLower())" value="@Value" min="@DateMin" max="@DateMax" required/>
+                    break;
+                default:
+                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@Type.Humanize().ToLower()" value="@Value" min="@Min" max="@Max" minlength="@Min" maxlength="@Max" required/>
+                    break;
+            }
+        }
+        else
+        {
+            @switch (Type)
+            {
+                case InputType.TextArea:
+                    <textarea class="@Status.Humanize().ToLower()" name="@Name"></textarea>
+                    break;
+                case InputType.Select:
+                    <select class="@Status.Humanize().ToLower()" name="@Name">
+                    </select>
+                    break;
+                case InputType.Date:
+                case InputType.DateTime:
+                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@(Type == InputType.DateTime ? "datetime-local" : Type.Humanize().ToLower())" value="@Value" min="@DateMin" max="@DateMax"/>
+                    break;
+                default:
+                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@Type.Humanize().ToLower()" value="@Value" min="@Min" max="@Max" minlength="@Min" maxlength="@Max"/>
+                    break;
+            }
+        }
+        @if (!Label.IsNullOrWhiteSpace() && Type is InputType.Checkbox or InputType.Radio)
+        {
+            /* radio and checkboxes have label after them on the same line */
+            <label for="@Name">@Label</label>
+        }
+    </div>
+    <div class="invalid-msg">
+        <span class="all-e">@InvalidMessage</span>
+    </div>
+</div>
+
+@code{
+
+    public enum ValidationStatus
+    {
+        None,
+        Ok,
+        Invalid
+    }
+
+    public enum InputType
+    {
+        Checkbox,
+        Color,
+        Date,
+        DateTime,
+        Email,
+        File,
+        Image,
+        Month,
+        Number,
+        Password,
+        Radio,
+        Range,
+        Search,
+        Tel,
+        Text,
+        Time,
+        Url,
+        Week,
+        // non html input types
+        TextArea,
+        Select
+    }
+
+    [Parameter]
+    [EditorRequired]
+    public string Name { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public InputType Type { get; set; }
+    
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string InvalidMessage { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+    
+    [Parameter]
+    [Description("The value assigned for radio and checkbox inputs")]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public bool? Bool { get; set; }
+    [Parameter]
+    public EventCallback<bool?> BoolChanged { get; set; }
+
+    [Parameter]
+    public string? String { get; set; }
+    [Parameter]
+    public EventCallback<string?> StringChanged { get; set; }
+
+    [Parameter]
+    public decimal? Decimal { get; set; }
+    [Parameter]
+    public EventCallback<decimal?> DecimalChanged { get; set; }
+
+    [Parameter]
+    public DateTime? DateTime { get; set; }
+    [Parameter]
+    public EventCallback<DateTime?> DateTimeChanged { get; set; }
+    
+    [Parameter]
+    public ValidationStatus? Status { get; set; }
+    [Parameter]
+    public EventCallback<ValidationStatus?> StatusChanged { get; set; }
+
+    [Parameter]
+    public int TextAreaRows { get; set; } = 5;
+    
+    [Parameter]
+    public List<(string Key, string Display)>? SelectOptions { get; set; }
+    
+    [Parameter]
+    public int? Min { get; set; }
+    
+    [Parameter]
+    public int? Max { get; set; }
+    
+    [Parameter]
+    public DateTime? DateMin { get; set; }
+    
+    [Parameter]
+    public DateTime? DateMax { get; set; }
+    
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        // validate certain params are set for certain types
+        switch (Type)
+        {
+            case InputType.Checkbox:
+            case InputType.Radio:
+                Throw.SetupIf(Value.IsNullOrWhiteSpace(), $"no {nameof(Value)} specified for {Type.Humanize()} input");
+                break;
+            case InputType.Select:
+                Throw.SetupIf(SelectOptions?.Any() ?? true, $"no {nameof(SelectOptions)} specified for {Type.Humanize()} input");
+                break;
+        }
+        // validate certain params aren't set for certain types
+        if (Type is not (InputType.Date or InputType.DateTime))
+        {
+            // DateMin and DateMax are only valid for Date and DateTime types
+            Throw.SetupIf(Type is not (InputType.Date or InputType.DateTime) && (DateMin.IsntNull() || DateMax.IsntNull()), $"{nameof(DateMin)} and {nameof(DateMax)} are not valid for a {Type.Humanize()} input");
+        }
+
+    }
+    
+
+}
