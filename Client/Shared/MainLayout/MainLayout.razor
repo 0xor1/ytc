@@ -2,30 +2,25 @@
     <RadzenLayout class="rz-shadow-3">
         <RadzenHeader>
             <div class="d-flex align-items-center">
-                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                <RadzenSidebarToggle Click="@(() => LeftExpanded = !LeftExpanded)" />
             </div>
         </RadzenHeader>
-        <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+        <RadzenSidebar @bind-Expanded="@LeftExpanded">
             <RadzenPanelMenu>
                 <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
                 <RadzenPanelMenuItem Text="Counter" Icon="account_box" Path="/counter"/>
             </RadzenPanelMenu>
         </RadzenSidebar>
         <RadzenBody>
-            <div class="p-2">
-                @Body
-            </div>
+            @Body
         </RadzenBody>
         <RadzenNotification/>
     </RadzenLayout>
 </div>
 
-@using Dnsk.Client.Lib
-@using System.Timers
-@using Humanizer
 @inherits LayoutComponentBase
 @code{
 
-    private bool sidebar1Expanded = false;
+    private bool LeftExpanded = false;
 
 }
