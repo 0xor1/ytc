@@ -3,10 +3,11 @@
 <div class="root">
     <div>
         <h1>Register</h1>
-        <div>
-            <label>Email</label>
-            <input type="email" @bind="Email"/>
-        </div>
+        <Input 
+            T="Input.Type.Email"
+            Label="Email" 
+            Name="email"
+            Required="@true"/>
         <div>
             <label>Password</label>
             <input type="password" @bind="Pwd"/>

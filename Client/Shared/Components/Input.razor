@@ -2,63 +2,47 @@
 @using Dnsk.Common
 @using Humanizer
 @using System.ComponentModel
-<div>
-    @if (!Label.IsNullOrWhiteSpace() && Type is not (InputType.Checkbox or InputType.Radio))
+<div class="root">
+    @if (!Label.IsNullOrWhiteSpace() && T is not (Type.Checkbox or Type.Radio))
     {
         /* non radio/checkbox controls have labels before on the line above */
         <div class="label">
             <label for="@Name">@Label</label>
         </div>
     }
-    <div class="input">
-        @if (Required)
+    <div class="input @(Horizontal? "horizontal": "")">
+        @switch (T)
         {
-            @switch (Type)
-            {
-                case InputType.TextArea:
-                    <textarea class="@Status.Humanize().ToLower()" name="@Name" rows="@TextAreaRows" minlength="@Min" maxlength="@Max" required></textarea>
-                    break;
-                case InputType.Select:
-                    <select class="@Status.Humanize().ToLower()" name="@Name" required>
-                        @foreach (var opt in SelectOptions.NotNull())
-                        {
-                            <option value="@opt.Key">@opt.Display</option>
-                        }
-                    </select>
-                    break;
-                case InputType.Date:
-                case InputType.DateTime:
-                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@(Type == InputType.DateTime ? "datetime-local" : Type.Humanize().ToLower())" value="@Value" min="@DateMin" max="@DateMax" required/>
-                    break;
-                default:
-                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@Type.Humanize().ToLower()" value="@Value" min="@Min" max="@Max" minlength="@Min" maxlength="@Max" required/>
-                    break;
-            }
-        }
-        else
-        {
-            @switch (Type)
-            {
-                case InputType.TextArea:
-                    <textarea class="@Status.Humanize().ToLower()" name="@Name"></textarea>
-                    break;
-                case InputType.Select:
-                    <select class="@Status.Humanize().ToLower()" name="@Name">
-                    </select>
-                    break;
-                case InputType.Date:
-                case InputType.DateTime:
-                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@(Type == InputType.DateTime ? "datetime-local" : Type.Humanize().ToLower())" value="@Value" min="@DateMin" max="@DateMax"/>
-                    break;
-                default:
-                    <input class="@Status.Humanize().ToLower()" name="@Name" type="@Type.Humanize().ToLower()" value="@Value" min="@Min" max="@Max" minlength="@Min" maxlength="@Max"/>
-                    break;
-            }
-        }
-        @if (!Label.IsNullOrWhiteSpace() && Type is InputType.Checkbox or InputType.Radio)
-        {
-            /* radio and checkboxes have label after them on the same line */
-            <label for="@Name">@Label</label>
+            case Type.TextArea:
+                <textarea name="@Name" rows="@TextAreaRows"></textarea>
+                break;
+            case Type.Select:
+                <select name="@Name">
+                    @foreach (var opt in Options.NotNull())
+                    {
+                        <option value="@opt.Key">@opt.Display</option>
+                    }
+                </select>
+                break;
+            case Type.Checkbox:
+            case Type.Radio:
+                @foreach (var opts in Options.NotNull())
+                {
+                    // individual requireds for checkboxes 
+                    @if (opts.Required)
+                    {
+                        <input name="@Name" type="@(T == Type.DateTime ? "datetime-local" : T.CssClass())" required/>
+                    }
+                    else
+                    {
+                        <input name="@Name" type="@(T == Type.DateTime ? "datetime-local" : T.CssClass())"/>
+                    }
+                    <label for="@Name">@Label</label>
+                }
+                break;
+            default:
+                <input name="@Name" type="@(T == Type.DateTime ? "datetime-local" : T.CssClass())" min="@Min" max="@Max" minlength="@Min" maxlength="@Max" step="@Step" required/>
+                break;
         }
     </div>
     <div class="invalid-msg">
@@ -68,24 +52,28 @@
 
 @code{
 
+    public record Option(string Key, string Display, bool Required = false);
+    public record CheckResult(string Key, bool Checked);
+
     public enum ValidationStatus
     {
         None,
         Ok,
-        Invalid
+        Invalid,
     }
 
-    public enum InputType
+    public enum Type
     {
         Checkbox,
         Color,
         Date,
         DateTime,
+        Decimal,
         Email,
         File,
         Image,
+        Int,
         Month,
-        Number,
         Password,
         Radio,
         Range,
@@ -95,7 +83,7 @@
         Time,
         Url,
         Week,
-        // non html input types
+        // non input tags
         TextArea,
         Select
     }
@@ -106,7 +94,7 @@
 
     [Parameter]
     [EditorRequired]
-    public InputType Type { get; set; }
+    public Type T { get; set; }
     
     [Parameter]
     public string Label { get; set; }
@@ -114,77 +102,95 @@
     [Parameter]
     public string InvalidMessage { get; set; }
 
+    // specify for layout of radio and checkboxes in horizontal order
+    [Parameter]
+    public bool Horizontal { get; set; }
+
     [Parameter]
     public bool Required { get; set; }
     
     [Parameter]
-    [Description("The value assigned for radio and checkbox inputs")]
-    public string? Value { get; set; }
-
-    [Parameter]
-    public bool? Bool { get; set; }
-    [Parameter]
-    public EventCallback<bool?> BoolChanged { get; set; }
-
-    [Parameter]
-    public string? String { get; set; }
-    [Parameter]
-    public EventCallback<string?> StringChanged { get; set; }
-
-    [Parameter]
-    public decimal? Decimal { get; set; }
-    [Parameter]
-    public EventCallback<decimal?> DecimalChanged { get; set; }
-
-    [Parameter]
-    public DateTime? DateTime { get; set; }
-    [Parameter]
-    public EventCallback<DateTime?> DateTimeChanged { get; set; }
+    public decimal? Min { get; set; }
     
     [Parameter]
-    public ValidationStatus? Status { get; set; }
-    [Parameter]
-    public EventCallback<ValidationStatus?> StatusChanged { get; set; }
-
-    [Parameter]
-    public int TextAreaRows { get; set; } = 5;
+    public decimal? Max { get; set; }
     
     [Parameter]
-    public List<(string Key, string Display)>? SelectOptions { get; set; }
-    
-    [Parameter]
-    public int? Min { get; set; }
-    
-    [Parameter]
-    public int? Max { get; set; }
+    public decimal? Step { get; set; }
     
     [Parameter]
     public DateTime? DateMin { get; set; }
     
     [Parameter]
     public DateTime? DateMax { get; set; }
+
+    [Parameter]
+    public int TextAreaRows { get; set; } = 5;
+
+    // options for checkbox, radio and select options
+    [Parameter]
+    public List<Option>? Options { get; set; }
+
+    // for checkbox
+    [Parameter]
+    public List<CheckResult>? Checked { get; set; }
+    [Parameter]
+    public EventCallback<List<(string Key, bool Checked)>?> CheckedChanged { get; set; }
+
+    // for all string, select and radio inputs and textarea
+    [Parameter]
+    public string? String { get; set; }
+    [Parameter]
+    public EventCallback<string?> StringChanged { get; set; }
+
+    // int
+    [Parameter]
+    public int? Int { get; set; }
+    [Parameter]
+    public EventCallback<int?> IntChanged { get; set; }
+
+    // decimal
+    [Parameter]
+    public decimal? Decimal { get; set; }
+    [Parameter]
+    public EventCallback<decimal?> DecimalChanged { get; set; }
+
+    // date and datetime
+    [Parameter]
+    public DateTime? DateTime { get; set; }
+    [Parameter]
+    public EventCallback<DateTime?> DateTimeChanged { get; set; }
+    
+    // validation
+    [Parameter]
+    public ValidationStatus? Status { get; set; }
+    [Parameter]
+    public EventCallback<ValidationStatus?> StatusChanged { get; set; }
     
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
         // validate certain params are set for certain types
-        switch (Type)
+        switch (T)
         {
-            case InputType.Checkbox:
-            case InputType.Radio:
-                Throw.SetupIf(Value.IsNullOrWhiteSpace(), $"no {nameof(Value)} specified for {Type.Humanize()} input");
-                break;
-            case InputType.Select:
-                Throw.SetupIf(SelectOptions?.Any() ?? true, $"no {nameof(SelectOptions)} specified for {Type.Humanize()} input");
+            case Type.Checkbox:
+            case Type.Radio:
+            case Type.Select:
+                Throw.SetupIf(Options?.Any() ?? true, $"no {nameof(Options)} specified for {T.Humanize()} input");
                 break;
         }
         // validate certain params aren't set for certain types
-        if (Type is not (InputType.Date or InputType.DateTime))
+        if (T is not (Type.Date or Type.DateTime))
         {
             // DateMin and DateMax are only valid for Date and DateTime types
-            Throw.SetupIf(Type is not (InputType.Date or InputType.DateTime) && (DateMin.IsntNull() || DateMax.IsntNull()), $"{nameof(DateMin)} and {nameof(DateMax)} are not valid for a {Type.Humanize()} input");
+            Throw.SetupIf(T is not (Type.Date or Type.DateTime) && (DateMin.IsntNull() || DateMax.IsntNull()), $"{nameof(DateMin)} and {nameof(DateMax)} are not valid for a {T.Humanize()} input");
         }
 
+    }
+
+    private void OnChanged(ChangeEventArgs args)
+    {
+        // central on change handler
     }
     
 
