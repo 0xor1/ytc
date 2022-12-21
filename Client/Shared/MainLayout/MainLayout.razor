@@ -3,12 +3,21 @@
         <RadzenHeader>
             <div class="d-flex align-items-center">
                 <RadzenSidebarToggle Click="@(() => LeftExpanded = !LeftExpanded)" />
+                <RadzenProfileMenu>
+                    <Template>
+                        <RadzenGravatar Email="user@example.com">
+                        </RadzenGravatar>
+                    </Template>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Login" Path="login" Icon="account_circle"></RadzenProfileMenuItem>
+                    </ChildContent>
+                </RadzenProfileMenu>
             </div>
         </RadzenHeader>
         <RadzenSidebar @bind-Expanded="@LeftExpanded">
             <RadzenPanelMenu>
                 <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
-                <RadzenPanelMenuItem Text="Counter" Icon="account_box" Path="/counter"/>
+                <RadzenPanelMenuItem Text="Counter" Icon="account_box" Path="counter"/>
             </RadzenPanelMenu>
         </RadzenSidebar>
         <RadzenBody>
