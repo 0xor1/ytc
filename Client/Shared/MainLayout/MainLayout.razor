@@ -1,27 +1,22 @@
-﻿<div class="root @(_theme.Humanize().ToLower())">
-    
-    <div class="top">
-        <TopBar></TopBar>
-    </div>
-    
-    <div class="bot">
-    
-        <div class="left @(_showLeft? "show": "")">
-            <LeftMenu/>
-        </div>
-
-        <div class="right">
-            @Body
-        </div>
-        
-        <div class="toaster">
-            @foreach (var t in _toasts)
-            {
-                <p @onclick="@(() => RemoveToast(t))" class="toast @(t.Level.Humanize().ToLower())">@t.Message</p>
-            }
-        </div>
-        
-    </div>
+﻿<div class="root">
+    <RadzenLayout class="rz-shadow-3">
+        <RadzenHeader>
+            <div class="d-flex align-items-center">
+                <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+            </div>
+        </RadzenHeader>
+        <RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+            <RadzenPanelMenu>
+                <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
+                <RadzenPanelMenuItem Text="Counter" Icon="account_box" Path="/counter"/>
+            </RadzenPanelMenu>
+        </RadzenSidebar>
+        <RadzenBody>
+            <div class="p-2">
+                @Body
+            </div>
+        </RadzenBody>
+    </RadzenLayout>
 </div>
 
 @using Dnsk.Client.Lib
@@ -32,25 +27,14 @@
 @inject IMainLayoutService _mls;
 @code{
 
-    private bool _showLeft = false;
+    private bool sidebar1Expanded = false;
     
     private readonly List<Toast> _toasts = new ();
 
-    private Theme _theme = Theme.Dark;
-    
     protected override void OnInitialized()
     {
         _mls.Init(this);
         base.OnInitialized();
-    }
-
-    public void Left(bool? show = null)
-    {
-        if (show is null || _showLeft != show)
-        {
-            _showLeft = show ?? !_showLeft;
-            StateHasChanged();
-        }
     }
     
     public void PopToast(Toast t)
@@ -73,12 +57,6 @@
     private void RemoveToast(Toast t)
     {
         _toasts.Remove(t);
-    }
-
-    public void SetTheme(Theme theme)
-    {
-        _theme = theme;
-        StateHasChanged();
     }
 
 }
