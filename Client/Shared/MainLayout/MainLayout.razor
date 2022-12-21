@@ -16,6 +16,7 @@
                 @Body
             </div>
         </RadzenBody>
+        <RadzenNotification/>
     </RadzenLayout>
 </div>
 
@@ -23,40 +24,8 @@
 @using System.Timers
 @using Humanizer
 @inherits LayoutComponentBase
-@implements IMainLayout;
-@inject IMainLayoutService _mls;
 @code{
 
     private bool sidebar1Expanded = false;
-    
-    private readonly List<Toast> _toasts = new ();
-
-    protected override void OnInitialized()
-    {
-        _mls.Init(this);
-        base.OnInitialized();
-    }
-    
-    public void PopToast(Toast t)
-    {
-        _toasts.Add(t);
-        StateHasChanged();
-        Timer timer = new Timer();
-        timer.Interval = 10000;
-        timer.AutoReset = false;
-        timer.Elapsed += (_, _) =>
-        {
-            if (_toasts.Remove(t))
-            {
-                StateHasChanged();
-            }
-        };
-        timer.Start();
-    }
-
-    private void RemoveToast(Toast t)
-    {
-        _toasts.Remove(t);
-    }
 
 }

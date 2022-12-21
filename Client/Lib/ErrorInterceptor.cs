@@ -3,16 +3,17 @@ using Dnsk.Proto;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Humanizer;
+using Radzen;
 
 namespace Dnsk.Client.Lib;
 
 public class ErrorInterceptor : Interceptor
 {
-    private readonly IMainLayout _mls;
-    
-    public ErrorInterceptor(IMainLayoutService mls)
+    private readonly NotificationService NotificationService;
+
+    public ErrorInterceptor(NotificationService notificationService)
     {
-        _mls = mls;
+        NotificationService = notificationService;
     }
     
     public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(
@@ -33,7 +34,7 @@ public class ErrorInterceptor : Interceptor
         catch (Exception ex)
         {
             var code = StatusCode.Internal;
-            var level = ToastLevel.Error;
+            var level = NotificationSeverity.Error;
             var message = "an unexpected error happened";
             if (ex.GetType() == typeof(RpcException))
             {
@@ -47,7 +48,7 @@ public class ErrorInterceptor : Interceptor
                 Console.WriteLine($"{DateTime.UtcNow.ToString("s")} {ex.Message}");
             }
 
-            _mls.PopToast(new Toast(level, message));
+            NotificationService.Notify(level, "Api Error", message);
             // rethrow in case any other specific components need to handle it too.
             throw new ApiException(code, message);
         }
