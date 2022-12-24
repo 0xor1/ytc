@@ -1,0 +1,189 @@
+$max_size: 5;
+$sub_suffixes: '', 'q', 'h', 't';
+$sub_divs: '', '.25', '.5', '.75';
+
+@mixin genVars($var_prefix: r, $units: em, $max_size: $max_size, $sub_suffixes: $sub_suffixes, $sub_divs: $sub_divs) {
+    @for $i from 0 through $max_size {
+        @for $j from 1 through length($sub_divs) {
+            --#{$var_prefix}-#{$i}#{nth($sub_suffixes, $j)}: #{$i}#{nth($sub_divs, $j)}#{$units};
+        }
+    }
+}
+
+@mixin genProps($class, $props, $val_prefix: r, $max_size: $max_size, $sub_suffixes: $sub_suffixes) {
+    @for $i from 0 through $max_size {
+        @each $sub_suffix in  $sub_suffixes {
+            .#{$class}-#{$i}#{$sub_suffix} {
+                @each $prop in $props {
+                    #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+                }
+            }
+        }
+    }
+}
+
+@mixin genPropsAmp($class, $props, $val_prefix: r, $max_size: $max_size, $sub_suffixes: $sub_suffixes) {
+    @for $i from 0 through $max_size {
+        @each $sub_suffix in  $sub_suffixes {
+            &.#{$class}-#{$i}#{$sub_suffix} {
+                @each $prop in $props {
+                    #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+                }
+            }
+        }
+    }
+}
+
+html, body, .fill {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.root{
+    @include genVars(r, em);
+    @include genVars(a, rem);
+    @include genProps(f, font-size, a);
+    @include genProps(m, margin);
+    @include genProps(m-x, (margin-left, margin-right));
+    @include genProps(m-y, (margin-top, margin-bottom));
+    @include genProps(m-t, margin-top);
+    @include genProps(m-r, margin-right);
+    @include genProps(m-b, margin-bottom);
+    @include genProps(m-l, margin-left);
+    @include genProps(p, padding);
+    @include genProps(p-x, (padding-left, padding-right));
+    @include genProps(p-y, (padding-top, padding-bottom));
+    @include genProps(p-t, padding-top);
+    @include genProps(p-r, padding-right);
+    @include genProps(p-b, padding-bottom);
+    @include genProps(p-l, padding-left);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    @extend .fill;
+}
+
+.flx {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    &.i{
+        display: inline-flex;
+    }
+    &.row{
+        flex-direction: row;
+        &.rev{
+            flex-direction: row-reverse;
+        }
+    }
+    &.col{
+        flex-direction: column;
+        &.rev{
+            flex-direction: column-reverse;
+        }
+    }
+    &.rap{
+        flex-wrap: wrap;
+    }
+    &.jc-s{
+        justify-content: flex-start;
+    }
+    &.jc-e{
+        justify-content: flex-end;
+    }
+    &.jc-c{
+        justify-content: center;
+    }
+    &.jc-sb{
+        justify-content: space-between;
+    }
+    &.jc-sa{
+        justify-content: space-around;
+    }
+    &.jc-se{
+        justify-content: space-evenly;
+    }
+    &.jc-stretch{
+        justify-content: stretch;
+    }
+    &.ai-s{
+        align-items: flex-start;
+    }
+    &.ai-e{
+        align-items: flex-end;
+    }
+    &.ai-c{
+        align-items: center;
+    }
+    &.ai-b{
+        align-items: baseline;
+    }
+    &.ai-stretch{
+        align-items: stretch;
+    }
+    &.ac-s{
+        align-content: flex-start;
+    }
+    &.ac-e{
+        align-content: flex-end;
+    }
+    &.ac-c{
+        align-content: center;
+    }
+    &.ac-sb{
+        align-content: space-between;
+    }
+    &.ac-sa{
+        align-content: space-around;
+    }
+    &.ac-se{
+        align-content: space-evenly;
+    }
+    &.ac-stretch{
+        align-content: stretch;
+    }
+    @include genPropsAmp(g, gap);
+    @include genPropsAmp(g-r, row-gap);
+    @include genPropsAmp(g-c, column-gap);
+    > {
+        .grow-0 {
+            flex-grow: 0;
+        }
+        .grow-1 {
+            flex-grow: 1;
+        }
+        .grow-2 {
+            flex-grow: 2;
+        }
+        .grow-3 {
+            flex-grow: 3;
+        }
+        .grow-4 {
+            flex-grow: 4;
+        }
+        .grow-5 {
+            flex-grow: 5;
+        }
+        .shrink-0 {
+            flex-shrink: 0;
+        }
+        .shrink-1 {
+            flex-shrink: 1;
+        }
+        .shrink-2 {
+            flex-shrink: 2;
+        }
+        .shrink-3 {
+            flex-shrink: 3;
+        }
+        .shrink-4 {
+            flex-shrink: 4;
+        }
+        .shrink-5 {
+            flex-shrink: 5;
+        }
+    }
+}

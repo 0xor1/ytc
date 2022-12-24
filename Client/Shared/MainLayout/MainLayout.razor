@@ -1,18 +1,16 @@
 ﻿<div class="root">
-    <RadzenLayout class="rz-shadow-3">
+    <RadzenLayout class="rz-shadow-3 fill">
         <RadzenHeader>
-            <div class="d-flex align-items-center">
-                <RadzenSidebarToggle Click="@(() => LeftExpanded = !LeftExpanded)" />
-                <RadzenProfileMenu>
-                    <Template>
-                        <RadzenGravatar Email="user@example.com">
-                        </RadzenGravatar>
-                    </Template>
-                    <ChildContent>
-                        <RadzenProfileMenuItem Text="Login" Path="login" Icon="account_circle"></RadzenProfileMenuItem>
-                    </ChildContent>
-                </RadzenProfileMenu>
-            </div>
+            <RadzenSidebarToggle Click="@(() => LeftExpanded = !LeftExpanded)" />
+            <RadzenProfileMenu>
+                <Template>
+                    <RadzenGravatar Email="user@example.com">
+                    </RadzenGravatar>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Login" Path="login" Icon="account_circle"></RadzenProfileMenuItem>
+                </ChildContent>
+            </RadzenProfileMenu>
         </RadzenHeader>
         <RadzenSidebar @bind-Expanded="@LeftExpanded">
             <RadzenPanelMenu>
@@ -20,7 +18,7 @@
                 <RadzenPanelMenuItem Text="Counter" Icon="account_box" Path="counter"/>
             </RadzenPanelMenu>
         </RadzenSidebar>
-        <RadzenBody>
+        <RadzenBody class="root">
             @Body
         </RadzenBody>
         <RadzenNotification/>
