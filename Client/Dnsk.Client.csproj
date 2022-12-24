@@ -50,8 +50,4 @@
     <ProjectReference Include="..\Common\Dnsk.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\css\global.scss" />
-  </ItemGroup>
-
 </Project>
