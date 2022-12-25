@@ -21,6 +21,10 @@
                 <RadzenRequiredValidator Component="Password" Popup="true" Text="Password is required!"/>
             </div>
             <RadzenButton ButtonType="ButtonType.Submit" Text="Sign In"/>
+            <div class="flx jc-sb">
+                <RadzenLink Path="register" Text="Register"></RadzenLink>
+                <RadzenLink Path="reset_pwd" Text="Reset Password"></RadzenLink>
+            </div>
         </RadzenTemplateForm>
     </RadzenCard>
 </div>
@@ -40,20 +44,4 @@
     {
         _auth.SignIn(Model.Email, Model.Pwd);
     }
-
-    private void OnLogin(LoginArgs args)
-    {
-        Console.WriteLine(args);
-    }
-
-    private void OnRegister()
-    {
-        Console.WriteLine("register");
-    }
-    
-    private void OnResetPwd(string args)
-    {
-        Console.WriteLine(args);
-    }
-
 }
