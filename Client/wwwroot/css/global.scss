@@ -10,26 +10,22 @@ $sub_divs: '', '.25', '.5', '.75';
     }
 }
 
-@mixin genProps($class, $props, $val_prefix: r, $max_size: $max_size, $sub_suffixes: $sub_suffixes) {
+@mixin genProps($class, $props, $amp: false, $val_prefix: r, $max_size: $max_size, $sub_suffixes: $sub_suffixes) {
     @for $i from 0 through $max_size {
         @each $sub_suffix in  $sub_suffixes {
-            .#{$class}-#{$i}#{$sub_suffix} {
-                @each $prop in $props {
-                    #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+            @if $amp {
+                &.#{$class}-#{$i}#{$sub_suffix} {
+                    @each $prop in $props {
+                        #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+                    }
                 }
-            }
-        }
-    }
-}
-
-@mixin genPropsAmp($class, $props, $val_prefix: r, $max_size: $max_size, $sub_suffixes: $sub_suffixes) {
-    @for $i from 0 through $max_size {
-        @each $sub_suffix in  $sub_suffixes {
-            &.#{$class}-#{$i}#{$sub_suffix} {
-                @each $prop in $props {
-                    #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+            } @else {
+                .#{$class}-#{$i}#{$sub_suffix} {
+                    @each $prop in $props {
+                        #{$prop}: var(--#{$val_prefix}-#{$i}#{$sub_suffix});
+                    }
                 }
-            }
+            }    
         }
     }
 }
@@ -45,7 +41,7 @@ html, body, .fill {
 .root{
     @include genVars(r, em);
     @include genVars(a, rem);
-    @include genProps(f, font-size, a);
+    @include genProps(f, font-size, false, a);
     @include genProps(m, margin);
     @include genProps(m-x, (margin-left, margin-right));
     @include genProps(m-y, (margin-top, margin-bottom));
@@ -60,13 +56,10 @@ html, body, .fill {
     @include genProps(p-r, padding-right);
     @include genProps(p-b, padding-bottom);
     @include genProps(p-l, padding-left);
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
     @extend .fill;
 }
 
-.flx {
+.root, .flx {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -145,9 +138,9 @@ html, body, .fill {
     &.ac-stretch{
         align-content: stretch;
     }
-    @include genPropsAmp(g, gap);
-    @include genPropsAmp(g-r, row-gap);
-    @include genPropsAmp(g-c, column-gap);
+    @include genProps(g, gap, true);
+    @include genProps(g-r, row-gap, true);
+    @include genProps(g-c, column-gap, true);
     > {
         .grow-0 {
             flex-grow: 0;
