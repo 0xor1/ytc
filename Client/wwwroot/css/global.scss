@@ -38,7 +38,10 @@ html, body, .fill {
     overflow: auto;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+
 .root{
+    font-family: 'Open Sans', sans-serif;
     @include genVars(r, em);
     @include genVars(a, rem);
     @include genProps(f, font-size, false, a);
