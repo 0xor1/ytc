@@ -12,12 +12,12 @@
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-1" Component="Email" Text="Email"/>
-                <RadzenTextBox Name="Email" @bind-Value=@Model.Email/>
+                <RadzenTextBox Name="Email" @bind-Value="@Model.Email"/>
                 <RadzenRequiredValidator Component="Email" Popup="true" Text="Email is required!"/>
             </div>
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-1" Component="Password" Text="Password"/>
-                <RadzenPassword Name="Password" @bind-Value=@Model.Pwd/>
+                <RadzenPassword Name="Password" @bind-Value="@Model.Pwd"/>
                 <RadzenRequiredValidator Component="Password" Popup="true" Text="Password is required!"/>
             </div>
             <RadzenButton ButtonType="ButtonType.Submit" Text="Sign In"/>
