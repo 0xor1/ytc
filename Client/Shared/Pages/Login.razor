@@ -1,20 +1,18 @@
 ﻿@using Dnsk.Client.Lib
 @using System.Text.RegularExpressions
-<div class="root">
-    <div class="col-xl-6 p-3">
-        <RadzenCard class="p-5">
-            <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" class="mb-4">
-                Register and password reset
-            </RadzenText>
-            <RadzenTemplateForm Data=@("LoginWithRegisterAndReset")>
-                <RadzenLogin
-                    Reme=@true
-                    Login=OnLogin
-                    ResetPassword=OnResetPwd
-                    Register=OnRegister />
-            </RadzenTemplateForm>
-        </RadzenCard>
-    </div>
+<div class="root jc-c ai-c">
+    <RadzenCard class="p-3">
+        <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" class="mb-4">
+            Register and password reset
+        </RadzenText>
+        <RadzenTemplateForm Data=@("LoginWithRegisterAndReset")>
+            <RadzenLogin
+                Reme=@true
+                Login=OnLogin
+                ResetPassword=OnResetPwd
+                Register=OnRegister />
+        </RadzenTemplateForm>
+    </RadzenCard>
 </div>
 
 @inject IAuthService _auth;
