@@ -42,6 +42,9 @@ html, body, .fill {
     @include genVars(r, em);
     @include genVars(a, rem);
     @include genProps(f, font-size, false, a);
+    @include genProps(w, width);
+    @include genProps(h, height);
+    @include genProps(sq, (width, height));
     @include genProps(m, margin);
     @include genProps(m-x, (margin-left, margin-right));
     @include genProps(m-y, (margin-top, margin-bottom));
