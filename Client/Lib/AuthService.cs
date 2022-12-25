@@ -10,8 +10,8 @@ public interface IAuthService
     Task<Session> GetSession();
     Task Register(string email, string pwd);
     Task VerifyEmail(string email, string code);
-    Task<Session> Login(string email, string pwd);
-    Task<Session> Logout();
+    Task<Session> SignIn(string email, string pwd);
+    Task<Session> SignOut();
 }
 
 public class AuthService: IAuthService
@@ -56,11 +56,11 @@ public class AuthService: IAuthService
         });
     }
 
-    public async Task<Session> Login(string email, string pwd)
+    public async Task<Session> SignIn(string email, string pwd)
     {
         var ses = await GetSession();
         Throw.OpIf(ses.IsAuthed, "already in authenticated session");
-        var newSes = await _api.Auth_LoginAsync(new Auth_LoginReq()
+        var newSes = await _api.Auth_SignInAsync(new Auth_SignInReq()
         {
             Email = email,
             Pwd = pwd
@@ -69,14 +69,14 @@ public class AuthService: IAuthService
         return _session;
     }
 
-    public async Task<Session> Logout()
+    public async Task<Session> SignOut()
     {
         var ses = await GetSession();
         if (!ses.IsAuthed)
         {
             return ses;
         }
-        var newSes = await _api.Auth_LogoutAsync(new Nothing());
+        var newSes = await _api.Auth_SignOutAsync(new Nothing());
         _session = new Session(newSes.Id, newSes.IsAuthed);
         return _session;
     }

@@ -33,9 +33,9 @@ public record Key
         {
             throw new InvalidDataException($"{str} must not contain double underscores");
         }
-        if (!Regex.IsMatch(str, @"^[a-z]"))
+        if (Regex.IsMatch(str, @"^_"))
         {
-            throw new InvalidDataException($"{str} must start with a lower case letter");
+            throw new InvalidDataException($"{str} must not start with _");
         }
         if (Regex.IsMatch(str, @"_$"))
         {

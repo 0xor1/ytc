@@ -19,7 +19,7 @@ public class ApiService : Api.ApiBase
         _session = session;
     }
 
-    public override Task<Auth_Session> Auth_GetSession(Nothing req, ServerCallContext stx)
+    public override Task<Auth_Session> Auth_GetSession(Nothing _, ServerCallContext stx)
     {
         var ses = _session.Get(stx);
         return new Auth_Session()
@@ -29,7 +29,21 @@ public class ApiService : Api.ApiBase
         }.Task();
     }
 
-    public override async Task<Nothing> Auth_Register(Auth_RegisterReq req, ServerCallContext stx)
+    public override Task<Nothing> Auth_Register(Auth_RegisterReq req, ServerCallContext stx)
+    {
+        var ses = _session.Get(stx);
+        Error.If(true, StatusCode.Internal, "status detail");
+        return new Nothing().Task();
+    }
+
+    public override Task<Nothing> Auth_VerifyEmail(Auth_VerifyEmailReq req, ServerCallContext stx)
+    {
+        var ses = _session.Get(stx);
+        Error.If(true, StatusCode.Internal, "status detail");
+        return new Nothing().Task();
+    }
+
+    public override Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
     {
         // await _db.Auths.AddAsync(new Auth()
         // {
@@ -38,6 +52,26 @@ public class ApiService : Api.ApiBase
         // await _db.SaveChangesAsync();
         var ses = _session.Get(stx);
         Error.If(true, StatusCode.Internal, "status detail");
-        return new Nothing();
+        return new Auth_Session()
+        {
+            Id = ses.Id,
+            IsAuthed = ses.IsAuthed
+        }.Task();
+    }
+
+    public override Task<Auth_Session> Auth_SignOut(Nothing _, ServerCallContext stx)
+    {
+        // await _db.Auths.AddAsync(new Auth()
+        // {
+        //     Id = Ulid.NewUlid()
+        // });
+        // await _db.SaveChangesAsync();
+        var ses = _session.Get(stx);
+        Error.If(true, StatusCode.Internal, "status detail");
+        return new Auth_Session()
+        {
+            Id = ses.Id,
+            IsAuthed = ses.IsAuthed
+        }.Task();
     }
 }

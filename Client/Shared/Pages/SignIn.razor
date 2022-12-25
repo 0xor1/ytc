@@ -1,0 +1,59 @@
+﻿@using Dnsk.Client.Lib
+@using System.Text.RegularExpressions
+<div class="root jc-c ai-c">
+    <RadzenCard class="p-3">
+        <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" class="mb-4">
+            Sign In
+        </RadzenText>
+        <RadzenTemplateForm
+            TItem="SignInModel"
+            Data="Model"
+            Submit="Submit"
+            class="flx col ai-stretch g-1">
+            <div class="flx col ai-stretch">
+                <RadzenLabel class="m-b-1" Component="Email" Text="Email"/>
+                <RadzenTextBox Name="Email" @bind-Value=@Model.Email/>
+                <RadzenRequiredValidator Component="Email" Popup="true" Text="Email is required!"/>
+            </div>
+            <div class="flx col ai-stretch">
+                <RadzenLabel class="m-b-1" Component="Password" Text="Password"/>
+                <RadzenPassword Name="Password" @bind-Value=@Model.Pwd/>
+                <RadzenRequiredValidator Component="Password" Popup="true" Text="Password is required!"/>
+            </div>
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Sign In"/>
+        </RadzenTemplateForm>
+    </RadzenCard>
+</div>
+
+@inject IAuthService _auth;
+@code{
+
+    class SignInModel
+    {
+        public string Email { get; set; }
+        public string Pwd { get; set; }
+    }
+
+    private SignInModel Model = new ();
+
+    private void Submit()
+    {
+        _auth.SignIn(Model.Email, Model.Pwd);
+    }
+
+    private void OnLogin(LoginArgs args)
+    {
+        Console.WriteLine(args);
+    }
+
+    private void OnRegister()
+    {
+        Console.WriteLine("register");
+    }
+    
+    private void OnResetPwd(string args)
+    {
+        Console.WriteLine(args);
+    }
+
+}

@@ -183,3 +183,18 @@ html, body, .fill {
         }
     }
 }
+
+/* custom input styling for invalid red highlighting on all inputs by default */
+input.invalid:not(:disabled):not(.rz-state-disabled) {
+    box-shadow: inset 0 0 0 1px var(--rz-danger);
+    border: var(--rz-border-danger);
+    &:focus, &:hover {
+        box-shadow: inset 0 0 0 2px var(--rz-danger);
+        border: var(--rz-border-danger);
+    }
+}
+
+.rz-message-popup {
+    position: relative;
+    transform: translateY(var(--r-0h));
+}

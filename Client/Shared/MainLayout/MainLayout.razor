@@ -2,13 +2,12 @@
     <RadzenLayout class="rz-shadow-3 fill">
         <RadzenHeader class="flx jc-sb">
             <RadzenSidebarToggle class="sq-4t" Click="@(() => LeftExpanded = !LeftExpanded)" />
-            <RadzenProfileMenu class="m-t-0q">
+            <RadzenProfileMenu class="m-t-0t">
                 <Template>
-                    <RadzenGravatar Email="user@example.com">
-                    </RadzenGravatar>
+                    <RadzenIcon Icon="account_circle" IconStyle="IconStyle.Danger"></RadzenIcon>
                 </Template>
                 <ChildContent>
-                    <RadzenProfileMenuItem Text="Login" Path="login" Icon="account_circle"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Sign In" Path="Signin" Icon="account_circle"></RadzenProfileMenuItem>
                 </ChildContent>
             </RadzenProfileMenu>
         </RadzenHeader>
