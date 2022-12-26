@@ -4,10 +4,10 @@
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3">
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
-            Sign In
+            Register
         </RadzenText>
         <RadzenTemplateForm
-            TItem="SignInModel"
+            TItem="RegisterModel"
             Data="Model"
             Submit="Submit"
             class="flx col ai-stretch g-1">
@@ -21,11 +21,15 @@
                 <RadzenPassword Name="Password" @bind-Value="@Model.Pwd"/>
                 <RadzenCustomValidator Validator="PasswordValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
             </div>
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="Submitting" Text="Sign In"/>
-            <div class="flx jc-sb">
-                <RadzenLink Path="register" Text="Register"></RadzenLink>
-                <RadzenLink Path="reset_pwd" Text="Reset Password"></RadzenLink>
+            <div class="flx col ai-stretch">
+                <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="Confirm Password"/>
+                <RadzenPassword Name="ConfirmPassword" @bind-Value="@Model.ConfirmPwd"/>
+                <RadzenCustomValidator Validator="ConfirmPasswordValidator" Component="ConfirmPassword" Popup="true" Text="Passwords don't match"></RadzenCustomValidator>
             </div>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Registering" IsBusy="Submitting" Text="Register"/>
+            @* <div class="flx jc-sb"> *@
+                <RadzenLink Path="sign_in" Text="Sign In"></RadzenLink>
+            @* </div> *@
         </RadzenTemplateForm>
     </RadzenCard>
 </div>
@@ -33,13 +37,14 @@
 @inject IAuthService _auth;
 @code{
 
-    class SignInModel
+    class RegisterModel
     {
         public string Email { get; set; }
         public string Pwd { get; set; }
+        public string ConfirmPwd { get; set; }
     }
 
-    private SignInModel Model = new ();
+    private RegisterModel Model = new ();
 
     private bool Submitting = false;
 
@@ -48,7 +53,7 @@
         Submitting = true;
         try
         {
-            await _auth.SignIn(Model.Email, Model.Pwd);
+            await _auth.Register(Model.Email, Model.Pwd);
         }
         catch
         {
@@ -102,5 +107,11 @@
             res.SubRules.Add("no special character");
         }
         return res;
+    }
+
+    private (bool Valid, List<string> SubRules) ConfirmPasswordValidator(IRadzenFormComponent component)
+    {
+        var str = component.GetValue() as string ?? "";
+        return (Valid: str == Model.Pwd, SubRules: new List<string>());
     }
 }
