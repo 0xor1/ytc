@@ -48,7 +48,7 @@ public class ErrorInterceptor : Interceptor
                 Console.WriteLine($"{DateTime.UtcNow.ToString("s")} {ex.Message}");
             }
 
-            NotificationService.Notify(level, "Api Error", message, duration: 60000D);
+            NotificationService.Notify(level, "Api Error", message, duration: 10000D);
             // rethrow in case any other specific components need to handle it too.
             throw new ApiException(code, message);
         }
