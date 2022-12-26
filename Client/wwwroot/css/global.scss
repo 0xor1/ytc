@@ -1,28 +1,33 @@
+$min_size: 0;
 $max_size: 5;
 $sub_sufs: '', 'q', 'h', 't';
 $sub_divs: '', '.25', '.5', '.75';
 
-@mixin genVars($var_prefix: r, $units: em, $max_size: $max_size, $sub_sufs: $sub_sufs, $sub_divs: $sub_divs) {
-    @for $i from 0 through $max_size {
-        @for $j from 1 through length($sub_divs) {
-            --#{$var_prefix}-#{$i}#{nth($sub_sufs, $j)}: #{$i}#{nth($sub_divs, $j)}#{$units};
+@mixin genVars($var_prefix: r, $units: em, $min_size: $min_size, $max_size: $max_size, $step_size: 1, $sub_sufs: $sub_sufs, $sub_divs: $sub_divs) {
+    @for $i from $min_size through $max_size {
+        @if $i % $step_size == 0 {
+            @for $j from 1 through length($sub_sufs) {
+                --#{$var_prefix}-#{$i}#{nth($sub_sufs, $j)}: #{$i}#{nth($sub_divs, $j)}#{$units};
+            }
         }
     }
 }
 
-@mixin genProps($class, $props, $amp: false, $val_pre: r, $max_size: $max_size, $sub_sufs: $sub_sufs) {
-    @for $i from 0 through $max_size {
-        @each $sub_suf in  $sub_sufs {
-            @if $amp {
-                &.#{$class}-#{$i}#{$sub_suf} {
-                    @each $prop in $props {
-                        #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
+@mixin genProps($class, $props, $amp: false, $val_pre: r, $min_size: $min_size, $max_size: $max_size, $step_size: 1, $sub_sufs: $sub_sufs) {
+    @for $i from $min_size through $max_size {
+        @if $i % $step_size == 0 {
+            @each $sub_suf in  $sub_sufs {
+                @if $amp {
+                    &.#{$class}-#{$i}#{$sub_suf} {
+                        @each $prop in $props {
+                            #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
+                        }
                     }
-                }
-            } @else {
-                .#{$class}-#{$i}#{$sub_suf} {
-                    @each $prop in $props {
-                        #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
+                } @else {
+                    .#{$class}-#{$i}#{$sub_suf} {
+                        @each $prop in $props {
+                            #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
+                        }
                     }
                 }
             }
@@ -42,10 +47,12 @@ html, body, .fill {
 
 .root{
     font-family: 'Open Sans', sans-serif;
-    @include genVars(r, em);
     @include genVars(a, rem);
+    @include genVars(r, em);
+    @include genVars(r, em, $min_size: 10, $max_size: 50, $step_size: 5, $sub_sufs: [""]);
     @include genProps(f, font-size, false, a);
     @include genProps(w, width);
+    @include genProps(w, width, $min_size: 10, $max_size: 50, $step_size: 5, $sub_sufs: [""]);
     @include genProps(h, height);
     @include genProps(sq, (width, height));
     @include genProps(m, margin);

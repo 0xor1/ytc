@@ -10,6 +10,8 @@ public interface IAuthService
     Task<Session> GetSession();
     Task Register(string email, string pwd);
     Task VerifyEmail(string email, string code);
+    Task SendResetPwdEmail(string email);
+    Task ResetPwd(string email, string code, string newPwd);
     Task<Session> SignIn(string email, string pwd);
     Task<Session> SignOut();
 }
@@ -53,6 +55,24 @@ public class AuthService: IAuthService
         {
             Email = email,
             Code = code
+        });
+    }
+
+    public async Task SendResetPwdEmail(string email)
+    {
+        await _api.Auth_SendResetPwdEmailAsync(new Auth_SendResetPwdEmailReq()
+        {
+            Email = email
+        });
+    }
+
+    public async Task ResetPwd(string email, string code, string newPwd)
+    {
+        await _api.Auth_ResetPwdAsync(new Auth_ResetPwdReq()
+        {
+            Email = email,
+            Code = code,
+            NewPwd = newPwd
         });
     }
 

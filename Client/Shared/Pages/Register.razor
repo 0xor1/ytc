@@ -2,7 +2,7 @@
 @using System.Text.RegularExpressions
 @using Dnsk.Common
 <div class="root jc-c ai-c">
-    <RadzenCard class="p-3">
+    <RadzenCard class="p-3 w-25">
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
             Register
         </RadzenText>
@@ -19,7 +19,7 @@
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Password" Text="Password"/>
                 <RadzenPassword Name="Password" @bind-Value="@Model.Pwd"/>
-                <RadzenCustomValidator Validator="PasswordValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
+                <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
             </div>
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="Confirm Password"/>
@@ -60,58 +60,15 @@
             // empty catch to avoid using StateHasChanged()
             // in finally after updating the busy bool flag
         }
-        finally
-        {
-            Submitting = false;
-        }
+        Submitting = false;
     }
 
     private (bool Valid, List<string> SubRules) EmailValidator(IRadzenFormComponent component)
-    {
-        var res = (Valid: true, SubRules: new List<string>());
-        var str = component.GetValue() as string ?? "";
-        if (!Regex.IsMatch(str, @"^[^@]+@[^@]+\.[^@]+$"))
-        {
-            res.Valid = false;
-        }
-        return res;
-    }
+        => AuthValidator.EmailValidator(component);
 
-    private (bool Valid, List<string> SubRules) PasswordValidator(IRadzenFormComponent component)
-    {
-        var res = (Valid: true, SubRules: new List<string>());
-        var str = component.GetValue() as string ?? "";
-        if (!Regex.IsMatch(str, ".{8,}"))
-        {
-            res.Valid = false;
-            res.SubRules.Add("less than 8 characters");
-        }
-        if (!Regex.IsMatch(str, "[a-z]"))
-        {
-            res.Valid = false;
-            res.SubRules.Add("no lowercase character");
-        }
-        if (!Regex.IsMatch(str, "[A-Z]"))
-        {
-            res.Valid = false;
-            res.SubRules.Add("no uppercase character");
-        }
-        if (!Regex.IsMatch(str, "[0-9]"))
-        {
-            res.Valid = false;
-            res.SubRules.Add("no digit");
-        }
-        if (!Regex.IsMatch(str, "[^a-zA-Z0-9 ]"))
-        {
-            res.Valid = false;
-            res.SubRules.Add("no special character");
-        }
-        return res;
-    }
+    private (bool Valid, List<string> SubRules) PwdValidator(IRadzenFormComponent component)
+        => AuthValidator.PwdValidator(component);
 
     private (bool Valid, List<string> SubRules) ConfirmPasswordValidator(IRadzenFormComponent component)
-    {
-        var str = component.GetValue() as string ?? "";
-        return (Valid: str == Model.Pwd, SubRules: new List<string>());
-    }
+        => (Valid: (component.GetValue() as string ?? "") == Model.Pwd, SubRules: new List<string>());
 }
