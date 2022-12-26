@@ -12,15 +12,12 @@ public class DnskDb : DbContext
 public class Auth
 {
     public string Id { get; set; }
-    public string? Email { get; set; }
-    public string? Phone { get; set; }
+    public string Email { get; set; }
     public DateTime LastAuthedOn { get; set; }
     public DateTime ActivatedOn { get; set; }
     public string? ActivateCode { get; set; }
     public string? NewEmail { get; set; }
     public string? NewEmailCode { get; set; }
-    public string? NewPhone { get; set; }
-    public string? NewPhoneCode { get; set; }
     public DateTime? LoginCodeCreatedOn { get; set; }
     public string? LoginCode { get; set; }
     public bool Use2FA { get; set; }

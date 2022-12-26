@@ -10,16 +10,17 @@ public class RadzenCustomValidator: ValidatorBase
 {
     public override string Text { get; set; } = "Invalid";
 
-    private List<string> SubRules { get; set; } = new();
+    private List<string> SubMessages { get; set; } = new();
 
     [Parameter]
     [EditorRequired]
-    public Func<IRadzenFormComponent, (bool Valid, List<String> SubRules)> Validator { get; set; }
+    public Func<IRadzenFormComponent, ValidationResult> Validator { get; set; }
 
     protected override bool Validate(IRadzenFormComponent component)
     {
         var res = Validator(component);
-        SubRules = res.SubRules;
+        Text = res.Message;
+        SubMessages = res.SubMessages;
         return res.Valid;
     }
     
@@ -36,11 +37,11 @@ public class RadzenCustomValidator: ValidatorBase
         {
             builder.AddContent(4, Text);
         }
-        if (SubRules.Any())
+        if (SubMessages.Any())
         {
             builder.OpenElement(5, "ul");
             builder.AddAttribute(6, "class", "p-l-1h m-y-0");
-            foreach (var subRule in SubRules)
+            foreach (var subRule in SubMessages)
             {
                 builder.OpenElement(7, "li");
                 builder.AddContent(8, subRule);

@@ -7,15 +7,12 @@ USE Dnsk;
 DROP TABLE IF EXISTS Auths;
 CREATE TABLE Auths (
     Id CHAR(22) NOT NULL,
-    Email VARCHAR(250) NULL,
-    Phone VARCHAR(20) NULL,
+    Email VARCHAR(250) NOT NULL,
     LastAuthedOn DATETIME(3) NOT NULL,
     ActivatedOn DATETIME(3) NOT NULL,
     ActivateCode VARCHAR(250) NULL,
     NewEmail VARCHAR(250) NULL,
     NewEmailCode VARCHAR(250) NULL,
-    NewPhone VARCHAR(20) NULL,
-    NewPhoneCode VARCHAR(250) NULL,
     LoginCodeCreatedOn DATETIME(3) NULL,
     LoginCode VARCHAR(250) NULL,
     Use2FA       BOOLEAN NOT NULL,
@@ -26,7 +23,6 @@ CREATE TABLE Auths (
     ScryptP      MEDIUMINT UNSIGNED NULL,
     PRIMARY KEY Id (Id),
     UNIQUE INDEX Email (Email),
-    UNIQUE INDEX Phone (Phone),
     INDEX(ActivatedOn, LastAuthedOn)
 );
 
