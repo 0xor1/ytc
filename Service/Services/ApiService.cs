@@ -1,4 +1,5 @@
-﻿using Dnsk.Common;
+﻿using System.Security.Cryptography;
+using Dnsk.Common;
 using Dnsk.Db;
 using Dnsk.Proto;
 using Dnsk.Service.Util;
@@ -45,18 +46,18 @@ public class ApiService : Api.ApiBase
             // TODO
             return new Nothing();
         }
-        // TODO: generate cryptographically strong activation code;
-        var activationCode = "123123";
+        var activationCode = Crypto.String();
         // TODO: generate salt and hash pwd and store in db
         await _db.Auths.AddAsync(new Auth()
         {
-            // is it ok to use existing anon ses id? it should be unique
-            // and there'll be an error inserting to db if it isnt
+            // use existing anon session id incase they have any work done in anon mode
+            // that they want to persist in to authed mode.
             Id = ses.Id,
             Email = req.Email,
             LastAuthedOn = DateTime.UtcNow,
             ActivatedOn = new DateTime(1, 1, 1, 0, 0, 0),
             ActivateCode = activationCode,
+            
         }, stx.CancellationToken);
         // TODO send activation email with link
         await _db.SaveChangesAsync();

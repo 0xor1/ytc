@@ -1,4 +1,6 @@
-﻿namespace Dnsk.Common;
+﻿using System.Security.Cryptography;
+
+namespace Dnsk.Common;
 
 public static class Base64
 {

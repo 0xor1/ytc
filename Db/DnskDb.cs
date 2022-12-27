@@ -1,3 +1,4 @@
+using Dnsk.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Db;
@@ -9,7 +10,7 @@ public class DnskDb : DbContext
     
 }
 
-public class Auth
+public class Auth: Pwd
 {
     public string Id { get; set; }
     public string Email { get; set; }
@@ -21,9 +22,11 @@ public class Auth
     public DateTime? LoginCodeCreatedOn { get; set; }
     public string? LoginCode { get; set; }
     public bool Use2FA { get; set; }
-    public byte[]? ScryptSalt { get; set; }
-    public byte[]? ScryptPwd { get; set; }
-    public uint? ScryptN { get; set; } 
-    public uint? ScryptR { get; set; }
-    public uint? ScryptP { get; set; }
+}
+public class Pwd
+{
+    public int PwdVersion { get; set; }
+    public byte[] PwdSalt { get; set; }
+    public byte[] PwdHash { get; set; }
+    public int PwdIters { get; set; }
 }
