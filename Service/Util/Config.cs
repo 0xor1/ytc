@@ -1,4 +1,5 @@
-﻿using Dnsk.Common;
+﻿using Amazon;
+using Dnsk.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -28,8 +29,18 @@ public record SessionConfig
 public record EmailConfig
 {
     public string Region { get; init; }
-    public string Id { get; init; }
+    public string Key { get; init; }
     public string Secret { get; init; }
+
+    public RegionEndpoint GetRegionEndpoint()
+    {
+        var re = RegionEndpoint.GetBySystemName(Region);
+        if (re == null)
+        {
+            throw new InvalidSetupException($"couldn't find aws region endpoint with system name: {Region}");
+        }
+        return re;
+    }
 }
 
 public static class Config

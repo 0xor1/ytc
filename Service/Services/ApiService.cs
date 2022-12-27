@@ -12,11 +12,13 @@ public class ApiService : Api.ApiBase
 {
     private readonly DnskDb _db;
     private readonly ISessionManager _session;
+    private readonly IEmailClient _emailClient;
     
-    public ApiService(DnskDb db, ISessionManager session)
+    public ApiService(DnskDb db, ISessionManager session, IEmailClient emailClient)
     {
         _db = db;
         _session = session;
+        _emailClient = emailClient;
     }
 
     public override Task<Auth_Session> Auth_GetSession(Nothing _, ServerCallContext stx)
@@ -46,10 +48,7 @@ public class ApiService : Api.ApiBase
             var existing = await _db.Auths.FirstOrDefaultAsync(x => x.Email.Equals(req.Email));
             if (existing != null)
             {
-                // email is already associated with an existing account
-                // send an email to notify the user of attempted registration
-                // and silently return success
-                // TODO
+                RateLimitAuthAttempts(existing);
                 return new Nothing();
             }
 
@@ -59,6 +58,7 @@ public class ApiService : Api.ApiBase
             {
                 Id = ses.Id,
                 Email = req.Email,
+                LastAuthedAttemptOn = DateTime.UtcNow,
                 LastAuthedOn = DateTime.UtcNow,
                 ActivatedOn = new DateTime(1, 1, 1, 0, 0, 0),
                 LoginCode = activationCode,
@@ -68,7 +68,12 @@ public class ApiService : Api.ApiBase
                 PwdIters = pwd.PwdIters
             }, stx.CancellationToken);
             await _db.SaveChangesAsync();
-            // TODO send activation email with link
+            await _emailClient.SendEmailAsync(
+                "Confirm Email Address", 
+                $"<div><a href=\"https://yolo.yolo.yolo?code={activationCode}\">please click this link to verify your email address</a></div>", 
+                $"please use this link to verify your email address: https://yolo.yolo.yolo?code={activationCode}", 
+                "yolo@yolo.yolo", 
+                new List<string>(){req.Email});
             await tx.CommitAsync();
         }
         catch
@@ -117,5 +122,11 @@ public class ApiService : Api.ApiBase
             Id = ses.Id,
             IsAuthed = ses.IsAuthed
         }.Task();
+    }
+
+    private const int AuthAttemptsRateLimit = 5;
+    private static void RateLimitAuthAttempts(Auth auth)
+    {
+        Error.If(DateTime.UtcNow.Subtract(auth.LastAuthedAttemptOn).TotalSeconds > AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true);
     }
 }

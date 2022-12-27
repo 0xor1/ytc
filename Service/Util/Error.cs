@@ -29,7 +29,7 @@ public class ApiException : Exception
 
 public class ErrorInterceptor : Interceptor
 {
-    private readonly ILogger _log;
+    private readonly ILogger<ErrorInterceptor> _log;
 
     public ErrorInterceptor(ILogger<ErrorInterceptor> log)
     {

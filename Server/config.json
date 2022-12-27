@@ -14,7 +14,7 @@
   },
   "email": {
     "region": "eu-west-1",
-    "id": "abc",
+    "key": "abc",
     "secret": "123"
   } 
 }

@@ -1,4 +1,7 @@
-﻿using Dnsk.Db;
+﻿using Amazon;
+using Amazon.Runtime;
+using Amazon.SimpleEmail;
+using Dnsk.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MySqlConnector;
@@ -14,6 +17,16 @@ public static class ServiceExts
             opts.Interceptors.Add<ErrorInterceptor>();
         });
         services.AddScoped<ISessionManager, SessionManager>();
+        if (Config.Env == Env.LCL)
+        {
+            services.AddScoped<IEmailClient, LogEmailClient>();
+        }
+        else
+        {
+            services.AddScoped<AmazonSimpleEmailServiceClient>(sp =>
+                new AmazonSimpleEmailServiceClient(new BasicAWSCredentials(Config.Email.Key, Config.Email.Secret), Config.Email.GetRegionEndpoint()));
+            services.AddScoped<IEmailClient, SesEmailClient>();
+        }
         services.AddDbContext<DnskDb>(
             dbContextOptions =>
             {
