@@ -1,4 +1,5 @@
 ﻿{
+  "env": "lcl",
   "server": {
     "listen": "https://localhost:9500"
   },
@@ -10,5 +11,10 @@
       "MlSZpzRgE0NovHM66Zm0MJf_B-0GK4eFABsN3BemeiP1uw9PxxyM2GHYhNmgveS5g5-QMM37tVq4XxOxCBfnjw",
       "YYHMi8l-UeuyDkBx3E1IEO-CGb7s5Dspe6MeARFdHoO0a8jcX4h0uM-CMHTSlUjUj3ix41MmqbaGmSzzmNM8DA"
     ]
-  }
+  },
+  "email": {
+    "region": "eu-west-1",
+    "id": "abc",
+    "secret": "123"
+  } 
 }

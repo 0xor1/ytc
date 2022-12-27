@@ -1,41 +1,63 @@
-﻿using System.Text.Json.Nodes;
-using Dnsk.Common;
+﻿using Dnsk.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Dnsk.Service.Util;
 
-public class ServerConfig
+public enum Env
+{
+    LCL,
+    DEV,
+    STG,
+    PRO
+}
+public record ServerConfig
 {
     public string Listen { get; init; }
 }
-public class DbConfig
+public record DbConfig
 {
     public string Connection { get; init; }
 }
 
-public class SessionConfig
+public record SessionConfig
 {
-    public string[] SignatureKeys { get; init; }
+    public IReadOnlyList<string> SignatureKeys { get; init; }
+}
+
+public record EmailConfig
+{
+    public string Region { get; init; }
+    public string Id { get; init; }
+    public string Secret { get; init; }
 }
 
 public static class Config
 {
-    public static ServerConfig Server { get; }
-    public static DbConfig Db { get; }
-    public static SessionConfig Session { get; }
+    private static readonly Raw _raw;
+
+    public static Env Env
+    {
+        get => _raw.Env;
+    }
+
+    public static ServerConfig Server { get => _raw.Server; }
+    public static DbConfig Db { get => _raw.Db; }
+    public static SessionConfig Session { get => _raw.Session; }
+    public static EmailConfig Email { get => _raw.Email; }
 
     static Config()
     {
-        var r = JsonConvert.DeserializeObject<Raw>(File.ReadAllText(Path.Join(Directory.GetCurrentDirectory(), "config.json"))).NotNull();
-        Server = r.Server;
-        Db = r.Db;
-        Session = r.Session;
+        _raw = JsonConvert.DeserializeObject<Raw>(File.ReadAllText(Path.Join(Directory.GetCurrentDirectory(), "config.json"))).NotNull();
     }
+}
     
-    public class Raw
-    {
-        public ServerConfig Server { get; init; }
-        public DbConfig Db { get; init; }
-        public SessionConfig Session { get; init; }
-    }
+internal record Raw
+{
+    [JsonConverter(typeof(StringEnumConverter))]
+    public Env Env { get; init; }
+    public ServerConfig Server { get; init; }
+    public DbConfig Db { get; init; }
+    public SessionConfig Session { get; init; }
+    public EmailConfig Email { get; init; }
 }
