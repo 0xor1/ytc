@@ -27,7 +27,7 @@ public static class AuthValidator
     {
         var res = new ValidationResult()
         {
-            Message = "Invalid email"
+            Message = "Invalid Password"
         };
         if (!Regex.IsMatch(str, ".{8,}"))
         {

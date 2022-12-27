@@ -10,7 +10,7 @@ public static class Error
     public static void If(bool condition, string message, StatusCode code = StatusCode.Internal, bool @public = false, bool log = true)
         => Throw.If(condition, () => new ApiException(code, message, @public, log));
     public static void FromValidationResult(ValidationResult res, StatusCode code = StatusCode.Internal, bool @public = true, bool log = false)
-        => If(res.Valid, $"{res.Message}{(res.SubMessages.Any() ? $":\n{String.Join("\n",res.SubMessages)}": "")}", code, @public, log);
+        => If(!res.Valid, $"{res.Message}{(res.SubMessages.Any() ? $":\n{String.Join("\n",res.SubMessages)}": "")}", code, @public, log);
 }
 
 public class ApiException : Exception
