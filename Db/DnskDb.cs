@@ -15,7 +15,6 @@ public class Auth: Pwd
     public string Email { get; set; }
     public DateTime LastAuthedOn { get; set; }
     public DateTime ActivatedOn { get; set; }
-    public string? ActivateCode { get; set; }
     public string? NewEmail { get; set; }
     public string? NewEmailCode { get; set; }
     public DateTime? LoginCodeCreatedOn { get; set; }

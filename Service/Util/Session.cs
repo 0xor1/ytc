@@ -53,7 +53,7 @@ public class SessionManager: ISessionManager
         return _cache;
     }
 
-    public Session Login(ServerCallContext stx, string userId)
+    public Session SignIn(ServerCallContext stx, string userId)
     {
         var ses = new Session()
         {
@@ -66,7 +66,7 @@ public class SessionManager: ISessionManager
         return ses;
     }
 
-    public Session Logout(ServerCallContext stx)
+    public Session SignOut(ServerCallContext stx)
     {
         DeleteCookie(stx);
         // generate new anon session
@@ -161,6 +161,6 @@ public class SessionManager: ISessionManager
 public interface ISessionManager
 {
     public Session Get(ServerCallContext stx);
-    public Session Login(ServerCallContext stx, string userId);
-    public Session Logout(ServerCallContext stx);
+    public Session SignIn(ServerCallContext stx, string userId);
+    public Session SignOut(ServerCallContext stx);
 }

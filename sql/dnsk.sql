@@ -10,7 +10,6 @@ CREATE TABLE Auths (
     Email VARCHAR(250) NOT NULL,
     LastAuthedOn DATETIME(3) NOT NULL,
     ActivatedOn DATETIME(3) NOT NULL,
-    ActivateCode VARCHAR(250) NULL,
     NewEmail VARCHAR(250) NULL,
     NewEmailCode VARCHAR(250) NULL,
     LoginCodeCreatedOn DATETIME(3) NULL,
