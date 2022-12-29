@@ -128,6 +128,6 @@ public class ApiService : Api.ApiBase
     private const int AuthAttemptsRateLimit = 5;
     private static void RateLimitAuthAttempts(Auth auth)
     {
-        Error.If(DateTime.UtcNow.Subtract(auth.LastAuthedAttemptOn).TotalSeconds > AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true);
+        Error.If(DateTime.UtcNow.Subtract(auth.LastAuthedAttemptOn).TotalSeconds < AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true);
     }
 }
