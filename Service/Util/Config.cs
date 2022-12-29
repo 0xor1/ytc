@@ -66,7 +66,7 @@ public static class Config
 internal record Raw
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    public Env Env { get; init; }
+    public Env Env { get; init; } = Env.LCL;
     public ServerConfig Server { get; init; }
     public DbConfig Db { get; init; }
     public SessionConfig Session { get; init; }
