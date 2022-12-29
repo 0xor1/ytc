@@ -7,7 +7,7 @@ namespace Dnsk.Service.Util;
 
 public static class Crypto
 {
-    public static byte[] Bytes(int n = 100)
+    public static byte[] Bytes(int n)
     {
         byte[] random = new Byte[n];
         using var rng = RandomNumberGenerator.Create();
@@ -15,7 +15,7 @@ public static class Crypto
         return random;
     }
 
-    public static string String(int n = 100)
+    public static string String(int n)
         => Base64.UrlEncode(Bytes(n));
 
     public static Pwd HashPwd(string pwd)

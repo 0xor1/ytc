@@ -21,6 +21,7 @@
     <PackageReference Include="LibSassBuilder" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Radzen.Blazor" Version="4.4.7" />
   </ItemGroup>
 
@@ -48,6 +49,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Dnsk.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Shared\Pages\VerifyEmail.razor" />
   </ItemGroup>
 
 </Project>

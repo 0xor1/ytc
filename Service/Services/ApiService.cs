@@ -52,7 +52,7 @@ public class ApiService : Api.ApiBase
                 return new Nothing();
             }
 
-            var activationCode = Crypto.String();
+            var activationCode = Crypto.String(32);
             var pwd = Crypto.HashPwd(req.Pwd);
             await _db.Auths.AddAsync(new Auth()
             {
@@ -70,8 +70,8 @@ public class ApiService : Api.ApiBase
             await _db.SaveChangesAsync();
             await _emailClient.SendEmailAsync(
                 "Confirm Email Address", 
-                $"<div><a href=\"https://yolo.yolo.yolo?code={activationCode}\">please click this link to verify your email address</a></div>", 
-                $"please use this link to verify your email address: https://yolo.yolo.yolo?code={activationCode}", 
+                $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={activationCode}\">please click this link to verify your email address</a></div>", 
+                $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={activationCode}", 
                 "yolo@yolo.yolo", 
                 new List<string>(){req.Email});
             await tx.CommitAsync();
