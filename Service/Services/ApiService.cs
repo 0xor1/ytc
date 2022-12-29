@@ -79,6 +79,7 @@ public class ApiService : Api.ApiBase
         catch
         {
             await tx.RollbackAsync();
+            throw;
         }
 
         return new Nothing();

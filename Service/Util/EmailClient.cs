@@ -22,7 +22,7 @@ public class LogEmailClient: IEmailClient
     public async Task SendEmailAsync(string subject, string bodyHtml, string bodyText, 
         string senderAddress, List<string> toAddresses, List<string>? ccAddresses = null, List<string>? bccAddresses = null)
     {
-        _log.LogInformation($"Sending Email:\nsubject: {subject}\nbodyHtml: {bodyHtml}\nbodyText: {bodyText}\nsenderAddress: {senderAddress}\ntoAddress: {String.Join(", ", toAddresses)}\nccAddress: {String.Join(", ", ccAddresses)}\nbccAddress: {String.Join(", ", bccAddresses)}");
+        _log.LogInformation($"Sending Email:\nsubject: {subject}\nbodyHtml: {bodyHtml}\nbodyText: {bodyText}\nsenderAddress: {senderAddress}\ntoAddress: {String.Join(", ", toAddresses)}\nccAddress: {String.Join(", ", ccAddresses ?? new List<string>())}\nbccAddress: {String.Join(", ", bccAddresses ?? new List<string>())}");
     }
 }
 
