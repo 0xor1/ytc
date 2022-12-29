@@ -51,8 +51,4 @@
     <ProjectReference Include="..\Common\Dnsk.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Shared\Pages\VerifyEmail.razor" />
-  </ItemGroup>
-
 </Project>
