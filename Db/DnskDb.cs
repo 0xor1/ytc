@@ -13,14 +13,14 @@ public class Auth: Pwd
 {
     public string Id { get; set; }
     public string Email { get; set; }
-    public DateTime LastAuthedOn { get; set; }
-    public DateTime LastAuthedAttemptOn { get; set; }
-    public DateTime ActivatedOn { get; set; }
-    public string? NewEmail { get; set; }
-    public string? NewEmailCode { get; set; }
-    public DateTime? LoginCodeCreatedOn { get; set; }
-    public string? LoginCode { get; set; }
-    public bool Use2FA { get; set; }
+    public DateTime LastAuthedOn { get; set; } = DateTime.UtcNow;
+    public DateTime LastAuthedAttemptOn { get; set; } = DateTime.UtcNow;
+    public DateTime ActivatedOn { get; set; } = new (1, 1, 1, 0, 0, 0);
+    public string NewEmail { get; set; } = "";
+    public string VerifyEmailCode { get; set; } = "";
+    public DateTime LoginCodeCreatedOn { get; set; } = new (1, 1, 1, 0, 0, 0);
+    public string LoginCode { get; set; } = "";
+    public bool Use2FA { get; set; } = false;
 }
 public class Pwd
 {

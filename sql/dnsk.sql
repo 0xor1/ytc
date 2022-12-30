@@ -11,10 +11,10 @@ CREATE TABLE Auths (
     LastAuthedOn DATETIME(3) NOT NULL,
     LastAuthedAttemptOn DATETIME(3) NOT NULL,
     ActivatedOn DATETIME(3) NOT NULL,
-    NewEmail VARCHAR(250) NULL,
-    NewEmailCode VARCHAR(250) NULL,
-    LoginCodeCreatedOn DATETIME(3) NULL,
-    LoginCode VARCHAR(250) NULL,
+    NewEmail VARCHAR(250) NOT NULL,
+    VerifyEmailCode VARCHAR(50) NOT NULL,
+    LoginCodeCreatedOn DATETIME(3) NOT NULL,
+    LoginCode VARCHAR(50) NOT NULL,
     Use2FA       BOOLEAN NOT NULL,
     PwdVersion INT NOT NULL,
     PwdSalt    VARBINARY(16) NOT NULL,
@@ -22,6 +22,7 @@ CREATE TABLE Auths (
     PwdIters   INT NOT NULL,
     PRIMARY KEY Id (Id),
     UNIQUE INDEX Email (Email),
+    UNIQUE INDEX NewEmail (NewEmail),
     INDEX(ActivatedOn, LastAuthedOn)
 );
 

@@ -45,23 +45,20 @@ public class ApiService : Api.ApiBase
         var tx = await _db.Database.BeginTransactionAsync();
         try
         {
-            var existing = await _db.Auths.FirstOrDefaultAsync(x => x.Email.Equals(req.Email));
+            var existing = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
             if (existing != null)
             {
                 RateLimitAuthAttempts(existing);
                 return new Nothing();
             }
 
-            var activationCode = Crypto.String(32);
+            var verifyEmailCode = Crypto.String(32);
             var pwd = Crypto.HashPwd(req.Pwd);
             await _db.Auths.AddAsync(new Auth()
             {
                 Id = ses.Id,
                 Email = req.Email,
-                LastAuthedAttemptOn = DateTime.UtcNow,
-                LastAuthedOn = DateTime.UtcNow,
-                ActivatedOn = new DateTime(1, 1, 1, 0, 0, 0),
-                LoginCode = activationCode,
+                VerifyEmailCode = verifyEmailCode,
                 PwdVersion = pwd.PwdVersion,
                 PwdSalt = pwd.PwdSalt,
                 PwdHash = pwd.PwdHash,
@@ -70,8 +67,8 @@ public class ApiService : Api.ApiBase
             await _db.SaveChangesAsync();
             await _emailClient.SendEmailAsync(
                 "Confirm Email Address", 
-                $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={activationCode}\">please click this link to verify your email address</a></div>", 
-                $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={activationCode}", 
+                $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={verifyEmailCode}\">please click this link to verify your email address</a></div>", 
+                $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={verifyEmailCode}", 
                 "yolo@yolo.yolo", 
                 new List<string>(){req.Email});
             await tx.CommitAsync();
@@ -85,12 +82,44 @@ public class ApiService : Api.ApiBase
         return new Nothing();
     }
 
-    public override Task<Nothing> Auth_VerifyEmail(Auth_VerifyEmailReq req, ServerCallContext stx)
+    public override async Task<Nothing> Auth_VerifyEmail(Auth_VerifyEmailReq req, ServerCallContext stx)
     {
         // basic validation
         var ses = _session.Get(stx); 
         Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
-        return new Nothing().Task();
+        // !!! ToLower all emails in all Auth_ api endpoints
+        req.Email = req.Email.ToLower();
+        Error.FromValidationResult(AuthValidator.Email(req.Email));
+        
+        // start db tx
+        var tx = await _db.Database.BeginTransactionAsync();
+        try
+        {
+            var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
+            Error.If(auth == null, "no matching record found", @public: true, log: false);
+            Error.If(auth.NotNull().VerifyEmailCode != req.Code, "invalid email code", @public: true, log: false);
+            if (!auth.NewEmail.IsNullOrEmpty())
+            {
+                // verifying new email
+                auth.Email = auth.NewEmail;
+                auth.NewEmail = "";
+            }
+            else
+            {
+                // first account activation
+                auth.ActivatedOn = DateTime.UtcNow;
+            }
+            auth.VerifyEmailCode = "";
+            await _db.SaveChangesAsync();
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+
+        return new Nothing();
     }
 
     public override Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
