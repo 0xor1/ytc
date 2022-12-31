@@ -51,9 +51,4 @@
     <ProjectReference Include="..\Common\Dnsk.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Pages\SignOutPage.razor" />
-    <AdditionalFiles Include="Shared\Pages\SignOut.razor" />
-  </ItemGroup>
-
 </Project>
