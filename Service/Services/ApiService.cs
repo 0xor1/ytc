@@ -4,6 +4,7 @@ using Dnsk.Db;
 using Dnsk.Proto;
 using Dnsk.Service.Util;
 using Grpc.Core;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Service.Services;
@@ -42,13 +43,12 @@ public class ApiService : Api.ApiBase
         Error.FromValidationResult(AuthValidator.Pwd(req.Pwd));
         
         // start db tx
-        var tx = await _db.Database.BeginTransactionAsync();
+        await using var tx = await _db.Database.BeginTransactionAsync();
         try
         {
             var existing = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
             if (existing != null)
             {
-                RateLimitAuthAttempts(existing);
                 return new Nothing();
             }
 
@@ -92,7 +92,7 @@ public class ApiService : Api.ApiBase
         Error.FromValidationResult(AuthValidator.Email(req.Email));
         
         // start db tx
-        var tx = await _db.Database.BeginTransactionAsync();
+        await using var tx = await _db.Database.BeginTransactionAsync();
         try
         {
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
@@ -122,31 +122,47 @@ public class ApiService : Api.ApiBase
         return new Nothing();
     }
 
-    public override Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
+    public override async Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
     {
-        var ses = _session.Get(stx);
+        // basic validation
+        var ses = _session.Get(stx); 
         Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
+        // !!! ToLower all emails in all Auth_ api endpoints
+        req.Email = req.Email.ToLower();
+        Error.FromValidationResult(AuthValidator.Email(req.Email));
+        
+        // start db tx
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
+        Error.If(auth == null, "no matching record found", @public: true, log: false);
+        RateLimitAuthAttempts(auth.NotNull());
+        auth.LastAuthedAttemptOn = DateTime.UtcNow;
+        if (!Crypto.PwdIsValid(req.Pwd, auth))
+        {
+            await _db.SaveChangesAsync();
+            await tx.CommitAsync();
+            Error.If(true, "no matching record found", @public: true, log: false);
+        }
+        auth.LastAuthedOn = DateTime.UtcNow;
+        ses = _session.SignIn(stx, auth.Id);
+        await _db.SaveChangesAsync();
+        await tx.CommitAsync();
+
         return new Auth_Session()
         {
             Id = ses.Id,
             IsAuthed = ses.IsAuthed
-        }.Task();
+        };
     }
 
     public override Task<Auth_Session> Auth_SignOut(Nothing _, ServerCallContext stx)
     {
         // basic validation
         var ses = _session.Get(stx);
-        if (ses.IsAnon)
+        if (ses.IsAuthed)
         {
-            // not logged in, just return existing anon session
-            return new Auth_Session()
-            {
-                Id = ses.Id,
-                IsAuthed = ses.IsAuthed
-            }.Task();
+            ses = _session.SignOut(stx);
         }
-        ses = _session.SignOut(stx);
         return new Auth_Session()
         {
             Id = ses.Id,

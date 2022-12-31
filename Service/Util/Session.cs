@@ -68,9 +68,20 @@ public class SessionManager: ISessionManager
 
     public Session SignOut(ServerCallContext stx)
     {
-        DeleteCookie(stx);
-        // generate new anon session
-        return Get(stx);
+        _cache = _SignOut(stx);
+        return _cache;
+    }
+
+    private static Session _SignOut(ServerCallContext stx)
+    {
+        var ses = new Session()
+        {
+            Id = Id.New(),
+            StartedOn = DateTime.UtcNow,
+            IsAuthed = false
+        };
+        SetCookie(stx, ses);
+        return ses;
     }
     
     private static Session GetCookie(ServerCallContext stx)
@@ -79,41 +90,34 @@ public class SessionManager: ISessionManager
         var c = htx.Request.Cookies[SessionName];
         if (c.IsNull())
         {
-            var ses = new Session()
-            {
-                Id = Id.New(),
-                StartedOn = DateTime.UtcNow,
-                IsAuthed = false
-            };
-            SetCookie(stx, ses);
-            return ses;
+            // there is no session set so use sign out to create a
+            // new anon session
+            return _SignOut(stx);
         }
-        else
+        // there is a session so lets get it from the cookie
+        var signedSessionBytes = Base64.UrlDecode(c);
+        var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
+        var i = 0;
+        foreach (var signatureKey in SignatureKeys)
         {
-            // there is a session so lets get it from the cookie
-            var signedSessionBytes = Base64.UrlDecode(c);
-            var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
-            var i = 0;
-            foreach (var signatureKey in SignatureKeys)
+            using (var hmac = new HMACSHA256(signatureKey))
             {
-                using (var hmac = new HMACSHA256(signatureKey))
+                var sesSig = hmac.ComputeHash(signedSes.Session);
+                if (sesSig.SequenceEqual(signedSes.Signature))
                 {
-                    var sesSig = hmac.ComputeHash(signedSes.Session);
-                    if (sesSig.SequenceEqual(signedSes.Signature))
+                    var ses = MessagePackSerializer.Deserialize<Session>(signedSes.Session);
+                    if (i > 0)
                     {
-                        var ses = MessagePackSerializer.Deserialize<Session>(signedSes.Session);
-                        if (i > 0)
-                        {
-                            // if it wasnt signed using the latest key, resign the cookie using the latest key
-                            SetCookie(stx, ses);
-                        }
-                        return ses;
+                        // if it wasnt signed using the latest key, resign the cookie using the latest key
+                        SetCookie(stx, ses);
                     }
-                    i++;
+                    return ses;
                 }
+                i++;
             }
-            throw new SecurityException("Session signature verification failed");
         }
+        throw new SecurityException("Session signature verification failed");
+        
     }
     
     private static void SetCookie(ServerCallContext stx, Session ses)

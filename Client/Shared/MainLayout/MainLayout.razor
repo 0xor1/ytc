@@ -4,10 +4,17 @@
             <RadzenSidebarToggle class="sq-4t" Click="@(() => LeftExpanded = !LeftExpanded)" />
             <RadzenProfileMenu class="m-t-0t">
                 <Template>
-                    <RadzenIcon Icon="account_circle" IconStyle="IconStyle.Danger"></RadzenIcon>
+                    <RadzenIcon Icon="account_circle" IconStyle="@(session.IsAuthed? IconStyle.Success: IconStyle.Danger)"></RadzenIcon>
                 </Template>
                 <ChildContent>
-                    <RadzenProfileMenuItem Text="Sign In" Path="sign_in" Icon="account_circle"></RadzenProfileMenuItem>
+                    @if (session.IsAuthed)
+                    {
+                        <RadzenProfileMenuItem Text="Sign Out" Path="sign_out" Icon="account_circle"></RadzenProfileMenuItem>
+                    }
+                    else
+                    {
+                        <RadzenProfileMenuItem Text="Sign In" Path="sign_in" Icon="account_circle"></RadzenProfileMenuItem>
+                    }
                 </ChildContent>
             </RadzenProfileMenu>
         </RadzenHeader>
@@ -24,9 +31,26 @@
     </RadzenLayout>
 </div>
 
+@using Dnsk.Client.Lib
 @inherits LayoutComponentBase
+@inject IAuthService _auth;
+@inject IMainLayoutService _mls;
+@implements IMainLayout
 @code{
 
     private bool LeftExpanded = false;
+    private Session session = new ("", false);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _mls.Init(this);
+        session = await _auth.GetSession();
+    }
+
+    public async Task AuthStateChanged()
+    {
+        session = await _auth.GetSession();
+        StateHasChanged();
+    }
 
 }

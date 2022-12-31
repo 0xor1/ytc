@@ -32,6 +32,7 @@
 </div>
 
 @inject IAuthService _auth;
+@inject IMainLayoutService _main;
 @code{
 
     class SignInModel
@@ -50,6 +51,7 @@
         try
         {
             await _auth.SignIn(Model.Email, Model.Pwd);
+            await _main.AuthStateChanged();
         }
         catch
         {
