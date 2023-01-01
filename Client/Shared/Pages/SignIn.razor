@@ -9,20 +9,20 @@
         </RadzenText>
         <RadzenTemplateForm
             TItem="SignInModel"
-            Data="Model"
+            Data="_model"
             Submit="Submit"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
-                <RadzenTextBox Name="Email" @bind-Value="@Model.Email"/>
+                <RadzenTextBox Name="Email" @bind-Value="@_model.Email"/>
                 <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true" Text="Invalid email"></RadzenCustomValidator>
             </div>
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Password" Text="Password"/>
-                <RadzenPassword Name="Password" @bind-Value="@Model.Pwd"/>
+                <RadzenPassword Name="Password" @bind-Value="@_model.Pwd"/>
                 <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
             </div>
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="Submitting" Text="Sign In"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="_signingIn" Text="Sign In"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="register" Text="Register"></RadzenLink>
                 <RadzenLink Path="send_reset_pwd_email" Text="Reset Password"></RadzenLink>
@@ -31,34 +31,32 @@
     </RadzenCard>
 </div>
 
-@inject IAuthService _auth;
-@inject IMainLayoutService _main;
+@inject IAuthService Auth;
+@inject IMainLayoutService Main;
 @code{
 
     class SignInModel
     {
-        public string Email { get; set; }
-        public string Pwd { get; set; }
+        public string Email { get; set; } = "";
+        public string Pwd { get; set; } = "";
     }
 
-    private SignInModel Model = new ();
+    private SignInModel _model = new ();
 
-    private bool Submitting = false;
+    private bool _signingIn = false;
 
     private async Task Submit()
     {
-        Submitting = true;
+        _signingIn = true;
         try
         {
-            await _auth.SignIn(Model.Email, Model.Pwd);
-            await _main.AuthStateChanged();
+            await Auth.SignIn(_model.Email, _model.Pwd);
+            await Main.AuthStateChanged();
         }
-        catch
+        finally
         {
-            // empty catch to avoid using StateHasChanged()
-            // in finally after updating the busy bool flag
+            _signingIn = false;
         }
-        Submitting = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)

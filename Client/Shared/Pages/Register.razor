@@ -9,57 +9,56 @@
         </RadzenText>
         <RadzenTemplateForm
             TItem="RegisterModel"
-            Data="Model"
+            Data="_model"
             Submit="Submit"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
-                <RadzenTextBox Name="Email" @bind-Value="@Model.Email"/>
+                <RadzenTextBox Name="Email" @bind-Value="@_model.Email" Disabled="_registering"/>
                 <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true" Text="Invalid email"></RadzenCustomValidator>
             </div>
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Password" Text="Password"/>
-                <RadzenPassword Name="Password" @bind-Value="@Model.Pwd"/>
+                <RadzenPassword Name="Password" @bind-Value="@_model.Pwd" Disabled="_registering"/>
                 <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
             </div>
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="Confirm Password"/>
-                <RadzenPassword Name="ConfirmPassword" @bind-Value="@Model.ConfirmPwd"/>
+                <RadzenPassword Name="ConfirmPassword" @bind-Value="@_model.ConfirmPwd" Disabled="_registering"/>
                 <RadzenCustomValidator Validator="ConfirmPasswordValidator" Component="ConfirmPassword" Popup="true" Text="Passwords don't match"></RadzenCustomValidator>
             </div>
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Registering" IsBusy="Submitting" Text="Register"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Registering" IsBusy="_registering" Text="Register"/>
             <RadzenLink Path="sign_in" Text="Sign In"></RadzenLink>
         </RadzenTemplateForm>
     </RadzenCard>
 </div>
 
-@inject IAuthService _auth;
+@inject IAuthService Auth;
 @code{
 
     class RegisterModel
     {
-        public string Email { get; set; }
-        public string Pwd { get; set; }
-        public string ConfirmPwd { get; set; }
+        public string Email { get; set; } = "";
+        public string Pwd { get; set; } = "";
+        public string ConfirmPwd { get; set; } = "";
     }
 
-    private RegisterModel Model = new ();
-
-    private bool Submitting = false;
+    private RegisterModel _model = new ();
+    private bool _registering = false;
+    private bool _success = false;
 
     private async Task Submit()
     {
-        Submitting = true;
+        _registering = true;
         try
         {
-            await _auth.Register(Model.Email, Model.Pwd);
+            await Auth.Register(_model.Email, _model.Pwd);
+            _success = true;
         }
-        catch
+        finally
         {
-            // empty catch to avoid using StateHasChanged()
-            // in finally after updating the busy bool flag
+            _registering = false;
         }
-        Submitting = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)
@@ -71,6 +70,6 @@
     private ValidationResult ConfirmPasswordValidator(IRadzenFormComponent component)
         => new ValidationResult()
         {
-            Valid = (component.GetValue() as string ?? "") == Model.Pwd
+            Valid = (component.GetValue() as string ?? "") == _model.Pwd
         };
 }

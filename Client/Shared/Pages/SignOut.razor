@@ -7,7 +7,7 @@
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
             Sign Out
         </RadzenText>
-        @if (SigningOut)
+        @if (_signingOut)
         {
             <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1">
                 Signing Out
@@ -15,52 +15,52 @@
         }
         else
         {
-            @if (Success)
+            @if (_success)
             {
-            <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1">
-                You are now signed out
+            <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 rz-color-success">
+                Success
             </RadzenText>
             }
             else
             {
                 <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 rz-color-danger">
-                    Something went wrong, whilst signing out
+                    Error
                 </RadzenText>
             }
         }
-        <RadzenButton ButtonType="ButtonType.Button" BusyText="Verifying" IsBusy="SigningOut" Text="Sign In" Click="SignIn"/>
+        <RadzenButton ButtonType="ButtonType.Button" BusyText="Verifying" IsBusy="_signingOut" Text="Sign In" Click="SignIn"/>
     </RadzenCard>
 </div>
 
-@inject IAuthService _auth;
-@inject NavigationManager _nav;
-@inject IMainLayoutService _main;
+@inject IAuthService Auth;
+@inject NavigationManager Nav;
+@inject IMainLayoutService Main;
 @code{
 
-    private bool SigningOut = false;
+    private bool _signingOut = false;
 
-    private bool Success = false;
+    private bool _success = false;
 
     protected override async Task OnInitializedAsync()
     {
-        SigningOut = true;
+        _signingOut = true;
         try
         {
-            await _auth.SignOut();
-            Success = true;
-            await _main.AuthStateChanged();
+            await Auth.SignOut();
+            _success = true;
+            await Main.AuthStateChanged();
         }
         finally
         {
-            SigningOut = false;
+            _signingOut = false;
         }
     }
 
     private void SignIn()
     {
-        if (!SigningOut && Success)
+        if (!_signingOut && _success)
         {
-            _nav.NavigateTo("sign_in");
+            Nav.NavigateTo("sign_in");
         }
     }
 }
