@@ -26,7 +26,7 @@ CREATE TABLE Auths (
     PRIMARY KEY Id (Id),
     UNIQUE INDEX Email (Email),
     UNIQUE INDEX NewEmail (NewEmail),
-    INDEX(ActivatedOn, LastSignedInOn)
+    INDEX(ActivatedOn, VerifyEmailCodeCreatedOn)
 );
 
 # cleanup old registrations that have not been activated in a week
