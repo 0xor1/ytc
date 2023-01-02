@@ -1,3 +1,4 @@
+using Dnsk.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Db;
@@ -13,12 +14,16 @@ public class Auth: Pwd
 {
     public string Id { get; set; }
     public string Email { get; set; }
-    public DateTime LastAuthedOn { get; set; } = DateTime.UtcNow;
-    public DateTime LastAuthedAttemptOn { get; set; } = DateTime.UtcNow;
-    public DateTime ActivatedOn { get; set; } = new (1, 1, 1, 0, 0, 0);
+    public DateTime LastSignedInOn { get; set; } = DateTimeExts.Zero();
+    public DateTime LastSignInAttemptOn { get; set; } = DateTimeExts.Zero();
+    public DateTime ActivatedOn { get; set; } = DateTimeExts.Zero();
     public string NewEmail { get; set; } = "";
+    public DateTime VerifyEmailCodeCreatedOn { get; set; } = DateTime.UtcNow;
+
     public string VerifyEmailCode { get; set; } = "";
-    public DateTime LoginCodeCreatedOn { get; set; } = new (1, 1, 1, 0, 0, 0);
+    public DateTime ResetPwdCodeCreatedOn { get; set; } = DateTimeExts.Zero();
+    public string ResetPwdCode { get; set; } = "";
+    public DateTime LoginCodeCreatedOn { get; set; } = DateTimeExts.Zero();
     public string LoginCode { get; set; } = "";
     public bool Use2FA { get; set; } = false;
 }

@@ -70,6 +70,12 @@ html, body, .fill {
     @include genProps(p-b, padding-bottom);
     @include genProps(p-l, padding-left);
     @extend .fill;
+    .f-n{
+        font-weight: 400;
+    }
+    .f-b {
+        font-weight: 800;
+    }
 }
 
 // flex rules

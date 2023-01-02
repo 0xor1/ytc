@@ -1,10 +1,8 @@
-﻿using System.Security.Cryptography;
-using Dnsk.Common;
+﻿using Dnsk.Common;
 using Dnsk.Db;
 using Dnsk.Proto;
 using Dnsk.Service.Util;
 using Grpc.Core;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Service.Services;
@@ -47,30 +45,42 @@ public class ApiService : Api.ApiBase
         try
         {
             var existing = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
-            if (existing != null)
+            var newCreated = existing == null;
+            if (existing == null)
             {
-                return new Nothing();
+                var verifyEmailCode = Crypto.String(32);
+                var pwd = Crypto.HashPwd(req.Pwd);
+                existing = new Auth()
+                {
+                    Id = ses.Id,
+                    Email = req.Email,
+                    VerifyEmailCodeCreatedOn = DateTime.UtcNow,
+                    VerifyEmailCode = verifyEmailCode,
+                    PwdVersion = pwd.PwdVersion,
+                    PwdSalt = pwd.PwdSalt,
+                    PwdHash = pwd.PwdHash,
+                    PwdIters = pwd.PwdIters
+                };
+                await _db.Auths.AddAsync(existing, stx.CancellationToken);
+                await _db.SaveChangesAsync();
             }
 
-            var verifyEmailCode = Crypto.String(32);
-            var pwd = Crypto.HashPwd(req.Pwd);
-            await _db.Auths.AddAsync(new Auth()
+            if (!existing.VerifyEmailCode.IsNullOrEmpty() && 
+                (newCreated || 
+                 (existing.VerifyEmailCodeCreatedOn.MinutesSince() > 10 && 
+                  existing.ActivatedOn.IsZero())))
             {
-                Id = ses.Id,
-                Email = req.Email,
-                VerifyEmailCode = verifyEmailCode,
-                PwdVersion = pwd.PwdVersion,
-                PwdSalt = pwd.PwdSalt,
-                PwdHash = pwd.PwdHash,
-                PwdIters = pwd.PwdIters
-            }, stx.CancellationToken);
-            await _db.SaveChangesAsync();
-            await _emailClient.SendEmailAsync(
-                "Confirm Email Address", 
-                $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={verifyEmailCode}\">please click this link to verify your email address</a></div>", 
-                $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={verifyEmailCode}", 
-                "yolo@yolo.yolo", 
-                new List<string>(){req.Email});
+                // if there is a verify email code and
+                // we've just registered a new account
+                // or the verify email was sent over 10 mins ago
+                // and the account is not yet activated
+                await _emailClient.SendEmailAsync(
+                    "Confirm Email Address", 
+                    $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={existing.VerifyEmailCode}\">please click this link to verify your email address</a></div>", 
+                    $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={existing.VerifyEmailCode}", 
+                    "noreply@yolo.yolo", 
+                    new List<string>(){req.Email});
+            }
             await tx.CommitAsync();
         }
         catch
@@ -84,9 +94,6 @@ public class ApiService : Api.ApiBase
 
     public override async Task<Nothing> Auth_VerifyEmail(Auth_VerifyEmailReq req, ServerCallContext stx)
     {
-        // basic validation
-        var ses = _session.Get(stx); 
-        Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         Error.FromValidationResult(AuthValidator.Email(req.Email));
@@ -98,7 +105,7 @@ public class ApiService : Api.ApiBase
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
             Error.If(auth == null, "no matching record found", @public: true, log: false);
             Error.If(auth.NotNull().VerifyEmailCode != req.Code, "invalid email code", @public: true, log: false);
-            if (!auth.NewEmail.IsNullOrEmpty())
+            if (!auth.NewEmail.IsNullOrEmpty() && auth.NewEmail == req.Email)
             {
                 // verifying new email
                 auth.Email = auth.NewEmail;
@@ -109,6 +116,8 @@ public class ApiService : Api.ApiBase
                 // first account activation
                 auth.ActivatedOn = DateTime.UtcNow;
             }
+
+            auth.VerifyEmailCodeCreatedOn = DateTimeExts.Zero();
             auth.VerifyEmailCode = "";
             await _db.SaveChangesAsync();
             await tx.CommitAsync();
@@ -135,19 +144,18 @@ public class ApiService : Api.ApiBase
         await using var tx = await _db.Database.BeginTransactionAsync();
         var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
         Error.If(auth == null, "no matching record found", @public: true, log: false);
+        Error.If(auth.NotNull().ActivatedOn.IsZero(), "account not verified, please check your emails for verification link", @public: true, log: false);
         RateLimitAuthAttempts(auth.NotNull());
-        auth.LastAuthedAttemptOn = DateTime.UtcNow;
-        if (!Crypto.PwdIsValid(req.Pwd, auth))
+        auth.LastSignInAttemptOn = DateTime.UtcNow;
+        var pwdIsValid = Crypto.PwdIsValid(req.Pwd, auth);
+        if (pwdIsValid)
         {
-            await _db.SaveChangesAsync();
-            await tx.CommitAsync();
-            Error.If(true, "no matching record found", @public: true, log: false);
+            auth.LastSignedInOn = DateTime.UtcNow;
+            ses = _session.SignIn(stx, auth.Id);
         }
-        auth.LastAuthedOn = DateTime.UtcNow;
-        ses = _session.SignIn(stx, auth.Id);
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
-
+        Error.If(!pwdIsValid, "no matching record found", @public: true, log: false);
         return new Auth_Session()
         {
             Id = ses.Id,
@@ -169,10 +177,85 @@ public class ApiService : Api.ApiBase
             IsAuthed = ses.IsAuthed
         }.Task();
     }
+    
+    public override async Task<Nothing> Auth_SendResetPwdEmail(Auth_SendResetPwdEmailReq req, ServerCallContext stx)
+    {
+        // basic validation
+        var ses = _session.Get(stx); 
+        Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
+        // !!! ToLower all emails in all Auth_ api endpoints
+        req.Email = req.Email.ToLower();
+        Error.FromValidationResult(AuthValidator.Email(req.Email));
+        
+        // start db tx
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        try
+        {
+            var existing = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
+            if (existing == null || existing.ResetPwdCodeCreatedOn.MinutesSince() < 10)
+            {
+                // if email is not associated with an account or
+                // a reset pwd was sent within the last 10 minutes
+                // dont do anything
+                return new Nothing();
+            }
 
+            existing.ResetPwdCodeCreatedOn = DateTime.UtcNow;
+            existing.ResetPwdCode = Crypto.String(32);
+            await _db.SaveChangesAsync();
+            await _emailClient.SendEmailAsync(
+                "Reset Password", 
+                $"<div><a href=\"https://localhost:9500/reset_pwd?email={req.Email}&code={existing.ResetPwdCode}\">please click this link to reset your password</a></div>", 
+                $"please click this link to reset your password: https://localhost:9500/reset_pwd?email={req.Email}&code={existing.ResetPwdCode}", 
+                "noreply@yolo.yolo", 
+                new List<string>(){req.Email});
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+
+        return new Nothing();
+    }
+
+    public override async Task<Nothing> Auth_ResetPwd(Auth_ResetPwdReq req, ServerCallContext stx)
+    {
+        // !!! ToLower all emails in all Auth_ api endpoints
+        req.Email = req.Email.ToLower();
+        Error.FromValidationResult(AuthValidator.Email(req.Email));
+        Error.FromValidationResult(AuthValidator.Pwd(req.NewPwd));
+        
+        // start db tx
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        try
+        {
+            var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
+            Error.If(auth == null, "no matching record found", @public: true, log: false);
+            Error.If(auth.NotNull().ResetPwdCode != req.Code, "invalid reset pwd code", @public: true, log: false);
+            var pwd = Crypto.HashPwd(req.NewPwd);
+            auth.ResetPwdCodeCreatedOn = DateTimeExts.Zero();
+            auth.ResetPwdCode = "";
+            auth.PwdVersion = pwd.PwdVersion;
+            auth.PwdSalt = pwd.PwdSalt;
+            auth.PwdHash = pwd.PwdHash;
+            auth.PwdIters = pwd.PwdIters;
+            await _db.SaveChangesAsync();
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+
+        return new Nothing();
+    }
+    
     private const int AuthAttemptsRateLimit = 5;
     private static void RateLimitAuthAttempts(Auth auth)
     {
-        Error.If(DateTime.UtcNow.Subtract(auth.LastAuthedAttemptOn).TotalSeconds < AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true);
+        Error.If(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true, log: false);
     }
 }

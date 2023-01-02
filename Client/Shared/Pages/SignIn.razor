@@ -31,6 +31,7 @@
     </RadzenCard>
 </div>
 
+@inject NavigationManager Nav;
 @inject IAuthService Auth;
 @inject IMainLayoutService Main;
 @code{
@@ -52,11 +53,14 @@
         {
             await Auth.SignIn(_model.Email, _model.Pwd);
             await Main.AuthStateChanged();
+            Nav.NavigateTo("/");
         }
-        finally
+        catch
         {
-            _signingIn = false;
+            // use empty catch to avoid having to
+            // call StatHasChanged on errors
         }
+        _signingIn = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)

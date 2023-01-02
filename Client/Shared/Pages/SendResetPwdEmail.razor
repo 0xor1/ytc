@@ -1,6 +1,7 @@
 ﻿@using Dnsk.Client.Lib
 @using System.Text.RegularExpressions
 @using Dnsk.Common
+@using Dnsk.Proto
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25">
@@ -9,21 +10,21 @@
         </RadzenText>
         <RadzenTemplateForm
             TItem="SendResetPwdEmailModel"
-            Data="Model"
+            Data="_model"
             Submit="Submit"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
-                <RadzenTextBox Name="Email" @bind-Value="@Model.Email"/>
+                <RadzenTextBox Name="Email" @bind-Value="@_model.Email" Disabled="!CanSend"/>
                 <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true" Text="Invalid email"></RadzenCustomValidator>
             </div>
-            @if (ReqSuccess)
+            @if (_success)
             {
-                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.H2" class="m-t-0">
+                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-t-0 f-b rz-color-success-light">
                     If this email matches an account an email will have been sent to reset your password.
                 </RadzenText>
             }
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="Submitting" Text="Send"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="_sending" Text="Send" Disabled="!CanSend"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="sign_in" Text="Sign In"></RadzenLink>
                 <RadzenLink Path="register" Text="Register"></RadzenLink>
@@ -32,34 +33,39 @@
     </RadzenCard>
 </div>
 
-@inject IAuthService _auth;
+@inject Api.ApiClient Api;
 @code{
 
     class SendResetPwdEmailModel
     {
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
     }
 
-    private SendResetPwdEmailModel Model = new ();
+    private bool CanSend => !_sending && !_success;
 
-    private bool Submitting = false;
+    private SendResetPwdEmailModel _model = new ();
 
-    private bool ReqSuccess = false;
+    private bool _sending = false;
+
+    private bool _success = false;
 
     private async Task Submit()
     {
-        Submitting = true;
-        ReqSuccess = false;
+        _sending = true;
+        _success = false;
         try
         {
-            await _auth.SendResetPwdEmail(Model.Email);
-            ReqSuccess = true;
+            await Api.Auth_SendResetPwdEmailAsync(new Auth_SendResetPwdEmailReq()
+            {
+                Email = _model.Email
+            });
+            _success = true;
         }
         catch
         {
-            ReqSuccess = false;
+            _success = false;
         }
-        Submitting = false;
+        _sending = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)

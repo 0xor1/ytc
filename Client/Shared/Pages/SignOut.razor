@@ -28,7 +28,7 @@
                 </RadzenText>
             }
         }
-        <RadzenButton ButtonType="ButtonType.Button" BusyText="Verifying" IsBusy="_signingOut" Text="Sign In" Click="SignIn"/>
+        <RadzenButton ButtonType="ButtonType.Button" BusyText="Signing Out" IsBusy="_signingOut" Text="Sign In" Click="SignIn"/>
     </RadzenCard>
 </div>
 
@@ -50,10 +50,13 @@
             _success = true;
             await Main.AuthStateChanged();
         }
-        finally
+        catch
         {
-            _signingOut = false;
+            // use empty catch to avoid having to
+            // call StatHasChanged on errors
         }
+        _signingOut = false;
+        
     }
 
     private void SignIn()

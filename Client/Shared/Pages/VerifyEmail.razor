@@ -1,6 +1,7 @@
 ﻿@using Dnsk.Client.Lib
 @using System.Text.RegularExpressions
 @using Dnsk.Common
+@using Dnsk.Proto
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
 <div class="root jc-c ai-c">
     <RadzenCard class="flx col jc-c ai-c p-3 w-25">
@@ -17,16 +18,13 @@
         {
             @if (_success)
             {
-                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1">
+                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 f-b rz-color-success-light">
                     Thank you for verifying your email.
-                </RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1">
-                    You may now sign in.
                 </RadzenText>
             }
             else
             {
-                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 .rz-color-danger">
+                <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 f-b rz-color-danger">
                     Something went wrong.
                 </RadzenText>
             }
@@ -35,7 +33,7 @@
     </RadzenCard>
 </div>
 
-@inject IAuthService Auth;
+@inject Api.ApiClient Api;
 @inject NavigationManager Nav;
 @code{
 
@@ -53,13 +51,19 @@
         _verifying = true;
         try
         {
-            await Auth.VerifyEmail(Email, Code);
+            await Api.Auth_VerifyEmailAsync(new Auth_VerifyEmailReq()
+            {
+                Email = Email,
+                Code = Code
+            });
             _success = true;
         }
-        finally
+        catch
         {
-            _verifying = false;
+            // use empty catch to avoid having to
+            // call StatHasChanged on errors
         }
+        _verifying = false;
     }
 
     private void SignIn()
