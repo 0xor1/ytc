@@ -19,7 +19,6 @@ public class Auth: Pwd
     public DateTime ActivatedOn { get; set; } = DateTimeExts.Zero();
     public string NewEmail { get; set; } = "";
     public DateTime VerifyEmailCodeCreatedOn { get; set; } = DateTime.UtcNow;
-
     public string VerifyEmailCode { get; set; } = "";
     public DateTime ResetPwdCodeCreatedOn { get; set; } = DateTimeExts.Zero();
     public string ResetPwdCode { get; set; } = "";
