@@ -44,5 +44,6 @@ message Auth_ResetPwdReq {
 message Auth_SignInReq {
     string email = 1;
     string pwd = 2;
+    bool rememberMe = 3;
 }
 

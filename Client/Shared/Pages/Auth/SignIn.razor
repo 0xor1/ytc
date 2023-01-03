@@ -22,6 +22,10 @@
                 <RadzenPassword Name="Password" @bind-Value="@_model.Pwd"/>
                 <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
             </div>
+            <div class="flx g-0h">
+                <RadzenCheckBox Name="RememberMe" @bind-Value="@_model.RememberMe"/>
+                <RadzenLabel class="m-b-0q" Component="RememberMe" Text="Remember Me"/>
+            </div>
             <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="_signingIn" Text="Sign In"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="register" Text="Register"></RadzenLink>
@@ -40,6 +44,7 @@
     {
         public string Email { get; set; } = "";
         public string Pwd { get; set; } = "";
+        public bool RememberMe { get; set; } = false;
     }
 
     private SignInModel _model = new ();
@@ -51,7 +56,7 @@
         _signingIn = true;
         try
         {
-            await Auth.SignIn(_model.Email, _model.Pwd);
+            await Auth.SignIn(_model.Email, _model.Pwd, _model.RememberMe);
             await Main.AuthStateChanged();
             Nav.NavigateTo("/");
         }

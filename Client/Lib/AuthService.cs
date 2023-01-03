@@ -12,7 +12,7 @@ public interface IAuthService
 {
     Task<Session> GetSession();
     Task Register(string email, string pwd);
-    Task<Session> SignIn(string email, string pwd);
+    Task<Session> SignIn(string email, string pwd, bool rememberMe);
     Task<Session> SignOut();
 }
 
@@ -47,14 +47,15 @@ public class AuthService: IAuthService
         });
     }
 
-    public async Task<Session> SignIn(string email, string pwd)
+    public async Task<Session> SignIn(string email, string pwd, bool rememberMe)
     {
         var ses = await GetSession();
         Throw.OpIf(ses.IsAuthed, "already in authenticated session");
         var newSes = await _api.Auth_SignInAsync(new Auth_SignInReq()
         {
             Email = email,
-            Pwd = pwd
+            Pwd = pwd,
+            RememberMe = rememberMe
         });
         _session = new Session(newSes.Id, newSes.IsAuthed);
         return _session;

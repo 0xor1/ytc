@@ -7,6 +7,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace Dnsk.Service.Util;
 
+
+public interface ISessionManager
+{
+    public Session Get(ServerCallContext stx);
+    public Session SignIn(ServerCallContext stx, string userId, bool rememberMe);
+    public Session SignOut(ServerCallContext stx);
+}
+
 [MessagePackObject]
 public record Session
 {
@@ -18,6 +26,9 @@ public record Session
     
     [Key(2)]
     public bool IsAuthed { get; init; }
+    
+    [Key(3)]
+    public bool RememberMe { get; init; }
 
     [IgnoreMember]
     public bool IsAnon => !IsAuthed;
@@ -53,13 +64,14 @@ public class SessionManager: ISessionManager
         return _cache;
     }
 
-    public Session SignIn(ServerCallContext stx, string userId)
+    public Session SignIn(ServerCallContext stx, string userId, bool rememberMe)
     {
         var ses = new Session()
         {
             Id = userId,
             StartedOn = DateTime.UtcNow,
-            IsAuthed = true
+            IsAuthed = true,
+            RememberMe = rememberMe
         };
         _cache = ses;
         SetCookie(stx, ses);
@@ -78,7 +90,8 @@ public class SessionManager: ISessionManager
         {
             Id = Id.New(),
             StartedOn = DateTime.UtcNow,
-            IsAuthed = false
+            IsAuthed = false,
+            RememberMe = false
         };
         SetCookie(stx, ses);
         return ses;
@@ -144,6 +157,7 @@ public class SessionManager: ISessionManager
             Secure = true,
             HttpOnly = true,
             IsEssential = true,
+            Expires = ses.RememberMe? DateTime.UtcNow.AddDays(7): null,
             SameSite = SameSiteMode.Strict
         });
     }
@@ -160,11 +174,4 @@ public class SessionManager: ISessionManager
         [Key(1)] 
         public byte[] Signature { get; init; }
     }
-}
-
-public interface ISessionManager
-{
-    public Session Get(ServerCallContext stx);
-    public Session SignIn(ServerCallContext stx, string userId);
-    public Session SignOut(ServerCallContext stx);
 }

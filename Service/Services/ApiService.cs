@@ -151,7 +151,7 @@ public class ApiService : Api.ApiBase
         if (pwdIsValid)
         {
             auth.LastSignedInOn = DateTime.UtcNow;
-            ses = _session.SignIn(stx, auth.Id);
+            ses = _session.SignIn(stx, auth.Id, req.RememberMe);
         }
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
