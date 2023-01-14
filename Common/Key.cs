@@ -10,7 +10,7 @@ public interface IKeyed
 }
 
 [TypeConverter(typeof(KeyConverter))]
-public record Key
+public partial record Key
 {
     public const int Min = 1;
     public const int Max = 50;
@@ -22,6 +22,18 @@ public record Key
         Validate();
     }
 
+    [GeneratedRegex(@"__")]
+    public static partial Regex NoDoubleUnderscores();
+
+    [GeneratedRegex(@"^_")]
+    public static partial Regex StartUnderscore();
+
+    [GeneratedRegex(@"_$")]
+    public static partial Regex EndUnderscore();
+
+    [GeneratedRegex(@"^[a-z0-9_]+$")]
+    public static partial Regex ValidChars();
+
     private void Validate()
     {
         var str = Value;
@@ -29,19 +41,19 @@ public record Key
         {
             throw new InvalidDataException($"{str} must be {Min} to {Max} characters long");
         }
-        if (Regex.IsMatch(str, @"__"))
+        if (NoDoubleUnderscores().IsMatch(str))
         {
             throw new InvalidDataException($"{str} must not contain double underscores");
         }
-        if (Regex.IsMatch(str, @"^_"))
+        if (StartUnderscore().IsMatch(str))
         {
             throw new InvalidDataException($"{str} must not start with _");
         }
-        if (Regex.IsMatch(str, @"_$"))
+        if (EndUnderscore().IsMatch(str))
         {
             throw new InvalidDataException($"{str} must not end with _");
         }
-        if (!Regex.IsMatch(str, @"^[a-z0-9_]+$"))
+        if (!ValidChars().IsMatch(str))
         {
             throw new InvalidDataException($"{str} must only container lower case letters, digits and underscore");
         }

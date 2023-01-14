@@ -17,17 +17,9 @@ $sub_divs: '', '.25', '.5', '.75';
     @for $i from $min_size through $max_size {
         @if $i % $step_size == 0 {
             @each $sub_suf in  $sub_sufs {
-                @if $amp {
-                    &.#{$class}-#{$i}#{$sub_suf} {
-                        @each $prop in $props {
-                            #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
-                        }
-                    }
-                } @else {
-                    .#{$class}-#{$i}#{$sub_suf} {
-                        @each $prop in $props {
-                            #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
-                        }
+                #{if($amp, "&", "")}.#{$class}-#{$i}#{$sub_suf} {
+                    @each $prop in $props {
+                        #{$prop}: var(--#{$val_pre}-#{$i}#{$sub_suf});
                     }
                 }
             }
