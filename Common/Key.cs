@@ -34,6 +34,12 @@ public partial record Key
     [GeneratedRegex(@"^[a-z0-9_]+$")]
     public static partial Regex ValidChars();
 
+    [GeneratedRegex(@"[^a-z0-9]")]
+    public static partial Regex NotLowerAlphaNumeric();
+
+    [GeneratedRegex(@"_+")]
+    public static partial Regex ConsecutiveUnderscores();
+
     private void Validate()
     {
         var str = Value;
@@ -70,6 +76,28 @@ public partial record Key
         {
             return false;
         }
+    }
+
+    public static Key Force(string k)
+    {
+        if (IsValid(k))
+        {
+            return new Key(k);
+        }
+        k = k.ToLower();
+        k = NotLowerAlphaNumeric().Replace(k, "_");
+        k = ConsecutiveUnderscores().Replace(k, "_");
+        k = k.Trim('_');
+        if (k == "")
+        {
+            k = "a";
+        }
+        if (k.Length > Max)
+        {
+            k = k.Substring(0, 50);
+            k = k.Trim('_');
+        }
+        return new(k);
     }
 
     public static explicit operator Key?(string? b) => b is null ? null : new Key(b);
