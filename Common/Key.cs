@@ -18,8 +18,8 @@ public partial record Key
 
     public Key(string value)
     {
+        Validate(value);
         Value = value;
-        Validate();
     }
 
     [GeneratedRegex(@"__")]
@@ -40,9 +40,8 @@ public partial record Key
     [GeneratedRegex(@"_+")]
     public static partial Regex ConsecutiveUnderscores();
 
-    private void Validate()
+    private static void Validate(string str)
     {
-        var str = Value;
         if (str.Length is < Min or > Max)
         {
             throw new InvalidDataException($"{str} must be {Min} to {Max} characters long");
@@ -69,7 +68,7 @@ public partial record Key
     {
         try
         {
-            var _ = new Key(maybeKey);
+            Validate(maybeKey);
             return true;
         }
         catch
@@ -82,7 +81,7 @@ public partial record Key
     {
         if (IsValid(k))
         {
-            return new Key(k);
+            return new(k);
         }
         k = k.ToLower();
         k = NotLowerAlphaNumeric().Replace(k, "_");
