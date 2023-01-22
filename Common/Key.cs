@@ -25,8 +25,8 @@ public partial record Key
     [GeneratedRegex(@"__")]
     public static partial Regex NoDoubleUnderscores();
 
-    [GeneratedRegex(@"^_")]
-    public static partial Regex StartUnderscore();
+    [GeneratedRegex(@"^[a-z]")]
+    public static partial Regex StartLetter();
 
     [GeneratedRegex(@"_$")]
     public static partial Regex EndUnderscore();
@@ -50,9 +50,9 @@ public partial record Key
         {
             throw new InvalidDataException($"{str} must not contain double underscores");
         }
-        if (StartUnderscore().IsMatch(str))
+        if (!StartLetter().IsMatch(str))
         {
-            throw new InvalidDataException($"{str} must not start with _");
+            throw new InvalidDataException($"{str} must start with a letter");
         }
         if (EndUnderscore().IsMatch(str))
         {
