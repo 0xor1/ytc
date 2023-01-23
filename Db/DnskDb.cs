@@ -1,4 +1,4 @@
-using Dnsk.Common;
+using Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Db;

@@ -1,4 +1,4 @@
-﻿using Dnsk.Common;
+﻿using Common;
 using Dnsk.Db;
 using Dnsk.Proto;
 using Dnsk.Service.Util;

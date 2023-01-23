@@ -1,4 +1,4 @@
-﻿using Dnsk.Common;
+﻿using Common;
 using Dnsk.Proto;
 
 namespace Dnsk.Client.Lib;

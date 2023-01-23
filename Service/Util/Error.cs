@@ -1,4 +1,4 @@
-﻿using Dnsk.Common;
+﻿using Common;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,5 @@
 ﻿using Amazon;
-using Dnsk.Common;
+using Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

@@ -1,5 +1,4 @@
-﻿using Dnsk.Common;
-using Dnsk.Proto;
+﻿using Dnsk.Proto;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Humanizer;

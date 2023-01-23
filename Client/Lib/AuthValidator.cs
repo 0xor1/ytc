@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Dnsk.Common;
+using Common;
 using Radzen;
 
 namespace Dnsk.Client.Lib;

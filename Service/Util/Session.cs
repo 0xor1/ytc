@@ -1,6 +1,6 @@
 ﻿using System.Security;
 using System.Security.Cryptography;
-using Dnsk.Common;
+using Common;
 using Grpc.Core;
 using MessagePack;
 using Microsoft.AspNetCore.Http;

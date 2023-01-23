@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography;
-using Dnsk.Common;
+using Common;
 using Dnsk.Db;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 

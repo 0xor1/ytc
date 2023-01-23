@@ -1,4 +1,4 @@
-﻿using Dnsk.Common;
+﻿using Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Radzen;
