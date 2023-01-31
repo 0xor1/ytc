@@ -19,6 +19,9 @@ service Api {
 message Auth_Session {
     string id = 1;
     bool isAuthed = 2;
+    string lang = 3;
+    string dateFmt = 4;
+    string timeFmt = 5;
 }
 
 message Auth_RegisterReq {

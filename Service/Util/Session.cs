@@ -1,12 +1,12 @@
 ﻿using System.Security;
 using System.Security.Cryptography;
 using Common;
+using Google.Protobuf.Collections;
 using Grpc.Core;
 using MessagePack;
 using Microsoft.AspNetCore.Http;
 
 namespace Dnsk.Service.Util;
-
 
 public interface ISessionManager
 {
@@ -32,6 +32,15 @@ public record Session
 
     [IgnoreMember]
     public bool IsAnon => !IsAuthed;
+
+    [Key(4)]
+    public string Lang { get; init; } = "en";
+
+    [Key(5)]
+    public string DateFmt { get; init; } = "yyyy-MM-dd";
+
+    [Key(6)]
+    public string TimeFmt { get; init; } = "HH:mm";
 }
 
 public class SessionManager: ISessionManager
@@ -91,7 +100,8 @@ public class SessionManager: ISessionManager
             Id = Id.New(),
             StartedOn = DateTime.UtcNow,
             IsAuthed = false,
-            RememberMe = false
+            RememberMe = false,
+            Lang = Strings.BestLang(stx.GetHttpContext().Request.Headers.AcceptLanguage.ToArray().FirstOrDefault() ?? "")
         };
         SetCookie(stx, ses);
         return ses;
@@ -107,6 +117,7 @@ public class SessionManager: ISessionManager
             // new anon session
             return _SignOut(stx);
         }
+
         // there is a session so lets get it from the cookie
         var signedSessionBytes = Base64.UrlDecode(c);
         var signedSes = MessagePackSerializer.Deserialize<SignedSession>(signedSessionBytes);
@@ -173,5 +184,21 @@ public class SessionManager: ISessionManager
         public byte[] Session { get; init; }
         [Key(1)] 
         public byte[] Signature { get; init; }
+    }
+}
+public static class GrpcExts
+{
+    public static RepeatedField<T> ToRepeatedField<T>(this IEnumerable<T> ts)
+    {
+        var rf = new RepeatedField<T>();
+        rf.AddRange(ts);
+        return rf;
+    }
+    
+    public static List<T> ToList<T>(this RepeatedField<T> ts)
+    {
+        var l = new List<T>();
+        l.AddRange(ts);
+        return l;
     }
 }

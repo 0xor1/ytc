@@ -23,11 +23,15 @@ public class ApiService : Api.ApiBase
     public override Task<Auth_Session> Auth_GetSession(Nothing _, ServerCallContext stx)
     {
         var ses = _session.Get(stx);
-        return new Auth_Session()
+        var a_ses = new Auth_Session()
         {
             Id = ses.Id,
-            IsAuthed = ses.IsAuthed
-        }.Task();
+            IsAuthed = ses.IsAuthed,
+            Lang = ses.Lang,
+            DateFmt = ses.DateFmt,
+            TimeFmt = ses.TimeFmt
+        };
+        return a_ses.Task();
     }
 
     public override async Task<Nothing> Auth_Register(Auth_RegisterReq req, ServerCallContext stx)
