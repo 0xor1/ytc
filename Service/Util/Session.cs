@@ -1,6 +1,7 @@
 ﻿using System.Security;
 using System.Security.Cryptography;
 using Common;
+using Dnsk.Proto;
 using Google.Protobuf.Collections;
 using Grpc.Core;
 using MessagePack;
@@ -41,6 +42,13 @@ public record Session
 
     [Key(6)]
     public string TimeFmt { get; init; } = "HH:mm";
+
+    public Auth_Session ToAuth() => new Auth_Session()
+    {
+        Id = Id,
+        IsAuthed = IsAuthed,
+        
+    };
 }
 
 public class SessionManager: ISessionManager

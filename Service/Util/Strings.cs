@@ -1,13 +1,15 @@
-﻿namespace Dnsk.Service.Util;
+﻿using Common;
 
-public static class Strings
+namespace Dnsk.Service.Util;
+
+public static partial class Strings
 {
     public const string Default = "en";
     
     public static string Get(string lang, string key)
     {
-        Error.If(!Library.ContainsKey(lang), $"Strings doesnt contain lang {lang}");
-        Error.If(!Library[lang].ContainsKey(key), $"Strings doesnt contain key: {key} for lang: {lang}");
+        Throw.DataIf(!Library.ContainsKey(lang), $"Strings doesnt contain lang {lang}");
+        Throw.DataIf(!Library[lang].ContainsKey(key), $"Strings doesnt contain key: {key} for lang: {lang}");
         return Library[lang][key];
     }
     
@@ -76,31 +78,6 @@ public static class Strings
         }
         return Default;
     }
-
-    public static readonly IReadOnlyDictionary<string, string> English = new Dictionary<string, string>()
-    {
-        { "str1", "yolo son" }
-    };
-
-    public static readonly IReadOnlyDictionary<string, string> Spanish = new Dictionary<string, string>()
-    {
-        { "str1", "yolo hijo" }
-    };
-
-    public static readonly IReadOnlyDictionary<string, string> French = new Dictionary<string, string>()
-    {
-        { "str1", "yolo fils" }
-    };
-
-    public static readonly IReadOnlyDictionary<string, string> German = new Dictionary<string, string>()
-    {
-        { "str1", "yolo sohn" }
-    };
-
-    public static readonly IReadOnlyDictionary<string, string> Italian = new Dictionary<string, string>()
-    {
-        { "str1", "yolo figlio" }
-    };
     
     public static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> Library =
         new Dictionary<string, IReadOnlyDictionary<string, string>>()

@@ -38,7 +38,7 @@ public class ApiService : Api.ApiBase
     {
         // basic validation
         var ses = _session.Get(stx); 
-        Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
+        Error.If(ses.IsAuthed, Strings.AlreadyAuthenticated);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         Error.FromValidationResult(AuthValidator.Email(req.Email));
@@ -107,13 +107,13 @@ public class ApiService : Api.ApiBase
         try
         {
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
-            Error.If(auth == null, "no matching record found", @public: true, log: false);
-            Error.If(auth.NotNull().VerifyEmailCode != req.Code, "invalid email code", @public: true, log: false);
+            Error.If(auth == null, Strings.NoMatchingRecord);
+            Error.If(auth.NotNull().VerifyEmailCode != req.Code, Strings.InvalidEmailCode);
             if (!auth.NewEmail.IsNullOrEmpty() && auth.NewEmail == req.Email)
             {
                 // verifying new email
                 auth.Email = auth.NewEmail;
-                auth.NewEmail = "";
+                auth.NewEmail = string.Empty;
             }
             else
             {
@@ -122,7 +122,7 @@ public class ApiService : Api.ApiBase
             }
 
             auth.VerifyEmailCodeCreatedOn = DateTimeExts.Zero();
-            auth.VerifyEmailCode = "";
+            auth.VerifyEmailCode = string.Empty;
             await _db.SaveChangesAsync();
             await tx.CommitAsync();
         }
@@ -134,59 +134,12 @@ public class ApiService : Api.ApiBase
 
         return new Nothing();
     }
-
-    public override async Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
-    {
-        // basic validation
-        var ses = _session.Get(stx); 
-        Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
-        // !!! ToLower all emails in all Auth_ api endpoints
-        req.Email = req.Email.ToLower();
-        Error.FromValidationResult(AuthValidator.Email(req.Email));
-        
-        // start db tx
-        await using var tx = await _db.Database.BeginTransactionAsync();
-        var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
-        Error.If(auth == null, "no matching record found", @public: true, log: false);
-        Error.If(auth.NotNull().ActivatedOn.IsZero(), "account not verified, please check your emails for verification link", @public: true, log: false);
-        RateLimitAuthAttempts(auth.NotNull());
-        auth.LastSignInAttemptOn = DateTime.UtcNow;
-        var pwdIsValid = Crypto.PwdIsValid(req.Pwd, auth);
-        if (pwdIsValid)
-        {
-            auth.LastSignedInOn = DateTime.UtcNow;
-            ses = _session.SignIn(stx, auth.Id, req.RememberMe);
-        }
-        await _db.SaveChangesAsync();
-        await tx.CommitAsync();
-        Error.If(!pwdIsValid, "no matching record found", @public: true, log: false);
-        return new Auth_Session()
-        {
-            Id = ses.Id,
-            IsAuthed = ses.IsAuthed
-        };
-    }
-
-    public override Task<Auth_Session> Auth_SignOut(Nothing _, ServerCallContext stx)
-    {
-        // basic validation
-        var ses = _session.Get(stx);
-        if (ses.IsAuthed)
-        {
-            ses = _session.SignOut(stx);
-        }
-        return new Auth_Session()
-        {
-            Id = ses.Id,
-            IsAuthed = ses.IsAuthed
-        }.Task();
-    }
     
     public override async Task<Nothing> Auth_SendResetPwdEmail(Auth_SendResetPwdEmailReq req, ServerCallContext stx)
     {
         // basic validation
         var ses = _session.Get(stx); 
-        Error.If(ses.IsAuthed, "already in authenticated session", @public: true, log: false);
+        Error.If(ses.IsAuthed, Strings.AlreadyAuthenticated);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         Error.FromValidationResult(AuthValidator.Email(req.Email));
@@ -236,11 +189,11 @@ public class ApiService : Api.ApiBase
         try
         {
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
-            Error.If(auth == null, "no matching record found", @public: true, log: false);
-            Error.If(auth.NotNull().ResetPwdCode != req.Code, "invalid reset pwd code", @public: true, log: false);
+            Error.If(auth == null, Strings.NoMatchingRecord);
+            Error.If(auth.NotNull().ResetPwdCode != req.Code, Strings.InvalidResetPwdCode);
             var pwd = Crypto.HashPwd(req.NewPwd);
             auth.ResetPwdCodeCreatedOn = DateTimeExts.Zero();
-            auth.ResetPwdCode = "";
+            auth.ResetPwdCode = string.Empty;
             auth.PwdVersion = pwd.PwdVersion;
             auth.PwdSalt = pwd.PwdSalt;
             auth.PwdHash = pwd.PwdHash;
@@ -256,10 +209,63 @@ public class ApiService : Api.ApiBase
 
         return new Nothing();
     }
+
+    public override async Task<Auth_Session> Auth_SignIn(Auth_SignInReq req, ServerCallContext stx)
+    {
+        // basic validation
+        var ses = _session.Get(stx); 
+        Error.If(ses.IsAuthed, Strings.AlreadyAuthenticated);
+        // !!! ToLower all emails in all Auth_ api endpoints
+        req.Email = req.Email.ToLower();
+        Error.FromValidationResult(AuthValidator.Email(req.Email));
+        
+        // start db tx
+        await using var tx = await _db.Database.BeginTransactionAsync();
+        var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
+        Error.If(auth == null, Strings.NoMatchingRecord);
+        Error.If(auth.NotNull().ActivatedOn.IsZero(), Strings.AccountNotVerified);
+        RateLimitAuthAttempts(auth.NotNull());
+        auth.LastSignInAttemptOn = DateTime.UtcNow;
+        var pwdIsValid = Crypto.PwdIsValid(req.Pwd, auth);
+        if (pwdIsValid)
+        {
+            auth.LastSignedInOn = DateTime.UtcNow;
+            ses = _session.SignIn(stx, auth.Id, req.RememberMe);
+        }
+        await _db.SaveChangesAsync();
+        await tx.CommitAsync();
+        Error.If(!pwdIsValid, Strings.NoMatchingRecord);
+        return new Auth_Session()
+        {
+            Id = ses.Id,
+            IsAuthed = ses.IsAuthed
+        };
+    }
+
+    public override Task<Auth_Session> Auth_SignOut(Nothing _, ServerCallContext stx)
+    {
+        // basic validation
+        var ses = _session.Get(stx);
+        if (ses.IsAuthed)
+        {
+            ses = _session.SignOut(stx);
+        }
+        return new Auth_Session()
+        {
+            Id = ses.Id,
+            IsAuthed = ses.IsAuthed
+        }.Task();
+    }
+
+    // public override async Task<Auth_Session> Auth_SetL10n(Auth_SetL10nReq req, ServerCallContext stx)
+    // {
+    //     var ses = _session.Get(stx);
+    //     
+    // }
     
     private const int AuthAttemptsRateLimit = 5;
     private static void RateLimitAuthAttempts(Auth auth)
     {
-        Error.If(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, $"auth attempts cannot be made more frequently than every {AuthAttemptsRateLimit} seconds", @public: true, log: false);
+        Error.If(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, Strings.AuthAttemptRateLimit);
     }
 }
