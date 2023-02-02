@@ -1,4 +1,5 @@
 ﻿using Common;
+using Dnsk.I18n;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Radzen;
@@ -8,9 +9,10 @@ namespace Dnsk.Client.Lib;
 
 public class RadzenCustomValidator: ValidatorBase
 {
-    public override string Text { get; set; } = "Invalid";
+    public override string Text { get; set; } = Strings.Invalid;
+    public Message Message { get; set; } = new (Strings.Invalid);
 
-    private List<string> SubMessages { get; set; } = new();
+    private List<Message> SubMessages { get; set; } = new();
 
     [Parameter]
     [EditorRequired]
@@ -19,7 +21,8 @@ public class RadzenCustomValidator: ValidatorBase
     protected override bool Validate(IRadzenFormComponent component)
     {
         var res = Validator(component);
-        Text = res.Message;
+        Message = res.Message;
+        Text = res.Message.Key; // TODO use Strings.Get
         SubMessages = res.SubMessages;
         return res.Valid;
     }
@@ -35,7 +38,7 @@ public class RadzenCustomValidator: ValidatorBase
         builder.AddMultipleAttributes(3, Attributes);
         if (!Text.IsNullOrWhiteSpace())
         {
-            builder.AddContent(4, Text);
+            builder.AddContent(4, Message.Key); // TODO call Strings.Get
         }
         if (SubMessages.Any())
         {
@@ -44,7 +47,7 @@ public class RadzenCustomValidator: ValidatorBase
             foreach (var subRule in SubMessages)
             {
                 builder.OpenElement(7, "li");
-                builder.AddContent(8, subRule);
+                builder.AddContent(8, subRule.Key); // TODO call Strings.Get
                 builder.CloseElement();
             }
             builder.CloseElement();

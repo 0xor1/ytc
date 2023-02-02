@@ -1,19 +1,21 @@
 ﻿using Common;
+using Fluid;
 
-namespace Dnsk.Service.Util;
+namespace Dnsk.I18n;
 
 public static partial class Strings
 {
+    public static readonly FluidParser Parser = new ();
     public const string Default = "en";
-    
-    public static string Get(string lang, string key)
+
+    public static string Get(string lang, string key, object? model = null)
     {
         Throw.DataIf(!Library.ContainsKey(lang), $"Strings doesnt contain lang {lang}");
         Throw.DataIf(!Library[lang].ContainsKey(key), $"Strings doesnt contain key: {key} for lang: {lang}");
-        return Library[lang][key];
+        return Library[lang][key].Render(new (model));
     }
     
-    public static bool TryGet(string lang, string key, out string res)
+    public static bool TryGet(string lang, string key, out string res, object? model = null)
     {
         res = "";
         if (!Library.ContainsKey(lang))
@@ -25,11 +27,11 @@ public static partial class Strings
         {
             return false;
         }
-        res = Library[lang][key];
+        res = Library[lang][key].Render(new (model));
         return true;
     }
     
-    public static string GetOr(string lang, string key, string def)
+    public static string GetOr(string lang, string key, string def, object? model = null)
     {
         if (!Library.ContainsKey(lang))
         {
@@ -41,17 +43,17 @@ public static partial class Strings
             return def;
         }
 
-        return Library[lang][key];
+        return Library[lang][key].Render(new(model));
     }
     
-    public static string GetOrAddress(string lang, string key)
+    public static string GetOrAddress(string lang, string key, object? model = null)
     {
         if (!Library.ContainsKey(lang) || !Library[lang].ContainsKey(key))
         {
             return $"{lang}:{key}";
         }
 
-        return Library[lang][key];
+        return Library[lang][key].Render(new(model));
     }
 
     public static string BestLang(string acceptLangsHeader)
@@ -79,8 +81,8 @@ public static partial class Strings
         return Default;
     }
     
-    public static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, string>> Library =
-        new Dictionary<string, IReadOnlyDictionary<string, string>>()
+    public static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IFluidTemplate>> Library =
+        new Dictionary<string, IReadOnlyDictionary<string, IFluidTemplate>>()
         {
             {
                 Default, 

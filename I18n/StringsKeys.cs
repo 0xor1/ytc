@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace Dnsk.Service.Util;
+namespace Dnsk.I18n;
 
 public static partial class Strings
 {

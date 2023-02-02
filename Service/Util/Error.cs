@@ -1,26 +1,19 @@
 ﻿using Common;
+using Dnsk.I18n;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Microsoft.Extensions.Logging;
 
 namespace Dnsk.Service.Util;
 
-public static class Error
-{
-    public const string YOLO = "yolo";
-    public static void If(bool condition, string message, StatusCode code = StatusCode.Internal)
-        => Throw.If(condition, () => new ApiException(code, message));
-    public static void FromValidationResult(ValidationResult res, StatusCode code = StatusCode.Internal)
-        => If(!res.Valid, $"{res.Message}{(res.SubMessages.Any() ? $":\n{String.Join("\n",res.SubMessages)}": "")}", code);
-}
-
 public class ApiException : Exception
 {
     public StatusCode Code { get; }
 
-    public ApiException(StatusCode code, string message): base(message)
+    public ApiException(string message, StatusCode code = StatusCode.Internal): base(message)
     {
         Code = code;
+        
     }
 }
 

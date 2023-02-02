@@ -1,6 +1,7 @@
 ﻿using System.Security;
 using System.Security.Cryptography;
 using Common;
+using Dnsk.I18n;
 using Dnsk.Proto;
 using Google.Protobuf.Collections;
 using Grpc.Core;
@@ -8,13 +9,6 @@ using MessagePack;
 using Microsoft.AspNetCore.Http;
 
 namespace Dnsk.Service.Util;
-
-public interface ISessionManager
-{
-    public Session Get(ServerCallContext stx);
-    public Session SignIn(ServerCallContext stx, string userId, bool rememberMe);
-    public Session SignOut(ServerCallContext stx);
-}
 
 [MessagePackObject]
 public record Session
@@ -51,12 +45,12 @@ public record Session
     };
 }
 
-public class SessionManager: ISessionManager
+public static class ServerCallContextExts
 {
     private const string SessionName = "dnsk";
     private static readonly byte[][] SignatureKeys;
 
-    static SessionManager()
+    static ServerCallContextExts()
     {
         SignatureKeys = Config.Session.SignatureKeys.Select(x => Base64.UrlDecode(x)).ToArray();
         if (SignatureKeys.Count(x => x.Length != 64) > 0)
@@ -69,19 +63,24 @@ public class SessionManager: ISessionManager
             throw new InvalidDataException("config: there must be at least 1 session signature key");
         }
     }
-    
-    private Session? _cache { get; set; }
 
-    public Session Get(ServerCallContext stx)
+    public static Session GetSession(this ServerCallContext stx)
     {
-        if (_cache.IsNull())
+        Session ses;
+        stx.UserState.ContainsKey(SessionName);
+        if (!stx.UserState.ContainsKey(SessionName))
         {
-            _cache = GetCookie(stx);
+            ses = GetCookie(stx);
+            stx.UserState.Add(SessionName, ses);
         }
-        return _cache;
+        else
+        {
+            ses = (Session)stx.UserState[SessionName];
+        }
+        return ses;
     }
 
-    public Session SignIn(ServerCallContext stx, string userId, bool rememberMe)
+    public static Session SignIn(this ServerCallContext stx, string userId, bool rememberMe)
     {
         var ses = new Session()
         {
@@ -90,15 +89,16 @@ public class SessionManager: ISessionManager
             IsAuthed = true,
             RememberMe = rememberMe
         };
-        _cache = ses;
+        stx.UserState[SessionName] = ses;
         SetCookie(stx, ses);
         return ses;
     }
 
-    public Session SignOut(ServerCallContext stx)
+    public static Session SignOut(this ServerCallContext stx)
     {
-        _cache = _SignOut(stx);
-        return _cache;
+        var ses = _SignOut(stx);
+        stx.UserState[SessionName] = ses;
+        return ses;
     }
 
     private static Session _SignOut(ServerCallContext stx)
@@ -180,10 +180,6 @@ public class SessionManager: ISessionManager
             SameSite = SameSiteMode.Strict
         });
     }
-    private static void DeleteCookie(ServerCallContext stx)
-    {
-        stx.GetHttpContext().Response.Cookies.Delete(SessionName);
-    }
 
     [MessagePackObject]
     public record SignedSession
@@ -193,20 +189,14 @@ public class SessionManager: ISessionManager
         [Key(1)] 
         public byte[] Signature { get; init; }
     }
-}
-public static class GrpcExts
-{
-    public static RepeatedField<T> ToRepeatedField<T>(this IEnumerable<T> ts)
-    {
-        var rf = new RepeatedField<T>();
-        rf.AddRange(ts);
-        return rf;
-    }
     
-    public static List<T> ToList<T>(this RepeatedField<T> ts)
-    {
-        var l = new List<T>();
-        l.AddRange(ts);
-        return l;
-    }
+    // error throwing
+    public static void ErrorIf(this ServerCallContext stx, bool condition, string key, object? model = null, StatusCode code = StatusCode.Internal)
+        => Throw.If(condition, () => new ApiException(stx.String(key, model), code));
+    public static void ErrorFromValidationResult(this ServerCallContext stx, ValidationResult res, StatusCode code = StatusCode.Internal)
+        => Throw.If(!res.Valid, () => new ApiException($"{stx.String(res.Message.Key, res.Message.Model)}{(res.SubMessages.Any() ? $":\n{string.Join("\n",res.SubMessages.Select(x => stx.String(x.Key, x.Model)))}": "")}", code));
+
+    // i18n string handling
+
+    public static string String(this ServerCallContext stx, string key, object? model = null) => Strings.Get(stx.GetSession().Lang, key, model);
 }
