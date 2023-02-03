@@ -77,11 +77,17 @@ public class ApiService : Api.ApiBase
                 // we've just registered a new account
                 // or the verify email was sent over 10 mins ago
                 // and the account is not yet activated
+                var model = new
+                {
+                    BaseHref = Config.Server.Listen,
+                    Email = existing.Email,
+                    Code = existing.VerifyEmailCode
+                };
                 await _emailClient.SendEmailAsync(
-                    "Confirm Email Address", 
-                    $"<div><a href=\"https://localhost:9500/verify_email?email={req.Email}&code={existing.VerifyEmailCode}\">please click this link to verify your email address</a></div>", 
-                    $"please use this link to verify your email address: https://localhost:9500/verify_email?email={req.Email}&code={existing.VerifyEmailCode}", 
-                    "noreply@yolo.yolo", 
+                    stx.String(Strings.AuthConfirmEmailSubject), 
+                     stx.String(Strings.AuthConfirmEmailHtml, model), 
+                    stx.String(Strings.AuthConfirmEmailText, model), 
+                    Config.Email.NoReplyAddress, 
                     new List<string>(){req.Email});
             }
             await tx.CommitAsync();
@@ -159,12 +165,19 @@ public class ApiService : Api.ApiBase
             existing.ResetPwdCodeCreatedOn = DateTime.UtcNow;
             existing.ResetPwdCode = Crypto.String(32);
             await _db.SaveChangesAsync();
+            var model = new
+            {
+                BaseHref = Config.Server.Listen,
+                Email = existing.Email,
+                Code = existing.ResetPwdCode
+            };
             await _emailClient.SendEmailAsync(
-                "Reset Password", 
-                $"<div><a href=\"https://localhost:9500/reset_pwd?email={req.Email}&code={existing.ResetPwdCode}\">please click this link to reset your password</a></div>", 
-                $"please click this link to reset your password: https://localhost:9500/reset_pwd?email={req.Email}&code={existing.ResetPwdCode}", 
-                "noreply@yolo.yolo", 
-                new List<string>(){req.Email});
+                stx.String(Strings.AuthResetPwdSubject),
+                stx.String(Strings.AuthResetPwdHtml, model),
+                stx.String(Strings.AuthResetPwdText, model),
+                Config.Email.NoReplyAddress,
+                new List<string>(){req.Email}
+            );
             await tx.CommitAsync();
         }
         catch

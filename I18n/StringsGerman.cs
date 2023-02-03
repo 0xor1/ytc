@@ -20,6 +20,12 @@ public static partial class Strings
         { InvalidEmailCode, Parser.Parse("Ungültiger E-Mail-Code") },
         { InvalidResetPwdCode, Parser.Parse("Ungültiger Passwort-Reset-Code") },
         { AccountNotVerified, Parser.Parse("Konto nicht bestätigt, bitte überprüfen Sie Ihre E-Mails auf den Bestätigungslink") },
-        { AuthAttemptRateLimit, Parser.Parse("Authentifizierungsversuche können nicht häufiger als alle {{Seconds}} Sekunden durchgeführt werden") }
+        { AuthAttemptRateLimit, Parser.Parse("Authentifizierungsversuche können nicht häufiger als alle {{Seconds}} Sekunden durchgeführt werden") },
+        { AuthConfirmEmailSubject, Parser.Parse("Confirm Email Address")}, 
+        { AuthConfirmEmailHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/verify_email?email={{Email}}&code={{Code}}\">please click this link to verify your email address</a></div>")}, 
+        { AuthConfirmEmailText, Parser.Parse("please use this link to verify your email address: {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
+        { AuthResetPwdSubject, Parser.Parse("Reset Password")}, 
+        { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">please click this link to reset your password</a></div>")}, 
+        { AuthResetPwdText, Parser.Parse("please click this link to reset your password: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
     };
 }

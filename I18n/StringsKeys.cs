@@ -19,4 +19,10 @@ public static partial class Strings
     public const string InvalidResetPwdCode = "invalid_reset_pwd_code";
     public const string AccountNotVerified = "account_not_verified";
     public const string AuthAttemptRateLimit = "auth_attempt_rate_limit";
+    public const string AuthConfirmEmailSubject = "auth_confirm_email_subject";
+    public const string AuthConfirmEmailHtml = "auth_confirm_email_html";
+    public const string AuthConfirmEmailText = "auth_confirm_email_text";
+    public const string AuthResetPwdSubject = "auth_reset_pwd_subject";
+    public const string AuthResetPwdHtml = "auth_reset_pwd_html";
+    public const string AuthResetPwdText = "auth_reset_pwd_text";
 }
