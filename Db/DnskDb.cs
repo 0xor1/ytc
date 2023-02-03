@@ -1,4 +1,5 @@
 using Common;
+using Dnsk.I18n;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Db;
@@ -25,9 +26,9 @@ public class Auth: Pwd
     public DateTime LoginCodeCreatedOn { get; set; } = DateTimeExts.Zero();
     public string LoginCode { get; set; } = "";
     public bool Use2FA { get; set; } = false;
-    public string Lang { get; set; } = "en";
-    public string DateFmt { get; set; } = "yyyy-MM-dd";
-    public string TimeFmt { get; set; } = "HH:mm";
+    public string Lang { get; set; } = Strings.DefaultLang;
+    public string DateFmt { get; set; } = Strings.DefaultDateFmt;
+    public string TimeFmt { get; set; } = Strings.DefaultTimeFmt;
 }
 public class Pwd
 {

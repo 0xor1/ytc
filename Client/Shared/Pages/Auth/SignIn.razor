@@ -8,9 +8,9 @@
             Sign In
         </RadzenText>
         <RadzenTemplateForm
-            TItem="SignInModel"
+            TItem="Model"
             Data="_model"
-            Submit="Submit"
+            Submit="Do"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
@@ -26,7 +26,7 @@
                 <RadzenCheckBox Name="RememberMe" @bind-Value="@_model.RememberMe"/>
                 <RadzenLabel class="m-b-0q" Component="RememberMe" Text="Remember Me"/>
             </div>
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="_signingIn" Text="Sign In"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Signing In" IsBusy="_doing" Text="Sign In"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="register" Text="Register"></RadzenLink>
                 <RadzenLink Path="send_reset_pwd_email" Text="Reset Password"></RadzenLink>
@@ -40,20 +40,20 @@
 @inject IMainLayoutService Main;
 @code{
 
-    class SignInModel
+    class Model
     {
         public string Email { get; set; } = "";
         public string Pwd { get; set; } = "";
         public bool RememberMe { get; set; } = false;
     }
 
-    private SignInModel _model = new ();
+    private Model _model = new ();
 
-    private bool _signingIn = false;
+    private bool _doing = false;
 
-    private async Task Submit()
+    private async Task Do()
     {
-        _signingIn = true;
+        _doing = true;
         try
         {
             await Auth.SignIn(_model.Email, _model.Pwd, _model.RememberMe);
@@ -65,7 +65,7 @@
             // use empty catch to avoid having to
             // call StatHasChanged on errors
         }
-        _signingIn = false;
+        _doing = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)

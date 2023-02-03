@@ -10,23 +10,23 @@ public static partial class Strings
         new Dictionary<string, IReadOnlyDictionary<string, IFluidTemplate>>()
         {
             {
-                Default, 
+                EN, 
                 English
             },
             {
-                "es", 
+                ES, 
                 Spanish
             },
             {
-                "fr", 
+                FR, 
                 French
             },
             {
-                "de", 
+                DE, 
                 German
             },
             {
-                "it", 
+                IT, 
                 Italian
             }
         };

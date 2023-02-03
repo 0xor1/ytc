@@ -15,6 +15,7 @@
                     {
                         <RadzenProfileMenuItem Text="Sign In" Path="sign_in" Icon="account_circle"></RadzenProfileMenuItem>
                     }
+                    <RadzenProfileMenuItem Text="Localization" Path="l10n" Icon="translate"></RadzenProfileMenuItem>
                 </ChildContent>
             </RadzenProfileMenu>
         </RadzenHeader>
@@ -38,7 +39,7 @@
 @code{
 
     private bool LeftExpanded = false;
-    private Session session = new ("", false);
+    private Session session = new ();
 
     protected override async Task OnInitializedAsync()
     {

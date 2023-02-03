@@ -20,21 +20,21 @@
             else
             {
                 <RadzenTemplateForm
-                    TItem="ResetPwdModel"
+                    TItem="Model"
                     Data="_model"
-                    Submit="Submit"
+                    Submit="Do"
                     class="flx col ai-stretch g-1">
                     <div class="flx col ai-stretch">
                         <RadzenLabel class="m-b-0q" Component="Password" Text="Password"/>
-                        <RadzenPassword Name="Password" @bind-Value="@_model.NewPwd" Disabled="!CanReset"/>
+                        <RadzenPassword Name="Password" @bind-Value="@_model.NewPwd" Disabled="!CanDo"/>
                         <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
                     </div>
                     <div class="flx col ai-stretch">
                         <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="Confirm Password"/>
-                        <RadzenPassword Name="ConfirmPassword" @bind-Value="@_model.ConfirmNewPwd" Disabled="!CanReset"/>
+                        <RadzenPassword Name="ConfirmPassword" @bind-Value="@_model.ConfirmNewPwd" Disabled="!CanDo"/>
                         <RadzenCustomValidator Validator="ConfirmPasswordValidator" Component="ConfirmPassword" Popup="true" Text="Passwords don't match"></RadzenCustomValidator>
                     </div>
-                    <RadzenButton ButtonType="ButtonType.Submit" BusyText="Resetting" IsBusy="_resetting" Text="Reset Password" Disabled="!CanReset"/>
+                    <RadzenButton ButtonType="ButtonType.Submit" BusyText="Resetting" IsBusy="_doing" Text="Reset Password" Disabled="!CanDo"/>
                 </RadzenTemplateForm>
             }
         </RadzenCard>
@@ -50,20 +50,20 @@
     [Parameter]
     public string Code { get; set; } = "";
 
-    class ResetPwdModel
+    class Model
     {
         public string NewPwd { get; set; } = "";
         public string ConfirmNewPwd { get; set; } = "";
     }
 
-    private ResetPwdModel _model = new();
-    private bool CanReset => !_resetting && !_success;
-    private bool _resetting = false;
+    private Model _model = new();
+    private bool CanDo => !_doing && !_success;
+    private bool _doing = false;
     private bool _success = false;
 
-    private async Task Submit()
+    private async Task Do()
     {
-        _resetting = true;
+        _doing = true;
         try
         {
             await Api.Auth_ResetPwdAsync(new Auth_ResetPwdReq()
@@ -79,7 +79,7 @@
             // use empty catch to avoid having to
             // call StatHasChanged on errors
         }
-        _resetting = false;
+        _doing = false;
     }
 
     private void SignIn()

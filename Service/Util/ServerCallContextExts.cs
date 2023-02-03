@@ -29,15 +29,15 @@ public record Session
     public bool IsAnon => !IsAuthed;
 
     [Key(4)]
-    public string Lang { get; init; } = "en";
+    public string Lang { get; init; } = Strings.DefaultLang;
 
     [Key(5)]
-    public string DateFmt { get; init; } = "yyyy-MM-dd";
+    public string DateFmt { get; init; } = Strings.DefaultDateFmt;
 
     [Key(6)]
-    public string TimeFmt { get; init; } = "HH:mm";
+    public string TimeFmt { get; init; } = Strings.DefaultTimeFmt;
 
-    public Auth_Session ToAuth() => new Auth_Session()
+    public Auth_Session ToAuth() => new ()
     {
         Id = Id,
         IsAuthed = IsAuthed,

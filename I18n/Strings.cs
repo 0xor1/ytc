@@ -3,10 +3,38 @@ using Fluid;
 
 namespace Dnsk.I18n;
 
+public record Lang(string Code, string NativeName)
+{
+    public override string ToString() => $"{Code} - {NativeName}";
+}
+
+public record DateTimeFmt(string Value)
+{
+    private static readonly DateTime dt = new DateTime(2022, 3, 28, 16, 5, 1);
+    public override string ToString() => dt.ToString(Value);
+}
 public static partial class Strings
 {
     public static readonly FluidParser Parser = new ();
-    public const string Default = "en";
+    public const string EN = "en";
+    public const string ES = "es";
+    public const string FR = "fr";
+    public const string DE = "de";
+    public const string IT = "it";
+    public const string DefaultLang = EN;
+
+    public static readonly IReadOnlyList<Lang> SupportedLangs = new List<Lang>()
+        { new(EN, "English"), new(ES, "Español"), new(FR, "Français"), new (DE, "Deutsch"), new (IT, "Italiano") };
+
+    public static readonly IReadOnlyList<DateTimeFmt> SupportedDateFmts = new List<DateTimeFmt>()
+        { new("yyyy-MM-dd"), new("dd-MM-yyyy"), new("MM-dd-yyyy") };
+
+    public static string DefaultDateFmt => SupportedDateFmts.First().Value;
+    
+    public static readonly IReadOnlyList<DateTimeFmt> SupportedTimeFmts = new List<DateTimeFmt>()
+        { new("HH:mm"), new("hh:mm") };
+    public static string DefaultTimeFmt => SupportedTimeFmts.First().Value;
+        
 
     public static string Get(string lang, string key, object? model = null)
     {
@@ -87,6 +115,6 @@ public static partial class Strings
                 return root;
             }
         }
-        return Default;
+        return DefaultLang;
     }
 }

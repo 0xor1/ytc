@@ -9,13 +9,13 @@
             Send Reset Password Link
         </RadzenText>
         <RadzenTemplateForm
-            TItem="SendResetPwdEmailModel"
+            TItem="Model"
             Data="_model"
-            Submit="Submit"
+            Submit="Do"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
                 <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
-                <RadzenTextBox Name="Email" @bind-Value="@_model.Email" Disabled="!CanSend"/>
+                <RadzenTextBox Name="Email" @bind-Value="@_model.Email" Disabled="!CanDo"/>
                 <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true" Text="Invalid email"></RadzenCustomValidator>
             </div>
             @if (_success)
@@ -24,7 +24,7 @@
                     If this email matches an account an email will have been sent to reset your password.
                 </RadzenText>
             }
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="_sending" Text="Send" Disabled="!CanSend"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="_doing" Text="Send" Disabled="!CanDo"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="sign_in" Text="Sign In"></RadzenLink>
                 <RadzenLink Path="register" Text="Register"></RadzenLink>
@@ -36,22 +36,22 @@
 @inject Api.ApiClient Api;
 @code{
 
-    class SendResetPwdEmailModel
+    class Model
     {
         public string Email { get; set; } = "";
     }
 
-    private bool CanSend => !_sending && !_success;
+    private bool CanDo => !_doing && !_success;
 
-    private SendResetPwdEmailModel _model = new ();
+    private Model _model = new ();
 
-    private bool _sending = false;
+    private bool _doing = false;
 
     private bool _success = false;
 
-    private async Task Submit()
+    private async Task Do()
     {
-        _sending = true;
+        _doing = true;
         _success = false;
         try
         {
@@ -65,7 +65,7 @@
         {
             _success = false;
         }
-        _sending = false;
+        _doing = false;
     }
 
     private ValidationResult EmailValidator(IRadzenFormComponent component)
