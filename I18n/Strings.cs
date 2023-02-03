@@ -12,7 +12,16 @@ public static partial class Strings
     {
         Throw.DataIf(!Library.ContainsKey(lang), $"Strings doesnt contain lang {lang}");
         Throw.DataIf(!Library[lang].ContainsKey(key), $"Strings doesnt contain key: {key} for lang: {lang}");
-        return Library[lang][key].Render(new (model));
+        return Library[lang][key].RenderWithModel(model);
+    }
+
+    private static string RenderWithModel(this IFluidTemplate tpl, object? model)
+    {
+        if (model == null)
+        {
+            return tpl.Render();
+        }
+        return tpl.Render(new TemplateContext(model));
     }
     
     public static bool TryGet(string lang, string key, out string res, object? model = null)
@@ -27,7 +36,7 @@ public static partial class Strings
         {
             return false;
         }
-        res = Library[lang][key].Render(new (model));
+        res = Library[lang][key].RenderWithModel(model);
         return true;
     }
     
@@ -43,7 +52,7 @@ public static partial class Strings
             return def;
         }
 
-        return Library[lang][key].Render(new(model));
+        return Library[lang][key].RenderWithModel(model);
     }
     
     public static string GetOrAddress(string lang, string key, object? model = null)
@@ -53,7 +62,7 @@ public static partial class Strings
             return $"{lang}:{key}";
         }
 
-        return Library[lang][key].Render(new(model));
+        return Library[lang][key].RenderWithModel(model);
     }
 
     public static string BestLang(string acceptLangsHeader)
@@ -80,29 +89,4 @@ public static partial class Strings
         }
         return Default;
     }
-    
-    public static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, IFluidTemplate>> Library =
-        new Dictionary<string, IReadOnlyDictionary<string, IFluidTemplate>>()
-        {
-            {
-                Default, 
-                English
-            },
-            {
-                "es", 
-                Spanish
-            },
-            {
-                "fr", 
-                French
-            },
-            {
-                "de", 
-                German
-            },
-            {
-                "it", 
-                Italian
-            }
-        };
 }
