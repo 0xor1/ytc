@@ -22,10 +22,10 @@ public static partial class Strings
         { AccountNotVerified, Parser.Parse("Compte non vérifié, veuillez vérifier vos e-mails pour le lien de vérification") },
         { AuthAttemptRateLimit, Parser.Parse("Les tentatives d'authentification ne peuvent pas être effectuées plus fréquemment que toutes les {{Seconds}} secondes") },
         { AuthConfirmEmailSubject, Parser.Parse("Confirmez votre adresse email")}, 
-        { AuthConfirmEmailHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/verify_email?email={{Email}}&code={{Code}}\">veuillez cliquer sur ce lien pour vérifier votre adresse e-mail</a></div>")}, 
-        { AuthConfirmEmailText, Parser.Parse("veuillez utiliser ce lien pour vérifier votre adresse e-mail : {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
-        { AuthResetPwdSubject, Parser.Parse("réinitialiser le mot de passe")}, 
-        { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">veuillez cliquer sur ce lien pour réinitialiser votre mot de passe</a></div>")}, 
-        { AuthResetPwdText, Parser.Parse("veuillez cliquer sur ce lien pour réinitialiser votre mot de passe : {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
+        { AuthConfirmEmailHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/verify_email?email={{Email}}&code={{Code}}\">Veuillez cliquer sur ce lien pour vérifier votre adresse e-mail</a></div>")}, 
+        { AuthConfirmEmailText, Parser.Parse("Veuillez utiliser ce lien pour vérifier votre adresse e-mail: {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
+        { AuthResetPwdSubject, Parser.Parse("Réinitialiser le mot de passe")}, 
+        { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">Veuillez cliquer sur ce lien pour réinitialiser votre mot de passe</a></div>")}, 
+        { AuthResetPwdText, Parser.Parse("Veuillez cliquer sur ce lien pour réinitialiser votre mot de passe: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
     };
 }

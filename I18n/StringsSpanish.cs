@@ -21,11 +21,11 @@ public static partial class Strings
         { InvalidResetPwdCode, Parser.Parse("Código de restablecimiento de contraseña no válido") },
         { AccountNotVerified, Parser.Parse("Cuenta no verificada, revise sus correos electrónicos para ver el enlace de verificación") },
         { AuthAttemptRateLimit, Parser.Parse("Los intentos de autenticación no se pueden realizar con más frecuencia que cada {{Seconds}} segundos") },
-        { AuthConfirmEmailSubject, Parser.Parse("Confirm Email Address")}, 
-        { AuthConfirmEmailHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/verify_email?email={{Email}}&code={{Code}}\">please click this link to verify your email address</a></div>")}, 
-        { AuthConfirmEmailText, Parser.Parse("please use this link to verify your email address: {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
-        { AuthResetPwdSubject, Parser.Parse("Reset Password")}, 
-        { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">please click this link to reset your password</a></div>")}, 
-        { AuthResetPwdText, Parser.Parse("please click this link to reset your password: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
+        { AuthConfirmEmailSubject, Parser.Parse("Confirmar el correo")}, 
+        { AuthConfirmEmailHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/verify_email?email={{Email}}&code={{Code}}\">Haga clic en este enlace para verificar su dirección de correo electrónico</a></div>")}, 
+        { AuthConfirmEmailText, Parser.Parse("Utilice este enlace para verificar su dirección de correo electrónico: {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
+        { AuthResetPwdSubject, Parser.Parse("Restablecer la contraseña")}, 
+        { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">Haga clic en este enlace para restablecer su contraseña</a></div>")}, 
+        { AuthResetPwdText, Parser.Parse("Haga clic en este enlace para restablecer su contraseña: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
     };
 }
