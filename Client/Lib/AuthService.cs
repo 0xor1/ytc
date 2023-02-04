@@ -13,6 +13,7 @@ public record Session(string Id, bool IsAuthed, string Lang, string DateFmt, str
 
 public interface IAuthService
 {
+    void RegisterRefreshUI(Action<Session> s);
     Task<Session> GetSession();
     Task Register(string email, string pwd);
     Task<Session> SignIn(string email, string pwd, bool rememberMe);
@@ -22,14 +23,26 @@ public interface IAuthService
 
 public class AuthService: IAuthService
 {
-    private Session? _session;
+    private Session? _s;
+    private Session? _session { get => _s;
+        set
+        {
+            _s = value;
+            L.Config(_s.Lang, _s.DateFmt, _s.TimeFmt);
+            _refreshUI?.Invoke(_s);
+        }
+    }
     private readonly Api.ApiClient _api;
-    private readonly IMainLayout _ml;
+    private Action<Session>? _refreshUI;
     
-    public AuthService(Api.ApiClient api, IMainLayoutService ml)
+    public AuthService(Api.ApiClient api)
     {
         _api = api;
-        _ml = ml;
+    }
+
+    public void RegisterRefreshUI(Action<Session> a)
+    {
+        _refreshUI = a;
     }
 
     public async Task<Session> GetSession()
@@ -37,7 +50,7 @@ public class AuthService: IAuthService
         if (_session == null)
         {
             var ses = await _api.Auth_GetSessionAsync(new Nothing());
-            _session = new Session(ses.Id, ses.IsAuthed, ses.Lang, ses.DateFmt, ses.TimeFmt);
+            _session = new Session(ses);
         }
         return _session;
     }
@@ -64,7 +77,6 @@ public class AuthService: IAuthService
             RememberMe = rememberMe
         });
         _session = new Session(newSes);
-        await _ml.AuthStateChanged();
         return _session;
     }
 
@@ -77,7 +89,6 @@ public class AuthService: IAuthService
         }
         var newSes = await _api.Auth_SignOutAsync(new Nothing());
         _session = new Session(newSes);
-        await _ml.AuthStateChanged();
         return _session;
     }
 
@@ -90,7 +101,6 @@ public class AuthService: IAuthService
             TimeFmt = timeFmt
         });
         _session = new Session(newSes);
-        await _ml.AuthStateChanged();
         return _session;
     }
 }

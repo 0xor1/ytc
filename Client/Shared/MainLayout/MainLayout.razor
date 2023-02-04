@@ -35,8 +35,6 @@
 @using Dnsk.I18n
 @inherits LayoutComponentBase
 @inject IAuthService _auth;
-@inject IMainLayoutService _mls;
-@implements IMainLayout
 @code{
 
     private bool LeftExpanded = false;
@@ -44,14 +42,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _mls.Init(this);
+        _auth.RegisterRefreshUI(AuthStateChanged);
         session = await _auth.GetSession();
     }
 
-    public async Task AuthStateChanged()
+    private void AuthStateChanged(Session s)
     {
-        session = await _auth.GetSession();
-        L.Config(session.Lang, session.DateFmt, session.TimeFmt);
+        session = s;
         StateHasChanged();
     }
 
