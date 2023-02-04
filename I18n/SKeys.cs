@@ -2,7 +2,7 @@
 
 namespace Dnsk.I18n;
 
-public static partial class Strings
+public static partial class S
 {
     public const string Invalid = AuthValidator.Strings.Invalid;
     public const string InvalidEmail = AuthValidator.Strings.InvalidEmail;
@@ -25,5 +25,9 @@ public static partial class Strings
     public const string AuthResetPwdSubject = "auth_reset_pwd_subject";
     public const string AuthResetPwdHtml = "auth_reset_pwd_html";
     public const string AuthResetPwdText = "auth_reset_pwd_text";
+    public const string Home = "home";
     public const string L10n = "l10n";
+    public const string Language = "language";
+    public const string DateFmt = "date_fmt";
+    public const string TimeFmt = "time_fmt";
 }

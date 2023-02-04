@@ -3,10 +3,9 @@
 @using Common
 @using Dnsk.I18n
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
-@using S = Dnsk.I18n.Strings
 <div class="root col g-1 p-1">
     <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
-        @L.S(Strings.L10n)
+        @L.S(S.L10n)
     </RadzenText>
     <RadzenTemplateForm
         TItem="Model"
@@ -14,23 +13,23 @@
         Submit="Do"
         class="flx col g-1 ai-s">
         <div class="flx col ai-s">
-            <RadzenLabel class="m-b-0q" Component="Lang" Text="Language"/>
+            <RadzenLabel class="m-b-0q" Component="Lang" Text="@L.S(S.Language)"/>
             <RadzenDropDown Name="Lang" AllowClear=false TValue=string 
-                            Data=Strings.SupportedLangs 
+                            Data=S.SupportedLangs 
                             TextProperty="NativeName" ValueProperty="Code"
                             @bind-Value=@_model.Lang />
         </div>
         <div class="flx col ai-s">
-            <RadzenLabel class="m-b-0q" Component="Date" Text="Date Format"/>
+            <RadzenLabel class="m-b-0q" Component="Date" Text="@L.S(S.DateFmt)"/>
             <RadzenDropDown Name="Date" AllowClear=false TValue=string 
-                            Data=Strings.SupportedDateFmts 
+                            Data=S.SupportedDateFmts 
                             ValueProperty="Value"
                             @bind-Value=@_model.DateFmt />
         </div>
         <div class="flx col ai-s">
-            <RadzenLabel class="m-b-0q" Component="Time" Text="Time Format"/>
+            <RadzenLabel class="m-b-0q" Component="Time" Text="@L.S(S.TimeFmt)"/>
             <RadzenDropDown Name="Time" AllowClear=false TValue=string 
-                            Data=Strings.SupportedTimeFmts 
+                            Data=S.SupportedTimeFmts 
                             ValueProperty="Value"
                             @bind-Value=@_model.TimeFmt />
         </div>
@@ -43,9 +42,9 @@
 
     record Model
     {
-        public string Lang { get; set; } = Strings.DefaultLang;
-        public string DateFmt { get; set; } = Strings.DefaultDateFmt;
-        public string TimeFmt { get; set; } = Strings.DefaultTimeFmt;
+        public string Lang { get; set; } = S.DefaultLang;
+        public string DateFmt { get; set; } = S.DefaultDateFmt;
+        public string TimeFmt { get; set; } = S.DefaultTimeFmt;
     }
 
     private bool CanDo => _model != _initialValues && !_doing;

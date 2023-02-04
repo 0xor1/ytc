@@ -90,7 +90,7 @@ public class ErrorInterceptor : Interceptor
     {
         var log = true;
         var code = StatusCode.Internal;
-        var msg = Strings.UnexpectedError;
+        var msg = S.UnexpectedError;
             
         if (ex.GetType() == typeof(ApiException))
         {

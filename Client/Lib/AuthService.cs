@@ -6,7 +6,7 @@ namespace Dnsk.Client.Lib;
 
 public record Session(string Id, bool IsAuthed, string Lang, string DateFmt, string TimeFmt)
 {
-    public Session() : this(string.Empty, false, Strings.DefaultLang, Strings.DefaultDateFmt, Strings.DefaultTimeFmt) {}
+    public Session() : this(string.Empty, false, S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt) {}
     public Session(Auth_Session ses): this(ses.Id, ses.IsAuthed, ses.Lang, ses.DateFmt, ses.TimeFmt) {}
     public bool IsAnon => !IsAuthed;
 }

@@ -21,7 +21,7 @@
         </RadzenHeader>
         <RadzenSidebar @bind-Expanded="@LeftExpanded">
             <RadzenPanelMenu>
-                <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
+                <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/"/>
             </RadzenPanelMenu>
         </RadzenSidebar>
         <RadzenBody class="root rz-background-color-base-100">
@@ -32,6 +32,7 @@
 </div>
 
 @using Dnsk.Client.Lib
+@using Dnsk.I18n
 @inherits LayoutComponentBase
 @inject IAuthService _auth;
 @inject IMainLayoutService _mls;

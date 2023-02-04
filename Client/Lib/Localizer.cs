@@ -5,9 +5,9 @@ namespace Dnsk.Client.Lib;
 // L for Localizer
 public static class L
 {
-    private static string _lang = Strings.DefaultLang;
-    private static string _date = Strings.DefaultDateFmt;
-    private static string _time = Strings.DefaultTimeFmt;
+    private static string _lang = I18n.S.DefaultLang;
+    private static string _date = I18n.S.DefaultDateFmt;
+    private static string _time = I18n.S.DefaultTimeFmt;
     
     public static void Config(string lang, string date, string time)
     {
@@ -17,7 +17,7 @@ public static class L
     }
 
     // S for String
-    public static string S(string key, object? model = null) => Strings.GetOrAddress(_lang, key, model);
+    public static string S(string key, object? model = null) => I18n.S.GetOrAddress(_lang, key, model);
 
     // D for Date
     public static string D(DateTime dt) => dt.ToLocalTime().ToString(_date);

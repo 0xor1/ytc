@@ -9,8 +9,8 @@ namespace Dnsk.Client.Lib;
 
 public class RadzenCustomValidator: ValidatorBase
 {
-    public override string Text { get; set; } = Strings.Invalid;
-    public Message Message { get; set; } = new (Strings.Invalid);
+    public override string Text { get; set; } = S.Invalid;
+    public Message Message { get; set; } = new (S.Invalid);
 
     private List<Message> SubMessages { get; set; } = new();
 

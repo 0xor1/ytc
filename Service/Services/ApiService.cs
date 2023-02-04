@@ -25,7 +25,7 @@ public class ApiService : Api.ApiBase
     {
         // basic validation
         var ses = stx.GetSession();
-        stx.ErrorIf(ses.IsAuthed, Strings.AlreadyAuthenticated);
+        stx.ErrorIf(ses.IsAuthed, S.AlreadyAuthenticated);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         stx.ErrorFromValidationResult(AuthValidator.Email(req.Email));
@@ -75,9 +75,9 @@ public class ApiService : Api.ApiBase
                     Code = existing.VerifyEmailCode
                 };
                 await _emailClient.SendEmailAsync(
-                    stx.String(Strings.AuthConfirmEmailSubject), 
-                     stx.String(Strings.AuthConfirmEmailHtml, model), 
-                    stx.String(Strings.AuthConfirmEmailText, model), 
+                    stx.String(S.AuthConfirmEmailSubject), 
+                     stx.String(S.AuthConfirmEmailHtml, model), 
+                    stx.String(S.AuthConfirmEmailText, model), 
                     Config.Email.NoReplyAddress, 
                     new List<string>(){req.Email});
             }
@@ -103,8 +103,8 @@ public class ApiService : Api.ApiBase
         try
         {
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email) || x.NewEmail.Equals(req.Email));
-            stx.ErrorIf(auth == null, Strings.NoMatchingRecord);
-            stx.ErrorIf(auth.NotNull().VerifyEmailCode != req.Code, Strings.InvalidEmailCode);
+            stx.ErrorIf(auth == null, S.NoMatchingRecord);
+            stx.ErrorIf(auth.NotNull().VerifyEmailCode != req.Code, S.InvalidEmailCode);
             if (!auth.NewEmail.IsNullOrEmpty() && auth.NewEmail == req.Email)
             {
                 // verifying new email
@@ -135,7 +135,7 @@ public class ApiService : Api.ApiBase
     {
         // basic validation
         var ses = stx.GetSession(); 
-        stx.ErrorIf(ses.IsAuthed, Strings.AlreadyAuthenticated);
+        stx.ErrorIf(ses.IsAuthed, S.AlreadyAuthenticated);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         stx.ErrorFromValidationResult(AuthValidator.Email(req.Email));
@@ -163,9 +163,9 @@ public class ApiService : Api.ApiBase
                 Code = existing.ResetPwdCode
             };
             await _emailClient.SendEmailAsync(
-                stx.String(Strings.AuthResetPwdSubject),
-                stx.String(Strings.AuthResetPwdHtml, model),
-                stx.String(Strings.AuthResetPwdText, model),
+                stx.String(S.AuthResetPwdSubject),
+                stx.String(S.AuthResetPwdHtml, model),
+                stx.String(S.AuthResetPwdText, model),
                 Config.Email.NoReplyAddress,
                 new List<string>(){req.Email}
             );
@@ -192,8 +192,8 @@ public class ApiService : Api.ApiBase
         try
         {
             var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
-            stx.ErrorIf(auth == null, Strings.NoMatchingRecord);
-            stx.ErrorIf(auth.NotNull().ResetPwdCode != req.Code, Strings.InvalidResetPwdCode);
+            stx.ErrorIf(auth == null, S.NoMatchingRecord);
+            stx.ErrorIf(auth.NotNull().ResetPwdCode != req.Code, S.InvalidResetPwdCode);
             var pwd = Crypto.HashPwd(req.NewPwd);
             auth.ResetPwdCodeCreatedOn = DateTimeExts.Zero();
             auth.ResetPwdCode = string.Empty;
@@ -217,7 +217,7 @@ public class ApiService : Api.ApiBase
     {
         // basic validation
         var ses = stx.GetSession();
-        stx.ErrorIf(ses.IsAuthed, Strings.AlreadyAuthenticated);
+        stx.ErrorIf(ses.IsAuthed, S.AlreadyAuthenticated);
         // !!! ToLower all emails in all Auth_ api endpoints
         req.Email = req.Email.ToLower();
         stx.ErrorFromValidationResult(AuthValidator.Email(req.Email));
@@ -225,8 +225,8 @@ public class ApiService : Api.ApiBase
         // start db tx
         await using var tx = await _db.Database.BeginTransactionAsync();
         var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Email.Equals(req.Email));
-        stx.ErrorIf(auth == null, Strings.NoMatchingRecord);
-        stx.ErrorIf(auth.NotNull().ActivatedOn.IsZero(), Strings.AccountNotVerified);
+        stx.ErrorIf(auth == null, S.NoMatchingRecord);
+        stx.ErrorIf(auth.NotNull().ActivatedOn.IsZero(), S.AccountNotVerified);
         RateLimitAuthAttempts(stx, auth.NotNull());
         auth.LastSignInAttemptOn = DateTime.UtcNow;
         var pwdIsValid = Crypto.PwdIsValid(req.Pwd, auth);
@@ -237,7 +237,7 @@ public class ApiService : Api.ApiBase
         }
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
-        stx.ErrorIf(!pwdIsValid, Strings.NoMatchingRecord);
+        stx.ErrorIf(!pwdIsValid, S.NoMatchingRecord);
         return AuthSession(ses);
     }
 
@@ -275,7 +275,7 @@ public class ApiService : Api.ApiBase
     private const int AuthAttemptsRateLimit = 5;
     private static void RateLimitAuthAttempts(ServerCallContext stx, Auth auth)
     {
-        stx.ErrorIf(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, Strings.AuthAttemptRateLimit);
+        stx.ErrorIf(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, S.AuthAttemptRateLimit);
     }
 
     private static Auth_Session AuthSession(Session s)

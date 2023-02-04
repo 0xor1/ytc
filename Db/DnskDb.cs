@@ -26,9 +26,9 @@ public class Auth: Pwd
     public DateTime LoginCodeCreatedOn { get; set; } = DateTimeExts.Zero();
     public string LoginCode { get; set; } = "";
     public bool Use2FA { get; set; } = false;
-    public string Lang { get; set; } = Strings.DefaultLang;
-    public string DateFmt { get; set; } = Strings.DefaultDateFmt;
-    public string TimeFmt { get; set; } = Strings.DefaultTimeFmt;
+    public string Lang { get; set; } = S.DefaultLang;
+    public string DateFmt { get; set; } = S.DefaultDateFmt;
+    public string TimeFmt { get; set; } = S.DefaultTimeFmt;
 }
 public class Pwd
 {

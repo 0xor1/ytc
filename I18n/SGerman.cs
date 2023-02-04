@@ -2,7 +2,7 @@
 
 namespace Dnsk.I18n;
 
-public static partial class Strings
+public static partial class S
 {
     private static readonly IReadOnlyDictionary<string, IFluidTemplate> German = new Dictionary<string, IFluidTemplate>()
     {
@@ -27,6 +27,10 @@ public static partial class Strings
         { AuthResetPwdSubject, Parser.Parse("Passwort zurücksetzen")}, 
         { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">klicken Sie bitte auf diesen Link, um Ihr Passwort zurückzusetzen</a></div>")}, 
         { AuthResetPwdText, Parser.Parse("Bitte klicken Sie auf diesen Link, um Ihr Passwort zurückzusetzen: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")},
-        { L10n, Parser.Parse("Lokalisierung")}
+        { Home, Parser.Parse("Heim")},
+        { L10n, Parser.Parse("Lokalisierung")},
+        { Language, Parser.Parse("Sprache")},
+        { DateFmt, Parser.Parse("Datumsformat")},
+        { TimeFmt, Parser.Parse("Zeitformat")}
     };
 }

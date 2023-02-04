@@ -29,13 +29,13 @@ public record Session
     public bool IsAnon => !IsAuthed;
 
     [Key(4)]
-    public string Lang { get; init; } = Strings.DefaultLang;
+    public string Lang { get; init; } = S.DefaultLang;
 
     [Key(5)]
-    public string DateFmt { get; init; } = Strings.DefaultDateFmt;
+    public string DateFmt { get; init; } = S.DefaultDateFmt;
 
     [Key(6)]
-    public string TimeFmt { get; init; } = Strings.DefaultTimeFmt;
+    public string TimeFmt { get; init; } = S.DefaultTimeFmt;
 
     public Auth_Session ToAuth() => new ()
     {
@@ -70,7 +70,7 @@ public static class ServerCallContextExts
         if (!stx.UserState.ContainsKey(SessionName))
         {
             ses = GetCookie(stx);
-            stx.UserState.Add(SessionName, ses);
+            stx.UserState[SessionName] = ses;
         }
         else
         {
@@ -79,7 +79,7 @@ public static class ServerCallContextExts
         return ses;
     }
 
-    public static Session CreateSession(this ServerCallContext stx, string userId, bool isAuthed, bool rememberMe, string lang = Strings.DefaultLang, string dateFmt = Strings.DefaultDateFmt, string timeFmt = Strings.DefaultTimeFmt)
+    public static Session CreateSession(this ServerCallContext stx, string userId, bool isAuthed, bool rememberMe, string lang = S.DefaultLang, string dateFmt = S.DefaultDateFmt, string timeFmt = S.DefaultTimeFmt)
     {
         var ses = new Session()
         {
@@ -106,7 +106,7 @@ public static class ServerCallContextExts
     private static Session _ClearSession(ServerCallContext stx)
     {
         return stx.CreateSession(Id.New(), false, false,
-            Strings.BestLang(stx.GetHttpContext().Request.Headers.AcceptLanguage.ToArray().FirstOrDefault() ?? ""));
+            S.BestLang(stx.GetHttpContext().Request.Headers.AcceptLanguage.ToArray().FirstOrDefault() ?? ""));
     }
     
     private static Session GetCookie(ServerCallContext stx)
@@ -192,5 +192,5 @@ public static class ServerCallContextExts
 
     // i18n string handling
 
-    public static string String(this ServerCallContext stx, string key, object? model = null) => Strings.Get(stx.GetSession().Lang, key, model);
+    public static string String(this ServerCallContext stx, string key, object? model = null) => S.Get(stx.GetSession().Lang, key, model);
 }
