@@ -22,7 +22,7 @@ public class RadzenCustomValidator: ValidatorBase
     {
         var res = Validator(component);
         Message = res.Message;
-        Text = res.Message.Key; // TODO use Strings.Get
+        //Text = L.S(res.Message.Key, res.Message.Model);
         SubMessages = res.SubMessages;
         return res.Valid;
     }
@@ -38,7 +38,7 @@ public class RadzenCustomValidator: ValidatorBase
         builder.AddMultipleAttributes(3, Attributes);
         if (!Text.IsNullOrWhiteSpace())
         {
-            builder.AddContent(4, Message.Key); // TODO call Strings.Get
+            builder.AddContent(4, L.S(Message.Key, Message.Model));
         }
         if (SubMessages.Any())
         {
@@ -47,7 +47,7 @@ public class RadzenCustomValidator: ValidatorBase
             foreach (var subRule in SubMessages)
             {
                 builder.OpenElement(7, "li");
-                builder.AddContent(8, subRule.Key); // TODO call Strings.Get
+                builder.AddContent(8, L.S(subRule.Key, subRule.Model));
                 builder.CloseElement();
             }
             builder.CloseElement();
