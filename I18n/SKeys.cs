@@ -30,4 +30,6 @@ public static partial class S
     public const string Language = "language";
     public const string DateFmt = "date_fmt";
     public const string TimeFmt = "time_fmt";
+    public const string SignIn = "sign_in";
+    public const string SignOut = "sign_out";
 }

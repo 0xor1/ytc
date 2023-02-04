@@ -31,6 +31,8 @@ public static partial class S
         { L10n, Parser.Parse("Localization")},
         { Language, Parser.Parse("Language")},
         { DateFmt, Parser.Parse("Date Format")},
-        { TimeFmt, Parser.Parse("Time Format")}
+        { TimeFmt, Parser.Parse("Time Format")},
+        { SignIn, Parser.Parse("Sign In")},
+        { SignOut, Parser.Parse("Sign Out")}
     };
 }

@@ -14,17 +14,17 @@
         class="flx col g-1 ai-s">
         <div class="flx col ai-s">
             <RadzenLabel class="m-b-0q" Component="Lang" Text="@L.S(S.Language)"/>
-            <RadzenDropDown Name="Lang" AllowClear=false TValue=string 
-                            Data=S.SupportedLangs 
+            <RadzenDropDown Name="Lang" AllowClear="false" TValue="string" 
+                            Data="S.SupportedLangs" 
                             TextProperty="NativeName" ValueProperty="Code"
-                            @bind-Value=@_model.Lang />
+                            @bind-Value="_model.Lang" />
         </div>
         <div class="flx col ai-s">
             <RadzenLabel class="m-b-0q" Component="Date" Text="@L.S(S.DateFmt)"/>
-            <RadzenDropDown Name="Date" AllowClear=false TValue=string 
-                            Data=S.SupportedDateFmts 
+            <RadzenDropDown Name="Date" AllowClear="false" TValue="string" 
+                            Data="S.SupportedDateFmts" 
                             ValueProperty="Value"
-                            @bind-Value=@_model.DateFmt />
+                            @bind-Value="_model.DateFmt" />
         </div>
         <div class="flx col ai-s">
             <RadzenLabel class="m-b-0q" Component="Time" Text="@L.S(S.TimeFmt)"/>
