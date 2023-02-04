@@ -22,7 +22,6 @@ public class RadzenCustomValidator: ValidatorBase
     {
         var res = Validator(component);
         Message = res.Message;
-        //Text = L.S(res.Message.Key, res.Message.Model);
         SubMessages = res.SubMessages;
         return res.Valid;
     }

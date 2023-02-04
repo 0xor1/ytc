@@ -31,8 +31,14 @@ public static partial class S
     public const string DateFmt = "date_fmt";
     public const string TimeFmt = "time_fmt";
     public const string Register = "register";
+    public const string Registering = "registering";
+    public const string RegisterSuccess = "register_success";
     public const string SignIn = "sign_in";
     public const string SignOut = "sign_out";
     public const string VerifyEmail = "verify_email";
     public const string ResetPwd = "reset_pwd";
+    public const string Email = "email";
+    public const string Pwd = "pwd";
+    public const string ConfirmPwd = "confirm_pwd";
+    public const string PwdsDontMatch = "pwds_dont_match";
 }

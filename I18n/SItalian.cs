@@ -33,9 +33,15 @@ public static partial class S
         { DateFmt, Parser.Parse("Formato data")},
         { TimeFmt, Parser.Parse("Formato orario")},
         { Register, Parser.Parse("Registrati")},
+        { Registering, Parser.Parse("Registrazione")},
+        { RegisterSuccess, Parser.Parse("Controlla le tue e-mail per un link di conferma per completare la registrazione.")},
         { SignIn, Parser.Parse("Registrazione")},
         { SignOut, Parser.Parse("Disconnessione")},
         { VerifyEmail, Parser.Parse("Verifica Email")},
-        { ResetPwd, Parser.Parse("Resetta la password")}
+        { ResetPwd, Parser.Parse("Resetta la password")},
+        { Email, Parser.Parse("E-mail")},
+        { Pwd, Parser.Parse("Parola d'ordine")},
+        { ConfirmPwd, Parser.Parse("Conferma password")},
+        { PwdsDontMatch, Parser.Parse("Le password non corrispondono")}
     };
 }
