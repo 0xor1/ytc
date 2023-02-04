@@ -24,10 +24,12 @@ public class AuthService: IAuthService
 {
     private Session? _session;
     private readonly Api.ApiClient _api;
+    private readonly IMainLayout _ml;
     
-    public AuthService(Api.ApiClient api)
+    public AuthService(Api.ApiClient api, IMainLayoutService ml)
     {
         _api = api;
+        _ml = ml;
     }
 
     public async Task<Session> GetSession()
@@ -62,6 +64,7 @@ public class AuthService: IAuthService
             RememberMe = rememberMe
         });
         _session = new Session(newSes);
+        await _ml.AuthStateChanged();
         return _session;
     }
 
@@ -74,16 +77,12 @@ public class AuthService: IAuthService
         }
         var newSes = await _api.Auth_SignOutAsync(new Nothing());
         _session = new Session(newSes);
+        await _ml.AuthStateChanged();
         return _session;
     }
 
     public async Task<Session> SetL10n(string lang, string dateFmt, string timeFmt)
     {
-        var ses = await GetSession();
-        if (!ses.IsAuthed)
-        {
-            return ses;
-        }
         var newSes = await _api.Auth_SetL10nAsync(new Auth_SetL10nReq()
         {
             Lang = lang,
@@ -91,6 +90,7 @@ public class AuthService: IAuthService
             TimeFmt = timeFmt
         });
         _session = new Session(newSes);
+        await _ml.AuthStateChanged();
         return _session;
     }
 }

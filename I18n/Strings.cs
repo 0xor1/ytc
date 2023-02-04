@@ -27,13 +27,13 @@ public static partial class Strings
         { new(EN, "English"), new(ES, "Español"), new(FR, "Français"), new (DE, "Deutsch"), new (IT, "Italiano") };
 
     public static readonly IReadOnlyList<DateTimeFmt> SupportedDateFmts = new List<DateTimeFmt>()
-        { new("yyyy-MM-dd"), new("dd-MM-yyyy"), new("MM-dd-yyyy") };
+        { new(DefaultDateFmt), new("dd-MM-yyyy"), new("MM-dd-yyyy") };
 
-    public static string DefaultDateFmt => SupportedDateFmts.First().Value;
+    public const string DefaultDateFmt = "yyyy-MM-dd";
     
     public static readonly IReadOnlyList<DateTimeFmt> SupportedTimeFmts = new List<DateTimeFmt>()
-        { new("HH:mm"), new("h:mmtt") };
-    public static string DefaultTimeFmt => SupportedTimeFmts.First().Value;
+        { new(DefaultTimeFmt), new("h:mmtt") };
+    public const string DefaultTimeFmt = "HH:mm";
         
 
     public static string Get(string lang, string key, object? model = null)

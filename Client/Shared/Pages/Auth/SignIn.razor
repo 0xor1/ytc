@@ -37,7 +37,6 @@
 
 @inject NavigationManager Nav;
 @inject IAuthService Auth;
-@inject IMainLayoutService Main;
 @code{
 
     class Model
@@ -57,7 +56,6 @@
         try
         {
             await Auth.SignIn(_model.Email, _model.Pwd, _model.RememberMe);
-            await Main.AuthStateChanged();
             Nav.NavigateTo("/");
         }
         catch

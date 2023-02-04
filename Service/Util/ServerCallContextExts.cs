@@ -67,7 +67,6 @@ public static class ServerCallContextExts
     public static Session GetSession(this ServerCallContext stx)
     {
         Session ses;
-        stx.UserState.ContainsKey(SessionName);
         if (!stx.UserState.ContainsKey(SessionName))
         {
             ses = GetCookie(stx);
@@ -80,39 +79,34 @@ public static class ServerCallContextExts
         return ses;
     }
 
-    public static Session SignIn(this ServerCallContext stx, string userId, bool rememberMe)
+    public static Session CreateSession(this ServerCallContext stx, string userId, bool isAuthed, bool rememberMe, string lang = Strings.DefaultLang, string dateFmt = Strings.DefaultDateFmt, string timeFmt = Strings.DefaultTimeFmt)
     {
         var ses = new Session()
         {
             Id = userId,
             StartedOn = DateTime.UtcNow,
-            IsAuthed = true,
-            RememberMe = rememberMe
+            IsAuthed = isAuthed,
+            RememberMe = rememberMe,
+            Lang = lang,
+            DateFmt = dateFmt,
+            TimeFmt = timeFmt
         };
         stx.UserState[SessionName] = ses;
         SetCookie(stx, ses);
         return ses;
     }
 
-    public static Session SignOut(this ServerCallContext stx)
+    public static Session ClearSession(this ServerCallContext stx)
     {
-        var ses = _SignOut(stx);
+        var ses = _ClearSession(stx);
         stx.UserState[SessionName] = ses;
         return ses;
     }
 
-    private static Session _SignOut(ServerCallContext stx)
+    private static Session _ClearSession(ServerCallContext stx)
     {
-        var ses = new Session()
-        {
-            Id = Id.New(),
-            StartedOn = DateTime.UtcNow,
-            IsAuthed = false,
-            RememberMe = false,
-            Lang = Strings.BestLang(stx.GetHttpContext().Request.Headers.AcceptLanguage.ToArray().FirstOrDefault() ?? "")
-        };
-        SetCookie(stx, ses);
-        return ses;
+        return stx.CreateSession(Id.New(), false, false,
+            Strings.BestLang(stx.GetHttpContext().Request.Headers.AcceptLanguage.ToArray().FirstOrDefault() ?? ""));
     }
     
     private static Session GetCookie(ServerCallContext stx)
@@ -123,7 +117,7 @@ public static class ServerCallContextExts
         {
             // there is no session set so use sign out to create a
             // new anon session
-            return _SignOut(stx);
+            return _ClearSession(stx);
         }
 
         // there is a session so lets get it from the cookie

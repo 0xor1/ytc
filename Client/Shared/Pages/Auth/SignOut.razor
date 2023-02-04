@@ -32,7 +32,6 @@
 
 @inject IAuthService Auth;
 @inject NavigationManager Nav;
-@inject IMainLayoutService Main;
 @code{
 
     private bool _doing = false;
@@ -46,7 +45,6 @@
         {
             await Auth.SignOut();
             _success = true;
-            await Main.AuthStateChanged();
         }
         catch
         {

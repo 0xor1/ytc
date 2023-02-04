@@ -25,4 +25,5 @@ public static partial class Strings
     public const string AuthResetPwdSubject = "auth_reset_pwd_subject";
     public const string AuthResetPwdHtml = "auth_reset_pwd_html";
     public const string AuthResetPwdText = "auth_reset_pwd_text";
+    public const string L10n = "l10n";
 }

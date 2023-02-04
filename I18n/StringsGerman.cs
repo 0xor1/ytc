@@ -26,6 +26,7 @@ public static partial class Strings
         { AuthConfirmEmailText, Parser.Parse("Bitte verwenden Sie diesen Link, um Ihre E-Mail-Adresse zu bestätigen: {{BaseHref}}/verify_email?email={{Email}}&code={{Code}}")},
         { AuthResetPwdSubject, Parser.Parse("Passwort zurücksetzen")}, 
         { AuthResetPwdHtml, Parser.Parse("<div><a href=\"{{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}\">klicken Sie bitte auf diesen Link, um Ihr Passwort zurückzusetzen</a></div>")}, 
-        { AuthResetPwdText, Parser.Parse("Bitte klicken Sie auf diesen Link, um Ihr Passwort zurückzusetzen: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")}
+        { AuthResetPwdText, Parser.Parse("Bitte klicken Sie auf diesen Link, um Ihr Passwort zurückzusetzen: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}")},
+        { L10n, Parser.Parse("Lokalisierung")}
     };
 }

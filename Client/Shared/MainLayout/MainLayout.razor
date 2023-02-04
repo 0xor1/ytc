@@ -50,6 +50,7 @@
     public async Task AuthStateChanged()
     {
         session = await _auth.GetSession();
+        L.Config(session.Lang, session.DateFmt, session.TimeFmt);
         StateHasChanged();
     }
 

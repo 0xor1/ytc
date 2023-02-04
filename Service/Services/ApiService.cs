@@ -19,19 +19,7 @@ public class ApiService : Api.ApiBase
         _emailClient = emailClient;
     }
 
-    public override Task<Auth_Session> Auth_GetSession(Nothing _, ServerCallContext stx)
-    {
-        var ses = stx.GetSession();
-        var a_ses = new Auth_Session()
-        {
-            Id = ses.Id,
-            IsAuthed = ses.IsAuthed,
-            Lang = ses.Lang,
-            DateFmt = ses.DateFmt,
-            TimeFmt = ses.TimeFmt
-        };
-        return a_ses.Task();
-    }
+    public override Task<Auth_Session> Auth_GetSession(Nothing _, ServerCallContext stx) => AuthSession(stx.GetSession()).Task();
 
     public override async Task<Nothing> Auth_Register(Auth_RegisterReq req, ServerCallContext stx)
     {
@@ -245,16 +233,12 @@ public class ApiService : Api.ApiBase
         if (pwdIsValid)
         {
             auth.LastSignedInOn = DateTime.UtcNow;
-            ses = stx.SignIn(auth.Id, req.RememberMe);
+            ses = stx.CreateSession(auth.Id, true, req.RememberMe, ses.Lang, ses.DateFmt, ses.TimeFmt);
         }
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
         stx.ErrorIf(!pwdIsValid, Strings.NoMatchingRecord);
-        return new Auth_Session()
-        {
-            Id = ses.Id,
-            IsAuthed = ses.IsAuthed
-        };
+        return AuthSession(ses);
     }
 
     public override Task<Auth_Session> Auth_SignOut(Nothing _, ServerCallContext stx)
@@ -263,24 +247,46 @@ public class ApiService : Api.ApiBase
         var ses = stx.GetSession();
         if (ses.IsAuthed)
         {
-            ses = stx.SignOut();
+            ses = stx.ClearSession();
         }
-        return new Auth_Session()
-        {
-            Id = ses.Id,
-            IsAuthed = ses.IsAuthed
-        }.Task();
+        return AuthSession(ses).Task();
     }
 
-    // public override async Task<Auth_Session> Auth_SetL10n(Auth_SetL10nReq req, ServerCallContext stx)
-    // {
-    //     var ses = _session.Get(stx);
-    //     TODO update session values and IF it's an authed session update the DB values 
-    // }
+    public override async Task<Auth_Session> Auth_SetL10n(Auth_SetL10nReq req, ServerCallContext stx)
+    {
+        var ses = stx.GetSession();
+        if (
+            (req.Lang.IsNullOrWhiteSpace() || ses.Lang == req.Lang)
+            && (req.DateFmt.IsNullOrWhiteSpace() || ses.DateFmt == req.DateFmt)
+            && (req.TimeFmt.IsNullOrWhiteSpace() || ses.TimeFmt == req.TimeFmt))
+        {
+            return AuthSession(ses);
+        }
+        ses = stx.CreateSession(ses.Id, ses.IsAuthed, ses.RememberMe, req.Lang ?? ses.Lang, req.DateFmt ?? ses.DateFmt,
+            req.TimeFmt ?? ses.TimeFmt);
+        if (ses.IsAuthed)
+        {
+            // TODO save l10n values to db
+        }
+        await Task.CompletedTask;
+        return AuthSession(ses);
+    }
     
     private const int AuthAttemptsRateLimit = 5;
     private static void RateLimitAuthAttempts(ServerCallContext stx, Auth auth)
     {
         stx.ErrorIf(auth.LastSignInAttemptOn.SecondsSince() < AuthAttemptsRateLimit, Strings.AuthAttemptRateLimit);
+    }
+
+    private static Auth_Session AuthSession(Session s)
+    {
+        return new Auth_Session()
+        {
+            Id = s.Id,
+            IsAuthed = s.IsAuthed,
+            Lang = s.Lang,
+            DateFmt = s.DateFmt,
+            TimeFmt = s.TimeFmt
+        };
     }
 }
