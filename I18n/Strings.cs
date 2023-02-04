@@ -5,12 +5,12 @@ namespace Dnsk.I18n;
 
 public record Lang(string Code, string NativeName)
 {
-    public override string ToString() => $"{Code} - {NativeName}";
+    public override string ToString() => NativeName;
 }
 
 public record DateTimeFmt(string Value)
 {
-    private static readonly DateTime dt = new DateTime(2022, 3, 28, 16, 5, 1);
+    private static readonly DateTime dt = new (DateTime.UtcNow.Year, 1, 21, 16, 1, 1);
     public override string ToString() => dt.ToString(Value);
 }
 public static partial class Strings
@@ -32,7 +32,7 @@ public static partial class Strings
     public static string DefaultDateFmt => SupportedDateFmts.First().Value;
     
     public static readonly IReadOnlyList<DateTimeFmt> SupportedTimeFmts = new List<DateTimeFmt>()
-        { new("HH:mm"), new("hh:mm") };
+        { new("HH:mm"), new("h:mmtt") };
     public static string DefaultTimeFmt => SupportedTimeFmts.First().Value;
         
 

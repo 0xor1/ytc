@@ -3,7 +3,7 @@
 @using Common
 @using Dnsk.I18n
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
-<div class="root col">
+<div class="root col g-1 p-1">
     <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
         Localization
     </RadzenText>
@@ -11,13 +11,27 @@
         TItem="Model"
         Data="_model"
         Submit="Do"
-        class="flx col ai-stretch g-1">
-        <div class="flx col ai-stretch">
-            <RadzenLabel class="m-b-0q" Component="Lang" Text="Lang"/>
-            <RadzenDropDown AllowClear="false" TValue="Lang" 
-                            Data=@(Strings.SupportedLangs) 
-                            SelectedItem="@Strings.SupportedLangs.First(x => x.Code == _model.Lang)"
-                            Change="LangSelected" />
+        class="flx col g-1 ai-s">
+        <div class="flx col ai-s">
+            <RadzenLabel class="m-b-0q" Component="Lang" Text="Language"/>
+            <RadzenDropDown Name="Lang" AllowClear=false TValue=string 
+                            Data=Strings.SupportedLangs 
+                            TextProperty="NativeName" ValueProperty="Code"
+                            @bind-Value=@_model.Lang />
+        </div>
+        <div class="flx col ai-s">
+            <RadzenLabel class="m-b-0q" Component="Date" Text="Date Format"/>
+            <RadzenDropDown Name="Date" AllowClear=false TValue=string 
+                            Data=Strings.SupportedDateFmts 
+                            ValueProperty="Value"
+                            @bind-Value=@_model.DateFmt />
+        </div>
+        <div class="flx col ai-s">
+            <RadzenLabel class="m-b-0q" Component="Time" Text="Time Format"/>
+            <RadzenDropDown Name="Time" AllowClear=false TValue=string 
+                            Data=Strings.SupportedTimeFmts 
+                            ValueProperty="Value"
+                            @bind-Value=@_model.TimeFmt />
         </div>
         <RadzenButton ButtonType="ButtonType.Submit" BusyText="Updating" IsBusy="_doing" Text="Update" Disabled="!CanDo"/>
     </RadzenTemplateForm>
