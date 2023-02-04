@@ -1,6 +1,8 @@
 ﻿@page "/verify_email"
 @using Dnsk.Client.Lib
-<PageTitle>Sign In</PageTitle>
+@using Dnsk.I18n
+@using Dnsk.Client.Lib
+<PageTitle>@L.S(S.VerifyEmail)</PageTitle>
 <VerifyEmail
     Email="@(_nav.QueryValue<string>("email"))"
     Code="@(_nav.QueryValue<string>("code"))"/>

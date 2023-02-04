@@ -32,7 +32,10 @@ public static partial class S
         { Language, Parser.Parse("Sprache")},
         { DateFmt, Parser.Parse("Datumsformat")},
         { TimeFmt, Parser.Parse("Zeitformat")},
+        { Register, Parser.Parse("Registrieren")},
         { SignIn, Parser.Parse("Anmelden")},
-        { SignOut, Parser.Parse("Austragen")}
+        { SignOut, Parser.Parse("Austragen")},
+        { VerifyEmail, Parser.Parse("E-Mail bestätigen")},
+        { ResetPwd, Parser.Parse("Passwort zurücksetzen")}
     };
 }

@@ -1,6 +1,8 @@
 ﻿@page "/reset_pwd"
 @using Dnsk.Client.Lib
-<PageTitle>Reset Password</PageTitle>
+@using Dnsk.Client.Lib
+@using Dnsk.I18n
+<PageTitle>@L.S(S.ResetPwd)</PageTitle>
 
 <ResetPwd
     Email="@(_nav.QueryValue<string>("email"))"
