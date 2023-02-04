@@ -233,7 +233,7 @@ public class ApiService : Api.ApiBase
         if (pwdIsValid)
         {
             auth.LastSignedInOn = DateTime.UtcNow;
-            ses = stx.CreateSession(auth.Id, true, req.RememberMe, ses.Lang, ses.DateFmt, ses.TimeFmt);
+            ses = stx.CreateSession(auth.Id, true, req.RememberMe, auth.Lang, auth.DateFmt, auth.TimeFmt);
         }
         await _db.SaveChangesAsync();
         await tx.CommitAsync();
@@ -262,13 +262,20 @@ public class ApiService : Api.ApiBase
         {
             return AuthSession(ses);
         }
-        ses = stx.CreateSession(ses.Id, ses.IsAuthed, ses.RememberMe, req.Lang ?? ses.Lang, req.DateFmt ?? ses.DateFmt,
+        ses = stx.CreateSession(ses.Id, ses.IsAuthed, ses.RememberMe, S.BestLang(req.Lang ?? ses.Lang), req.DateFmt ?? ses.DateFmt,
             req.TimeFmt ?? ses.TimeFmt);
         if (ses.IsAuthed)
         {
-            // TODO save l10n values to db
+            await using var tx = await _db.Database.BeginTransactionAsync();
+            var auth = await _db.Auths.SingleOrDefaultAsync(x => x.Id.Equals(ses.Id));
+            stx.ErrorIf(auth == null, S.NoMatchingRecord);
+            stx.ErrorIf(auth.NotNull().ActivatedOn.IsZero(), S.AccountNotVerified);
+            auth.Lang = ses.Lang;
+            auth.DateFmt = ses.DateFmt;
+            auth.TimeFmt = ses.TimeFmt;
+            await _db.SaveChangesAsync();
+            await tx.CommitAsync();
         }
-        await Task.CompletedTask;
         return AuthSession(ses);
     }
     
