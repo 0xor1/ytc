@@ -42,6 +42,8 @@ public static partial class S
         { Email, Parser.Parse("Email")},
         { Pwd, Parser.Parse("Passwort")},
         { ConfirmPwd, Parser.Parse("Bestätige das Passwort")},
-        { PwdsDontMatch, Parser.Parse("Passwörter stimmen nicht überein")}
+        { PwdsDontMatch, Parser.Parse("Passwörter stimmen nicht überein")},
+        { ResetPwdSuccess, Parser.Parse("Sie können sich jetzt mit Ihrem neuen Passwort anmelden.")},
+        { Resetting, Parser.Parse("Zurücksetzen")}
     };
 }

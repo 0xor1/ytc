@@ -41,4 +41,6 @@ public static partial class S
     public const string Pwd = "pwd";
     public const string ConfirmPwd = "confirm_pwd";
     public const string PwdsDontMatch = "pwds_dont_match";
+    public const string ResetPwdSuccess = "reset_pwd_success";
+    public const string Resetting = "resetting";
 }

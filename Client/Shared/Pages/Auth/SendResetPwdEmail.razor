@@ -1,6 +1,7 @@
 ﻿@using Dnsk.Client.Lib
 @using System.Text.RegularExpressions
 @using Common
+@using Dnsk.I18n
 @using Dnsk.Proto
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
 <div class="root jc-c ai-c">
@@ -26,8 +27,8 @@
             }
             <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="_doing" Text="Send" Disabled="!CanDo"/>
             <div class="flx jc-sb">
-                <RadzenLink Path="sign_in" Text="Sign In"></RadzenLink>
-                <RadzenLink Path="register" Text="Register"></RadzenLink>
+                <RadzenLink Path="sign_in" Text="@L.S(S.SignIn)"></RadzenLink>
+                <RadzenLink Path="register" Text="@L.S(S.Register)"></RadzenLink>
             </div>
         </RadzenTemplateForm>
     </RadzenCard>

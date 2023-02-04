@@ -1,20 +1,21 @@
 ﻿@using Dnsk.Client.Lib
 @using System.Text.RegularExpressions
 @using Common
+@using Dnsk.I18n
 @using Dnsk.Proto
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25">
             <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
-                Reset Password
+                @L.S(S.ResetPwd)
             </RadzenText>
             @if (_success)
             {
                 <div class="flx col ai-stretch">
                     <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 f-b rz-color-success-light">
-                        You can now sign in with your new password.
+                        @L.S(S.ResetPwdSuccess)
                     </RadzenText>
-                    <RadzenButton ButtonType="ButtonType.Button"Text="Sign In" Click="SignIn"/>
+                    <RadzenButton ButtonType="ButtonType.Button"Text="@L.S(S.SignIn)" Click="SignIn"/>
                 </div>
             }
             else
@@ -25,16 +26,16 @@
                     Submit="Do"
                     class="flx col ai-stretch g-1">
                     <div class="flx col ai-stretch">
-                        <RadzenLabel class="m-b-0q" Component="Password" Text="Password"/>
+                        <RadzenLabel class="m-b-0q" Component="Password" Text="@L.S(S.Pwd)"/>
                         <RadzenPassword Name="Password" @bind-Value="@_model.NewPwd" Disabled="!CanDo"/>
-                        <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true" Text="Invalid password"></RadzenCustomValidator>
+                        <RadzenCustomValidator Validator="PwdValidator" Component="Password" Popup="true"></RadzenCustomValidator>
                     </div>
                     <div class="flx col ai-stretch">
-                        <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="Confirm Password"/>
+                        <RadzenLabel class="m-b-0q" Component="ConfirmPassword" Text="@L.S(S.ConfirmPwd)"/>
                         <RadzenPassword Name="ConfirmPassword" @bind-Value="@_model.ConfirmNewPwd" Disabled="!CanDo"/>
-                        <RadzenCustomValidator Validator="ConfirmPasswordValidator" Component="ConfirmPassword" Popup="true" Text="Passwords don't match"></RadzenCustomValidator>
+                        <RadzenCustomValidator Validator="ConfirmPasswordValidator" Component="ConfirmPassword" Popup="true"></RadzenCustomValidator>
                     </div>
-                    <RadzenButton ButtonType="ButtonType.Submit" BusyText="Resetting" IsBusy="_doing" Text="Reset Password" Disabled="!CanDo"/>
+                    <RadzenButton ButtonType="ButtonType.Submit" BusyText="@L.S(S.Resetting)" IsBusy="_doing" Text="@L.S(S.ResetPwd)" Disabled="!CanDo"/>
                 </RadzenTemplateForm>
             }
         </RadzenCard>
@@ -93,6 +94,7 @@
     private ValidationResult ConfirmPasswordValidator(IRadzenFormComponent component)
         => new ()
         {
-            Valid = (component.GetValue() as string ?? "") == _model.NewPwd
+            Valid = (component.GetValue() as string ?? "") == _model.NewPwd,
+            Message = new(L.S(S.PwdsDontMatch))
         };
 }
