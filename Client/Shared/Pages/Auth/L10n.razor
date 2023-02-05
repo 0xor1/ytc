@@ -33,7 +33,7 @@
                             ValueProperty="Value"
                             @bind-Value=@_model.TimeFmt />
         </div>
-        <RadzenButton ButtonType="ButtonType.Submit" BusyText="Updating" IsBusy="_doing" Text="Update" Disabled="!CanDo"/>
+        <RadzenButton ButtonType="ButtonType.Submit" BusyText="@L.S(S.Updating)" IsBusy="_doing" Text="@L.S(S.Update)" Disabled="!CanDo"/>
     </RadzenTemplateForm>
 </div>
 

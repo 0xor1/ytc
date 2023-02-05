@@ -57,6 +57,8 @@ public static partial class S
         { Processing, Parser.Parse("Traitement")},
         { Send, Parser.Parse("Envoyer")},
         { Success, Parser.Parse("Succès")},
-        { Error, Parser.Parse("Erreur")}
+        { Error, Parser.Parse("Erreur")},
+        { Update, Parser.Parse("Mise à jour")},
+        { Updating, Parser.Parse("Mise à jour")}
     };
 }

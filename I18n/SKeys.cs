@@ -56,5 +56,7 @@ public static partial class S
     public const string Send = "send";
     public const string Success = "success";
     public const string Error = "error";
+    public const string Update = "update";
+    public const string Updating = "updating";
 
 }
