@@ -29,9 +29,9 @@
         <div class="flx col ai-s">
             <RadzenLabel class="m-b-0q" Component="Time" Text="@L.S(S.TimeFmt)"/>
             <RadzenDropDown Name="Time" AllowClear=false TValue=string 
-                            Data=S.SupportedTimeFmts 
+                            Data="S.SupportedTimeFmts" 
                             ValueProperty="Value"
-                            @bind-Value=@_model.TimeFmt />
+                            @bind-Value="@_model.TimeFmt" />
         </div>
         <RadzenButton ButtonType="ButtonType.Submit" BusyText="@L.S(S.Updating)" IsBusy="_doing" Text="@L.S(S.Update)" Disabled="!CanDo"/>
     </RadzenTemplateForm>
