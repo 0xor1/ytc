@@ -36,14 +36,25 @@ public static partial class S
         { Registering, Parser.Parse("Enregistrement")},
         { RegisterSuccess, Parser.Parse("Veuillez vérifier vos e-mails pour un lien de confirmation pour terminer l'inscription.")},
         { SignIn, Parser.Parse("S'identifier")},
+        { SigningIn, Parser.Parse("Connectez-vous")},
         { SignOut, Parser.Parse("Se déconnecter")},
+        { SigningOut, Parser.Parse("Déconnecter")},
         { VerifyEmail, Parser.Parse("Vérifier les courriels")},
+        { Verifying, Parser.Parse("Vérification")},
+        { VerifyingEmail, Parser.Parse("Vérification de votre e-mail")},
+        { VerifyEmailSuccess, Parser.Parse("Merci d'avoir vérifié votre adresse e-mail.")},
         { ResetPwd, Parser.Parse("Réinitialiser le mot de passe")},
         { Email, Parser.Parse("E-mail")},
         { Pwd, Parser.Parse("Mot de passe")},
         { ConfirmPwd, Parser.Parse("Confirmez le mot de passe")},
         { PwdsDontMatch, Parser.Parse("Les mots de passe ne correspondent pas")},
         { ResetPwdSuccess, Parser.Parse("Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.")},
-        { Resetting, Parser.Parse("Réinitialisation")}
+        { Resetting, Parser.Parse("Réinitialisation")},
+        { SendResetPwdLink, Parser.Parse("Envoyer le lien de réinitialisation du mot de passe")},
+        { SendResetPwdLinkSuccess, Parser.Parse("Si cet e-mail correspond à un compte, un e-mail vous aura été envoyé pour réinitialiser votre mot de passe.")},
+        { Processing, Parser.Parse("Traitement")},
+        { Send, Parser.Parse("Envoyer")},
+        { Success, Parser.Parse("Succès")},
+        { Error, Parser.Parse("Erreur")}
     };
 }

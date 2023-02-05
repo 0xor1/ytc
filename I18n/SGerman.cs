@@ -36,14 +36,25 @@ public static partial class S
         { Registering, Parser.Parse("Registrieren")},
         { RegisterSuccess, Parser.Parse("Bitte überprüfen Sie Ihre E-Mails auf einen Bestätigungslink, um die Registrierung abzuschließen.")},
         { SignIn, Parser.Parse("Anmelden")},
+        { SigningIn, Parser.Parse("Anmelden")},
         { SignOut, Parser.Parse("Austragen")},
+        { SigningOut, Parser.Parse("Abmelden")},
         { VerifyEmail, Parser.Parse("E-Mail bestätigen")},
+        { Verifying, Parser.Parse("Überprüfung")},
+        { VerifyingEmail, Parser.Parse("Überprüfung Ihrer E-Mail")},
+        { VerifyEmailSuccess, Parser.Parse("Danke für das Verifizieren deiner E-Mail.")},
         { ResetPwd, Parser.Parse("Passwort zurücksetzen")},
         { Email, Parser.Parse("Email")},
         { Pwd, Parser.Parse("Passwort")},
         { ConfirmPwd, Parser.Parse("Bestätige das Passwort")},
         { PwdsDontMatch, Parser.Parse("Passwörter stimmen nicht überein")},
         { ResetPwdSuccess, Parser.Parse("Sie können sich jetzt mit Ihrem neuen Passwort anmelden.")},
-        { Resetting, Parser.Parse("Zurücksetzen")}
+        { Resetting, Parser.Parse("Zurücksetzen")},
+        { SendResetPwdLink, Parser.Parse("Link zum Zurücksetzen des Passworts senden")},
+        { SendResetPwdLinkSuccess, Parser.Parse("Wenn diese E-Mail mit einem Konto übereinstimmt, wurde eine E-Mail zum Zurücksetzen Ihres Passworts gesendet.")},
+        { Processing, Parser.Parse("wird bearbeitet")},
+        { Send, Parser.Parse("Schicken")},
+        { Success, Parser.Parse("Erfolg")},
+        { Error, Parser.Parse("Fehler")}
     };
 }

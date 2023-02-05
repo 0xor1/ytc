@@ -34,8 +34,13 @@ public static partial class S
     public const string Registering = "registering";
     public const string RegisterSuccess = "register_success";
     public const string SignIn = "sign_in";
+    public const string SigningIn = "signing_in";
     public const string SignOut = "sign_out";
+    public const string SigningOut = "signing_out";
     public const string VerifyEmail = "verify_email";
+    public const string Verifying = "verifying";
+    public const string VerifyingEmail = "verifying_email";
+    public const string VerifyEmailSuccess = "verify_email_success";
     public const string ResetPwd = "reset_pwd";
     public const string Email = "email";
     public const string Pwd = "pwd";
@@ -43,4 +48,11 @@ public static partial class S
     public const string PwdsDontMatch = "pwds_dont_match";
     public const string ResetPwdSuccess = "reset_pwd_success";
     public const string Resetting = "resetting";
+    public const string SendResetPwdLink = "send_reset_pwd_link";
+    public const string SendResetPwdLinkSuccess = "send_reset_pwd_link_success";
+    public const string Processing = "processing";
+    public const string Send = "send";
+    public const string Success = "success";
+    public const string Error = "error";
+
 }

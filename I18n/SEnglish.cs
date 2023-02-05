@@ -36,14 +36,25 @@ public static partial class S
         { Registering, Parser.Parse("Registering")},
         { RegisterSuccess, Parser.Parse("Please check your emails for a confirmation link to complete registration.")},
         { SignIn, Parser.Parse("Sign In")},
+        { SigningIn, Parser.Parse("Signing In")},
         { SignOut, Parser.Parse("Sign Out")},
+        { SigningOut, Parser.Parse("Signing Out")},
         { VerifyEmail, Parser.Parse("Verify Email")},
+        { Verifying, Parser.Parse("Verifying")},
+        { VerifyingEmail, Parser.Parse("Verifying your email")},
+        { VerifyEmailSuccess, Parser.Parse("Thank you for verifying your email.")},
         { ResetPwd, Parser.Parse("Reset Password")},
         { Email, Parser.Parse("Email")},
         { Pwd, Parser.Parse("Password")},
         { ConfirmPwd, Parser.Parse("Confirm Password")},
         { PwdsDontMatch, Parser.Parse("Passwords don't match")},
         { ResetPwdSuccess, Parser.Parse("You can now sign in with your new password.")},
-        { Resetting, Parser.Parse("Resetting")}
+        { Resetting, Parser.Parse("Resetting")},
+        { SendResetPwdLink, Parser.Parse("Send Reset Password Link")},
+        { SendResetPwdLinkSuccess, Parser.Parse("If this email matches an account an email will have been sent to reset your password.")},
+        { Processing, Parser.Parse("Processing")},
+        { Send, Parser.Parse("Send")},
+        { Success, Parser.Parse("Success")},
+        { Error, Parser.Parse("Error")}
     };
 }

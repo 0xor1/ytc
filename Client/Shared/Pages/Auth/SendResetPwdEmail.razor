@@ -7,7 +7,7 @@
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25">
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
-            Send Reset Password Link
+            @L.S(S.SendResetPwdLink)
         </RadzenText>
         <RadzenTemplateForm
             TItem="Model"
@@ -15,17 +15,17 @@
             Submit="Do"
             class="flx col ai-stretch g-1">
             <div class="flx col ai-stretch">
-                <RadzenLabel class="m-b-0q" Component="Email" Text="Email"/>
+                <RadzenLabel class="m-b-0q" Component="Email" Text="@L.S(S.Email)"/>
                 <RadzenTextBox Name="Email" @bind-Value="@_model.Email" Disabled="!CanDo"/>
-                <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true" Text="Invalid email"></RadzenCustomValidator>
+                <RadzenCustomValidator Validator="EmailValidator" Component="Email" Popup="true"></RadzenCustomValidator>
             </div>
             @if (_success)
             {
                 <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-t-0 f-b rz-color-success-light">
-                    If this email matches an account an email will have been sent to reset your password.
+                    @L.S(S.SendResetPwdLinkSuccess)
                 </RadzenText>
             }
-            <RadzenButton ButtonType="ButtonType.Submit" BusyText="Processing" IsBusy="_doing" Text="Send" Disabled="!CanDo"/>
+            <RadzenButton ButtonType="ButtonType.Submit" BusyText="@L.S(S.Processing)" IsBusy="_doing" Text="@L.S(S.Send)" Disabled="!CanDo"/>
             <div class="flx jc-sb">
                 <RadzenLink Path="sign_in" Text="@L.S(S.SignIn)"></RadzenLink>
                 <RadzenLink Path="register" Text="@L.S(S.Register)"></RadzenLink>

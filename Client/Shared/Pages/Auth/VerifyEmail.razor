@@ -1,15 +1,16 @@
 ﻿@using Dnsk.Client.Lib
+@using Dnsk.I18n
 @using Dnsk.Proto
 @using AuthValidator = Dnsk.Client.Lib.AuthValidator
 <div class="root jc-c ai-c">
     <RadzenCard class="flx col jc-c ai-c p-3 w-25">
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
-            Verify Email
+            @L.S(S.VerifyEmail)
         </RadzenText>
         @if (_doing)
         {
             <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1">
-                Verifying your email.
+                @L.S(S.VerifyingEmail)
             </RadzenText>
         }
         else
@@ -17,17 +18,17 @@
             @if (_success)
             {
                 <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 f-b rz-color-success-light">
-                    Thank you for verifying your email.
+                    @L.S(S.VerifyEmailSuccess)
                 </RadzenText>
             }
             else
             {
                 <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.P" class="m-b-1 f-b rz-color-danger">
-                    Something went wrong.
+                    @L.S(S.Error)
                 </RadzenText>
             }
         }
-        <RadzenButton ButtonType="ButtonType.Button" BusyText="Verifying" IsBusy="_doing" Text="Sign In" Click="SignIn"/>
+        <RadzenButton ButtonType="ButtonType.Button" BusyText="@L.S(S.Verifying)" IsBusy="_doing" Text="@L.S(S.SignIn)" Click="SignIn"/>
     </RadzenCard>
 </div>
 
