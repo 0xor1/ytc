@@ -4,6 +4,7 @@ namespace Dnsk.I18n;
 
 public static partial class S
 {
+    public const string Dnsk = "dnsk";
     public const string Invalid = AuthValidator.Strings.Invalid;
     public const string InvalidEmail = AuthValidator.Strings.InvalidEmail;
     public const string InvalidPwd = AuthValidator.Strings.InvalidPwd;

@@ -6,6 +6,7 @@ public static partial class S
 {
     private static readonly IReadOnlyDictionary<string, IFluidTemplate> English = new Dictionary<string, IFluidTemplate>()
     {
+        { Dnsk, Parser.Parse("<h1>Hello, Dnsk!</h1><p>Welcome to your new dotnet starter kit.</p><p>You will find:</p><ul><li>Client: a blazor wasm app using radzen ui library</li><li>Server: aspnet with grpc api and entity framework db interface</li></ul>")},
         { Invalid, Parser.Parse("Invalid") },
         { InvalidEmail, Parser.Parse("Invalid email") },
         { InvalidPwd, Parser.Parse("Invalid password") },

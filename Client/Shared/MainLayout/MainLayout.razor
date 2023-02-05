@@ -25,7 +25,9 @@
             </RadzenPanelMenu>
         </RadzenSidebar>
         <RadzenBody class="root rz-background-color-base-100">
-            @Body
+            <CascadingValue Value="@session">
+                @Body
+            </CascadingValue>
         </RadzenBody>
         <RadzenNotification/>
     </RadzenLayout>
@@ -43,7 +45,7 @@
     protected override async Task OnInitializedAsync()
     {
         _auth.RegisterRefreshUI(AuthStateChanged);
-        session = await _auth.GetSession();
+        AuthStateChanged(await _auth.GetSession());
     }
 
     private void AuthStateChanged(Session s)
