@@ -25,7 +25,7 @@
             </div>
             <div class="flx g-0h">
                 <RadzenCheckBox Name="RememberMe" @bind-Value="@_model.RememberMe"/>
-                <RadzenLabel class="m-b-0q" Component="RememberMe" Text="Remember Me"/>
+                <RadzenLabel class="m-b-0q" Component="RememberMe" Text="@L.S(S.RememberMe)"/>
             </div>
             <RadzenButton ButtonType="ButtonType.Submit" BusyText="@L.S(S.SigningIn)" IsBusy="_doing" Text="@L.S(S.SignIn)"/>
             <div class="flx jc-sb">

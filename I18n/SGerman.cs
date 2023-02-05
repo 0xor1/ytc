@@ -37,6 +37,7 @@ public static partial class S
         { Registering, Parser.Parse("Registrieren")},
         { RegisterSuccess, Parser.Parse("Bitte überprüfen Sie Ihre E-Mails auf einen Bestätigungslink, um die Registrierung abzuschließen.")},
         { SignIn, Parser.Parse("Anmelden")},
+        { RememberMe, Parser.Parse("Mich erinnern")},
         { SigningIn, Parser.Parse("Anmelden")},
         { SignOut, Parser.Parse("Austragen")},
         { SigningOut, Parser.Parse("Abmelden")},

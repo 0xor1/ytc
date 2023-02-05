@@ -35,6 +35,7 @@ public static partial class S
     public const string Registering = "registering";
     public const string RegisterSuccess = "register_success";
     public const string SignIn = "sign_in";
+    public const string RememberMe = "remember_me";
     public const string SigningIn = "signing_in";
     public const string SignOut = "sign_out";
     public const string SigningOut = "signing_out";
