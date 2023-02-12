@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Proto\protos\api.proto" GrpcServices="Client" />
+    <Protobuf Include="..\Dnsk.Proto\protos\api.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\I18n\Dnsk.I18n.csproj" />
+    <ProjectReference Include="..\Dnsk.I18n\Dnsk.I18n.csproj" />
   </ItemGroup>
 
 </Project>

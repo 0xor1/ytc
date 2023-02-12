@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Proto\protos\api.proto" GrpcServices="Server" />
+    <Protobuf Include="..\Dnsk.Proto\protos\api.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Db\Dnsk.Db.csproj" />
-    <ProjectReference Include="..\I18n\Dnsk.I18n.csproj" />
+    <ProjectReference Include="..\Dnsk.Db\Dnsk.Db.csproj" />
+    <ProjectReference Include="..\Dnsk.I18n\Dnsk.I18n.csproj" />
   </ItemGroup>
   
 </Project>

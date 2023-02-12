@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\Dnsk.Client.csproj" />
-    <ProjectReference Include="..\Service\Dnsk.Service.csproj" />
+    <ProjectReference Include="..\Dnsk.Client\Dnsk.Client.csproj" />
+    <ProjectReference Include="..\Dnsk.Service\Dnsk.Service.csproj" />
   </ItemGroup>
 
 </Project>
