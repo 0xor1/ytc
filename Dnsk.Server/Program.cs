@@ -1,8 +1,10 @@
 using Dnsk.Service.Services;
-using Dnsk.Service.Util;
+using Common.Server;
+using Dnsk.Db;
+using Dnsk.I18n;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddApiServices();
+builder.Services.AddApiServices<DnskDb>(S.UnexpectedError);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Common.Shared;
 using Dnsk.I18n;
 using Dnsk.Proto;
 
