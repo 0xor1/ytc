@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Shared;
+﻿using Common.Shared;
 
 namespace Dnsk.I18n;
 
