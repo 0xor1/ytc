@@ -1,11 +1,12 @@
 ﻿@using Dnsk.Client.Lib
 @using Dnsk.I18n
+@using Common.Client
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25">
         @(new MarkupString(L.S(S.Dnsk)))
     </RadzenCard>
 </div>
-
+@inject L L;
 @code{
 
     [CascadingParameter]
