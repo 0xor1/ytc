@@ -3,4 +3,4 @@ using Dnsk.Service.Services;
 using Dnsk.Db;
 using Dnsk.I18n;
 
-Server.Run<DnskDb, ApiService>(args, S.UnexpectedError);
+Server.Run<DnskDb, ApiService>(args);
