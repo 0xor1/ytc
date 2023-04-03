@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dnsk.Client\Dnsk.Client.csproj" />
+    <ProjectReference Include="..\Dnsk.Client.Rz\Dnsk.Client.Rz.csproj" />
     <ProjectReference Include="..\Dnsk.Service\Dnsk.Service.csproj" />
   </ItemGroup>
 

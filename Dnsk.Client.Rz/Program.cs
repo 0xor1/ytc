@@ -1,6 +1,6 @@
 using Common.Client;
-using Dnsk.Client;
-using Dnsk.Client.Lib;
+using Dnsk.Client.Rz;
+using Dnsk.Client.Rz.Lib;
 using Dnsk.I18n;
 using Dnsk.Proto;
 

@@ -3,7 +3,7 @@ using Common.Shared;
 using Dnsk.I18n;
 using Dnsk.Proto;
 
-namespace Dnsk.Client.Lib;
+namespace Dnsk.Client.Rz.Lib;
 
 public record Session(string Id, bool IsAuthed, string Lang, string DateFmt, string TimeFmt)
     : ISession
