@@ -1,7 +1,6 @@
 ﻿using Common.Client;
 using Common.Shared;
 using Dnsk.I18n;
-using Dnsk.Proto;
 
 namespace Dnsk.Client.Rz.Lib;
 
@@ -11,8 +10,8 @@ public record Session(string Id, bool IsAuthed, string Lang, string DateFmt, str
     public Session()
         : this(string.Empty, false, S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt) { }
 
-    public Session(Auth_Session ses)
-        : this(ses.Id, ses.IsAuthed, ses.Lang, ses.DateFmt, ses.TimeFmt) { }
+    // public Session(Auth_Session ses)
+    //     : this(ses.Id, ses.IsAuthed, ses.Lang, ses.DateFmt, ses.TimeFmt) { }
 }
 
 public class AuthService : IAuthService
@@ -29,14 +28,15 @@ public class AuthService : IAuthService
             _refreshUI?.Invoke(_s);
         }
     }
-    private readonly Api.ApiClient _api;
+
+    // private readonly Api.ApiClient _api;
     private Action<ISession>? _refreshUI;
 
-    public AuthService(Api.ApiClient api, L l)
-    {
-        _api = api;
-        L = l;
-    }
+    // public AuthService(Api.ApiClient api, L l)
+    // {
+    //     _api = api;
+    //     L = l;
+    // }
 
     public void RegisterRefreshUi(Action<ISession> a)
     {
@@ -47,8 +47,9 @@ public class AuthService : IAuthService
     {
         if (Session == null)
         {
-            var ses = await _api.Auth_GetSessionAsync(new Nothing());
-            Session = new Session(ses);
+            // var ses = await _api.Auth_GetSessionAsync(new Nothing());
+            //Session = new Session(ses);
+            Session = new Session();
         }
         return Session;
     }
@@ -57,22 +58,22 @@ public class AuthService : IAuthService
     {
         var ses = await GetSession();
         Throw.OpIf(ses.IsAuthed, "already in authenticated session");
-        await _api.Auth_RegisterAsync(new Auth_RegisterReq() { Email = email, Pwd = pwd });
+        // await _api.Auth_RegisterAsync(new Auth_RegisterReq() { Email = email, Pwd = pwd });
     }
 
     public async Task<ISession> SignIn(string email, string pwd, bool rememberMe)
     {
         var ses = await GetSession();
         Throw.OpIf(ses.IsAuthed, "already in authenticated session");
-        var newSes = await _api.Auth_SignInAsync(
-            new Auth_SignInReq()
-            {
-                Email = email,
-                Pwd = pwd,
-                RememberMe = rememberMe
-            }
-        );
-        Session = new Session(newSes);
+        // var newSes = await _api.Auth_SignInAsync(
+        //     new Auth_SignInReq()
+        //     {
+        //         Email = email,
+        //         Pwd = pwd,
+        //         RememberMe = rememberMe
+        //     }
+        // );
+        // Session = new Session(newSes);
         return Session;
     }
 
@@ -83,22 +84,24 @@ public class AuthService : IAuthService
         {
             return ses;
         }
-        var newSes = await _api.Auth_SignOutAsync(new Nothing());
-        Session = new Session(newSes);
+        // var newSes = await _api.Auth_SignOutAsync(new Nothing());
+        // Session = new Session(newSes);
+        Session = new Session();
         return Session;
     }
 
     public async Task<ISession> SetL10n(string lang, string dateFmt, string timeFmt)
     {
-        var newSes = await _api.Auth_SetL10nAsync(
-            new Auth_SetL10nReq()
-            {
-                Lang = lang,
-                DateFmt = dateFmt,
-                TimeFmt = timeFmt
-            }
-        );
-        Session = new Session(newSes);
+        // var newSes = await _api.Auth_SetL10nAsync(
+        //     new Auth_SetL10nReq()
+        //     {
+        //         Lang = lang,
+        //         DateFmt = dateFmt,
+        //         TimeFmt = timeFmt
+        //     }
+        // );
+        // Session = new Session(newSes);
+        Session = new Session();
         return Session;
     }
 }

@@ -3,7 +3,6 @@
 @using Common.Client
 @using Common.Shared
 @using Dnsk.I18n
-@using Dnsk.Proto
 @using AuthValidator = Common.Client.AuthValidator
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25">
@@ -35,7 +34,6 @@
     </RadzenCard>
 </div>
 
-@inject Api.ApiClient Api;
 @inject L L;
 @code{
 
@@ -58,10 +56,10 @@
         _success = false;
         try
         {
-            await Api.Auth_SendResetPwdEmailAsync(new Auth_SendResetPwdEmailReq()
-            {
-                Email = _model.Email
-            });
+            // await Api.Auth_SendResetPwdEmailAsync(new Auth_SendResetPwdEmailReq()
+            // {
+            //     Email = _model.Email
+            // });
             _success = true;
         }
         catch

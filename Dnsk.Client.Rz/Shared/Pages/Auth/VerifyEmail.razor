@@ -1,6 +1,5 @@
 ﻿@using Dnsk.Client.Rz.Lib
 @using Dnsk.I18n
-@using Dnsk.Proto
 @using AuthValidator = Common.Client.AuthValidator
 @using Common.Client
 <div class="root jc-c ai-c">
@@ -33,7 +32,6 @@
     </RadzenCard>
 </div>
 
-@inject Api.ApiClient Api;
 @inject L L;
 @inject NavigationManager Nav;
 @code{
@@ -52,11 +50,11 @@
         _doing = true;
         try
         {
-            await Api.Auth_VerifyEmailAsync(new Auth_VerifyEmailReq()
-            {
-                Email = Email,
-                Code = Code
-            });
+            // await Api.Auth_VerifyEmailAsync(new Auth_VerifyEmailReq()
+            // {
+            //     Email = Email,
+            //     Code = Code
+            // });
             _success = true;
         }
         catch
