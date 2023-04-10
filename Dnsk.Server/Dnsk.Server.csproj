@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Server\Common.Server.csproj" />
     <ProjectReference Include="..\Dnsk.Db\Dnsk.Db.csproj" />
+    <ProjectReference Include="..\Dnsk.Eps\Dnsk.Eps.csproj" />
   </ItemGroup>
   <ItemGroup>
 <!--    <PackageReference Include="0xor1.Common.Server" Version="1.0.11" />-->

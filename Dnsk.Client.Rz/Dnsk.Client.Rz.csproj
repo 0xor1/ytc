@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dnsk.Api\Dnsk.Api.csproj" />
     <ProjectReference Include="..\Dnsk.I18n\Dnsk.I18n.csproj" />
   </ItemGroup>
 

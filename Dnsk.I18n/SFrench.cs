@@ -1,4 +1,4 @@
-﻿using Common.Shared.I18n;
+﻿using Common.Shared;
 
 namespace Dnsk.I18n;
 
@@ -16,20 +16,20 @@ public static partial class S
             )
         },
         { Invalid, new("Invalide") },
-        { InvalidEmail, new("Email invalide") },
-        { InvalidPwd, new("Mot de passe incorrect") },
+        { AuthInvalidEmail, new("Email invalide") },
+        { AuthInvalidPwd, new("Mot de passe incorrect") },
         { LessThan8Chars, new("Moins de 8 caractères") },
         { NoLowerCaseChar, new("Pas de caractère minuscule") },
         { NoUpperCaseChar, new("Pas de caractère majuscule") },
         { NoDigit, new("Aucun chiffre") },
         { NoSpecialChar, new("Aucun caractère spécial") },
         { UnexpectedError, new("Une erreur inattendue est apparue") },
-        { AlreadyAuthenticated, new("Déjà en session authentifiée") },
+        { AuthAlreadyAuthenticated, new("Déjà en session authentifiée") },
         { NoMatchingRecord, new("Aucun enregistrement correspondant") },
-        { InvalidEmailCode, new("Code e-mail invalide") },
-        { InvalidResetPwdCode, new("Code de mot de passe de réinitialisation invalide") },
+        { AuthInvalidEmailCode, new("Code e-mail invalide") },
+        { AuthInvalidResetPwdCode, new("Code de mot de passe de réinitialisation invalide") },
         {
-            AccountNotVerified,
+            AuthAccountNotVerified,
             new("Compte non vérifié, veuillez vérifier vos e-mails pour le lien de vérification")
         },
         {
