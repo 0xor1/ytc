@@ -51,7 +51,7 @@
 
     private bool CanDo => _model != _initialValues && !_doing;
 
-    private ISession _session = new Session(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt); 
+    private ISession _session = Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt); 
     private Model _model = new (); 
     private Model _initialValues = new (); 
     private bool _doing = false;

@@ -57,7 +57,7 @@
 
     private bool CanDo => _session.IsAnon && !_doing && !_success;
 
-    private ISession _session = new Session(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt); 
+    private ISession _session = Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt); 
     private Model _model = new (); 
     private bool _doing = false;
     private bool _success = false;

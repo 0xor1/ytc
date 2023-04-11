@@ -42,7 +42,7 @@
 @code{
 
     private bool _leftExpanded;
-    private ISession _session = new Session(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt);
+    private ISession _session = Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt);
 
     protected override async Task OnInitializedAsync()
     {
