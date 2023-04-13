@@ -4,7 +4,7 @@ VisualStudioVersion = 16.0.0.0
 MinimumVisualStudioVersion = 16.0.0.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Server", "Dnsk.Server\Dnsk.Server.csproj", "{E5C7665B-BDF5-433E-8F45-C3E8CA1B0A01}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Client.Rz", "Dnsk.Client.Rz\Dnsk.Client.Rz.csproj", "{9A214248-6D1D-42D6-BC42-4A3338D73D8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dnsk.Client", "Dnsk.Client\Dnsk.Client.csproj", "{9A214248-6D1D-42D6-BC42-4A3338D73D8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnsk.Db", "Dnsk.Db\Dnsk.Db.csproj", "{470BC0E0-52BE-4530-9AA6-6EA273E76698}"
 EndProject
