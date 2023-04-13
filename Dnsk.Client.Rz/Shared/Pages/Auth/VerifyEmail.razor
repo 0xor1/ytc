@@ -1,6 +1,7 @@
 ﻿@using Dnsk.I18n
 @using AuthValidator = Common.Client.AuthValidator
 @using Common.Client
+@using Dnsk.Api
 <div class="root jc-c ai-c">
     <RadzenCard class="flx col jc-c ai-c p-3 w-25">
         <RadzenText TextStyle="TextStyle.H4" TagName="TagName.H2" class="m-t-0">
@@ -32,6 +33,7 @@
 </div>
 
 @inject L L;
+@inject IApi Api;
 @inject NavigationManager Nav;
 @code{
 
@@ -49,11 +51,7 @@
         _doing = true;
         try
         {
-            // await Api.Auth_VerifyEmailAsync(new Auth_VerifyEmailReq()
-            // {
-            //     Email = Email,
-            //     Code = Code
-            // });
+            await Api.Auth.VerifyEmail.Do(new (Email, Code));
             _success = true;
         }
         catch

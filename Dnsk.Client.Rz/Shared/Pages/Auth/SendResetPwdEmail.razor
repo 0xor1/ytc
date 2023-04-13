@@ -1,6 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @using Common.Client
 @using Common.Shared
+@using Dnsk.Api
 @using S = Dnsk.I18n.S
 @using AuthValidator = Common.Client.AuthValidator
 <div class="root jc-c ai-c">
@@ -34,6 +35,7 @@
 </div>
 
 @inject L L;
+@inject IApi Api;
 @code{
 
     class Model
@@ -55,10 +57,7 @@
         _success = false;
         try
         {
-            // await Api.Auth_SendResetPwdEmailAsync(new Auth_SendResetPwdEmailReq()
-            // {
-            //     Email = _model.Email
-            // });
+            await Api.Auth.SendResetPwdEmail.Do(new (_model.Email));
             _success = true;
         }
         catch
