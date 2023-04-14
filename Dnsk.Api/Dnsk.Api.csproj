@@ -8,6 +8,6 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Common\Common.Shared\Common.Shared.csproj" />
+        <PackageReference Include="0xor1.Common.Shared" Version="2.0.0"/>
     </ItemGroup>
 </Project>

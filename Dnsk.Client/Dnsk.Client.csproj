@@ -16,14 +16,10 @@
     <!-- msbuild output level -->
     <LibSassMessageLevel>High</LibSassMessageLevel>
   </PropertyGroup>
-
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.Client\Common.Client.csproj" />
-    <ProjectReference Include="..\..\Common\Common.Shared\Common.Shared.csproj" />
-  </ItemGroup>
-    
-  <ItemGroup>
+    <PackageReference Include="0xor1.Common.Client" Version="2.0.0" />
+    <PackageReference Include="0xor1.Common.Shared" Version="2.0.0" />
     <PackageReference Include="CSharpier.MsBuild" Version="0.22.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

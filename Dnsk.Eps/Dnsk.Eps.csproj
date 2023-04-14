@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Common\Common.Server\Common.Server.csproj" />
       <ProjectReference Include="..\Dnsk.Db\Dnsk.Db.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="0xor1.Common.Server" Version="2.0.0"/>
     </ItemGroup>
 
 </Project>

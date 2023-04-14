@@ -8,12 +8,12 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.Server\Common.Server.csproj" />
     <ProjectReference Include="..\Dnsk.Db\Dnsk.Db.csproj" />
     <ProjectReference Include="..\Dnsk.Eps\Dnsk.Eps.csproj" />
   </ItemGroup>
+  
   <ItemGroup>
-<!--    <PackageReference Include="0xor1.Common.Server" Version="1.0.11" />-->
+    <PackageReference Include="0xor1.Common.Server" Version="2.0.0" />
     <PackageReference Include="CSharpier.MsBuild" Version="0.22.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
