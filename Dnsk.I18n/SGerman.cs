@@ -64,6 +64,7 @@ public static partial class S
                 "Bitte klicken Sie auf diesen Link, um Ihr Passwort zurückzusetzen: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}"
             )
         },
+        { ApiError, new("API-Fehler") },
         { Home, new("Heim") },
         { L10n, new("Lokalisierung") },
         { Language, new("Sprache") },

@@ -25,6 +25,7 @@ public static partial class S
     public const string AuthResetPwdSubject = Common.Shared.S.AuthResetPwdSubject;
     public const string AuthResetPwdHtml = Common.Shared.S.AuthResetPwdHtml;
     public const string AuthResetPwdText = Common.Shared.S.AuthResetPwdText;
+    public const string ApiError = Common.Shared.S.ApiError;
     public const string Dnsk = "dnsk";
     public const string Home = "home";
     public const string L10n = "l10n";

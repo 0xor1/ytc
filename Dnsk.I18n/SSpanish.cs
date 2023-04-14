@@ -66,6 +66,7 @@ public static partial class S
                 "Haga clic en este enlace para restablecer su contraseña: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}"
             )
         },
+        { ApiError, new("Error de API") },
         { Home, new("Hogar") },
         { L10n, new("Localización") },
         { Language, new("Idioma") },

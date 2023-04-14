@@ -64,6 +64,7 @@ public static partial class S
                 "Please click this link to reset your password: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}"
             )
         },
+        { ApiError, new("Api Error") },
         { Home, new("Home") },
         { L10n, new("Localization") },
         { Language, new("Language") },

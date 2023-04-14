@@ -64,6 +64,7 @@ public static partial class S
                 "Veuillez cliquer sur ce lien pour réinitialiser votre mot de passe: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}"
             )
         },
+        { ApiError, new("Erreur API") },
         { Home, new("Maison") },
         { L10n, new("Localisation") },
         { Language, new("Langue") },

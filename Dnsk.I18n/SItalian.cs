@@ -64,6 +64,7 @@ public static partial class S
                 "Fai clic su questo link per reimpostare la tua password: {{BaseHref}}/reset_pwd?email={{Email}}&code={{Code}}"
             )
         },
+        { ApiError, new("Errore API") },
         { Home, new("Casa") },
         { L10n, new("Localizzazione") },
         { Language, new("Lingua") },
