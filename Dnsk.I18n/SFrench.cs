@@ -12,10 +12,11 @@ public static partial class S
         {
             Dnsk,
             new(
-                "<h1>Bonjour, Dnsk !</h1><p>Bienvenue dans votre nouveau kit de démarrage dotnet.</p><p>Vous trouverez :</p><ul><li>Client : une application blazor wasm utilisant bibliothèque radzen ui</li><li>Serveur : aspnet avec grpc api et interface de base de données du cadre d'entité</li></ul>"
+                "<h1>Bonjour, Dnsk!</h1><p>Bienvenue dans votre nouveau kit de démarrage dotnet.</p><p>Vous trouverez:</p><ul><li>Client: une application blazor wasm utilisant bibliothèque radzen ui</li><li>Serveur: aspnet avec grpc api et interface de base de données du cadre d'entité</li></ul>"
             )
         },
         { Invalid, new("Invalide") },
+        { RpcUnknownEndpoint, new("Point de terminaison RPC inconnu") },
         { AuthInvalidEmail, new("Email invalide") },
         { AuthInvalidPwd, new("Mot de passe incorrect") },
         { LessThan8Chars, new("Moins de 8 caractères") },
