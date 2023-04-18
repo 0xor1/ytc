@@ -1,6 +1,4 @@
 using Common.Client;
-using Common.Shared.Auth;
-using Dnsk.Api;
 using Dnsk.Client;
 using Dnsk.I18n;
 

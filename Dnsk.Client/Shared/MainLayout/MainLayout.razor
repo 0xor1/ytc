@@ -22,6 +22,10 @@
         <RadzenSidebar @bind-Expanded="@_leftExpanded">
             <RadzenPanelMenu>
                 <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/"/>
+                @if (_session.IsAuthed)
+                {
+                    <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="/counter"/>
+                }
             </RadzenPanelMenu>
         </RadzenSidebar>
         <RadzenBody class="root rz-background-color-base-100">

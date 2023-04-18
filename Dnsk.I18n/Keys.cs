@@ -61,4 +61,9 @@ public static partial class S
     public const string Error = "error";
     public const string Update = "update";
     public const string Updating = "updating";
+    public const string Counter = "counter";
+    public const string Increment = "increment";
+    public const string Decrement = "decrement";
+    public const string Incrementing = "incrementing";
+    public const string Decrementing = "decrementing";
 }

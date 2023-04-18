@@ -7,5 +7,17 @@ namespace Dnsk.Eps;
 public static class DnskEps
 {
     private static IReadOnlyList<IRpcEndpoint>? _eps;
-    public static IReadOnlyList<IRpcEndpoint> Eps => _eps ??= AuthEps<DnskDb>.Eps;
+    public static IReadOnlyList<IRpcEndpoint> Eps
+    {
+        get {
+            if (_eps == null)
+            {
+                var eps = (List<IRpcEndpoint>) AuthEps<DnskDb>.Eps;
+                eps.AddRange(CounterEps.Eps);
+                _eps = eps;
+            }
+
+            return _eps;
+        }
+    }
 }

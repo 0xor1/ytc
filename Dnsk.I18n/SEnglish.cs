@@ -106,6 +106,11 @@ public static partial class S
         { Success, new("Success") },
         { Error, new("Error") },
         { Update, new("Update") },
-        { Updating, new("Updating") }
+        { Updating, new("Updating") },
+        { Counter, new("Counter") },
+        { Increment, new("Increment") },
+        { Decrement, new("Decrement") },
+        { Incrementing, new("Incrementing") },
+        { Decrementing, new("Decrementing") }
     };
 }

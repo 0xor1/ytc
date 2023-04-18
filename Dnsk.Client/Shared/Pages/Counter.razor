@@ -1,0 +1,68 @@
+﻿@using Common.Client
+@using Common.Shared
+@using Common.Shared.Auth
+@using ApiCounter = Api.Counter.Counter
+@using IApi = Dnsk.Api.IApi
+@using S = Dnsk.I18n.S
+
+<div class="root jc-c ai-c">
+    <RadzenCard class="p-3 w-25">
+        @L.S(S.Counter): @ApiCounter.Value
+        
+        <RadzenButton ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
+        <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
+    </RadzenCard>
+</div>
+
+@inject L L;
+@inject IApi Api;
+@code{
+
+    private bool _incrementing = false;
+    private bool _decrementing = false;
+    private bool DoingSomething => _incrementing || _decrementing;
+    private bool CanIncrement => ApiCounter.Value < uint.MaxValue && !DoingSomething;
+    private bool CanDecrement => ApiCounter.Value > uint.MinValue && !DoingSomething;
+    
+    [CascadingParameter]
+    public ISession Session { get; set; } = Common.Shared.Auth.Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt);
+
+    private ApiCounter ApiCounter { get; set; } = new ApiCounter(0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApiCounter = await Api.Counter.Get.Do(new Nothing());
+    }
+
+    private async void Increment()
+    {
+        _incrementing = true;
+        try
+        {
+            ApiCounter = await Api.Counter.Increment.Do(new());
+        }
+        catch
+        {
+            // use empty catch to avoid having to
+            // call StatHasChanged on errors
+        }
+        _incrementing = false;
+        StateHasChanged();
+    }
+    
+    private async void Decrement()
+    {
+        _decrementing = true;
+        try
+        {
+            ApiCounter = await Api.Counter.Decrement.Do(new());
+        }
+        catch
+        {
+            // use empty catch to avoid having to
+            // call StatHasChanged on errors
+        }
+        _decrementing = false;
+        StateHasChanged();
+    }
+}
