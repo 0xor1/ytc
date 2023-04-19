@@ -6,8 +6,10 @@
 @using S = Dnsk.I18n.S
 
 <div class="root jc-c ai-c">
-    <RadzenCard class="p-3 w-25">
-        @L.S(S.Counter): @ApiCounter.Value
+    <RadzenCard class="p-3 w-25 flx col ai-stretch g-1">
+        <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" class="m-t-0 ta-c f-b">
+            @ApiCounter.Value
+        </RadzenText>    
         
         <RadzenButton ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
         <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
