@@ -7,17 +7,17 @@ namespace Dnsk.Eps.Test;
 
 public class CounterTests : IDisposable
 {
-    private readonly RpcTestRig<DnskDb> _rpcTestRig;
+    private readonly RpcTestRig<DnskDb, Api.Api> _rpcTestRig;
 
     public CounterTests()
     {
-        _rpcTestRig = new RpcTestRig<DnskDb>(S.Inst, DnskEps.Eps);
+        _rpcTestRig = new RpcTestRig<DnskDb, Api.Api>(S.Inst, DnskEps.Eps, c => new Api.Api(c));
     }
 
     [Fact]
     public async Task Counter_Success()
     {
-        var (ali, _, _) = await NewApi("ali");
+        var (ali, _, _) = await _rpcTestRig.NewApi("ali");
         var counter = await ali.Counter.Get();
         Assert.Equal(0u, counter.Value);
         counter = await ali.Counter.Increment();
@@ -27,9 +27,6 @@ public class CounterTests : IDisposable
         counter = await ali.Counter.Decrement();
         Assert.Equal(0u, counter.Value);
     }
-
-    public async Task<(IApi, string Email, string Pwd)> NewApi(string? name = null) =>
-        await _rpcTestRig.NewApi(rpcClient => new Api.Api(rpcClient), name);
 
     public void Dispose()
     {
