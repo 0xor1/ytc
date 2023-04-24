@@ -10,8 +10,6 @@ namespace Dnsk.Eps;
 
 internal static class CounterEps
 {
-    private static readonly ICounterApi Api = ICounterApi.Init();
-
     private static async Task<Db.Counter> GetCounter(DnskDb db, Session ses)
     {
         var counter = await db.Counters.SingleOrDefaultAsync(x => x.User == ses.Id);
@@ -25,14 +23,14 @@ internal static class CounterEps
     }
     public static IReadOnlyList<IRpcEndpoint> Eps { get; } = new List<IRpcEndpoint>()
     {
-        new RpcEndpoint<Nothing, Counter>(Api.Get, async (ctx, _) =>
+        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Get, async (ctx, _) =>
             await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
             {
                 var counter = await GetCounter(db, ses);
                 return counter.ToApi();
             })),
         
-        new RpcEndpoint<Nothing, Counter>(Api.Increment, async (ctx, _) =>
+        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Increment, async (ctx, _) =>
             await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
             {
                 var counter = await GetCounter(db, ses);
@@ -43,7 +41,7 @@ internal static class CounterEps
                 return counter.ToApi();
             })),
         
-        new RpcEndpoint<Nothing, Counter>(Api.Decrement, async (ctx, _) =>
+        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Decrement, async (ctx, _) =>
             await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
             {
                 var counter = await GetCounter(db, ses);

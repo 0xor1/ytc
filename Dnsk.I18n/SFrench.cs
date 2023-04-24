@@ -1,4 +1,5 @@
-﻿using Common.Shared;
+﻿using System.Collections.Generic;
+using Common.Shared;
 
 namespace Dnsk.I18n;
 

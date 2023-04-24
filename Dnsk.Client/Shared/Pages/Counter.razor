@@ -33,7 +33,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ApiCounter = await Api.Counter.Get.Do(new Nothing());
+        ApiCounter = await Api.Counter.Get();
     }
 
     private async void Increment()
@@ -41,7 +41,7 @@
         _incrementing = true;
         try
         {
-            ApiCounter = await Api.Counter.Increment.Do(new());
+            ApiCounter = await Api.Counter.Increment();
         }
         catch
         {
@@ -57,7 +57,7 @@
         _decrementing = true;
         try
         {
-            ApiCounter = await Api.Counter.Decrement.Do(new());
+            ApiCounter = await Api.Counter.Decrement();
         }
         catch
         {

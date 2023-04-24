@@ -1,0 +1,19 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Users\danie\code\dotnet\Common\Common.Shared\bin\Debug\net7.0\Common.Shared.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=15642022_002Dae55_002D4651_002D8515_002D24cf400f05bf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Counter_ShouldWork #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::2B20462A-6883-4AE1-8F0D-E3F638BBBFE7::net7.0::Dnsk.Eps.Test.CounterTests.Counter_ShouldWork&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0ccf163_002D3566_002D4eff_002Da9ea_002D8f3baacc439e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Counter_ShouldWork" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::2B20462A-6883-4AE1-8F0D-E3F638BBBFE7::net7.0::Dnsk.Eps.Test.CounterTests.Counter_ShouldWork&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dccb8099_002Dfc97_002D49fe_002Dbdf8_002Dc3ed4b1f770e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Counter_ShouldWork #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::2B20462A-6883-4AE1-8F0D-E3F638BBBFE7::net7.0::Dnsk.Eps.Test.CounterTests.Counter_ShouldWork&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
