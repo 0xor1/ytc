@@ -15,7 +15,7 @@ public class CounterTests : IDisposable
     }
 
     [Fact]
-    public async Task Counter_ShouldWork()
+    public async Task Counter_Success()
     {
         var (ali, _, _) = await NewApi("ali");
         var counter = await ali.Counter.Get();
