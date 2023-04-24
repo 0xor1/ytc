@@ -1,6 +1,4 @@
-﻿using Common.Shared;
-
-namespace Dnsk.I18n;
+﻿namespace Dnsk.I18n;
 
 public static partial class S
 {

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Common.Server;
+﻿using Common.Server;
 using Common.Shared;
 using Dnsk.Api.Counter;
 using Dnsk.Db;
