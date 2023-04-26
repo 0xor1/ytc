@@ -14,41 +14,56 @@ internal static class CounterEps
         var counter = await db.Counters.SingleOrDefaultAsync(x => x.User == ses.Id);
         if (counter == null)
         {
-            counter = new(){User = ses.Id, Value = 0};
+            counter = new() { User = ses.Id, Value = 0 };
             await db.AddAsync(counter);
         }
 
         return counter;
     }
-    public static IReadOnlyList<IRpcEndpoint> Eps { get; } = new List<IRpcEndpoint>()
-    {
-        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Get, async (ctx, _) =>
-            await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
-            {
-                var counter = await GetCounter(db, ses);
-                return counter.ToApi();
-            })),
-        
-        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Increment, async (ctx, _) =>
-            await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
-            {
-                var counter = await GetCounter(db, ses);
-                if (counter.Value < uint.MaxValue)
-                {
-                    counter.Value++;
-                }
-                return counter.ToApi();
-            })),
-        
-        new RpcEndpoint<Nothing, Counter>(CounterRpcs.Decrement, async (ctx, _) =>
-            await ctx.DbTx<DnskDb, Counter>(async (db, ses) =>
-            {
-                var counter = await GetCounter(db, ses);
-                if (counter.Value > uint.MinValue)
-                {
-                    counter.Value--;
-                }
-                return counter.ToApi();
-            }))
-    };
+
+    public static IReadOnlyList<IRpcEndpoint> Eps { get; } =
+        new List<IRpcEndpoint>()
+        {
+            new RpcEndpoint<Nothing, Counter>(
+                CounterRpcs.Get,
+                async (ctx, _) =>
+                    await ctx.DbTx<DnskDb, Counter>(
+                        async (db, ses) =>
+                        {
+                            var counter = await GetCounter(db, ses);
+                            return counter.ToApi();
+                        }
+                    )
+            ),
+            new RpcEndpoint<Nothing, Counter>(
+                CounterRpcs.Increment,
+                async (ctx, _) =>
+                    await ctx.DbTx<DnskDb, Counter>(
+                        async (db, ses) =>
+                        {
+                            var counter = await GetCounter(db, ses);
+                            if (counter.Value < uint.MaxValue)
+                            {
+                                counter.Value++;
+                            }
+                            return counter.ToApi();
+                        }
+                    )
+            ),
+            new RpcEndpoint<Nothing, Counter>(
+                CounterRpcs.Decrement,
+                async (ctx, _) =>
+                    await ctx.DbTx<DnskDb, Counter>(
+                        async (db, ses) =>
+                        {
+                            var counter = await GetCounter(db, ses);
+                            if (counter.Value > uint.MinValue)
+                            {
+                                counter.Value--;
+                            }
+                            return counter.ToApi();
+                        }
+                    )
+            )
+        };
 }
