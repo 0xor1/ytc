@@ -26,6 +26,8 @@ public static partial class S
     public const string AuthResetPwdHtml = Common.Shared.S.AuthResetPwdHtml;
     public const string AuthResetPwdText = Common.Shared.S.AuthResetPwdText;
     public const string ApiError = Common.Shared.S.ApiError;
+    public const string MinMaxNullArgs = Common.Shared.S.MinMaxNullArgs;
+    public const string MinMaxReversedArgs = Common.Shared.S.MinMaxReversedArgs;
     public const string Dnsk = "dnsk";
     public const string Home = "home";
     public const string L10n = "l10n";

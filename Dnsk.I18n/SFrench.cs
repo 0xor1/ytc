@@ -67,6 +67,8 @@ public static partial class S
             )
         },
         { ApiError, new("Erreur API") },
+        { MinMaxNullArgs, new("Les arguments min et max sont nuls") },
+        { MinMaxReversedArgs, new("Les valeurs Min {{Min}} et Max {{Max}} ne sont pas ordonnées") },
         { Home, new("Maison") },
         { L10n, new("Localisation") },
         { Language, new("Langue") },
