@@ -41,6 +41,30 @@ ON SCHEDULE EVERY 24 HOUR
 STARTS CURRENT_TIMESTAMP + INTERVAL 1 HOUR
 DO DELETE FROM Auths WHERE ActivatedOn=CAST('0001-01-01 00:00:00.000' AS DATETIME(3)) AND VerifyEmailCodeCreatedOn < DATE_SUB(NOW(), INTERVAL 7 DAY);
 
+
+DROP TABLE IF EXISTS FcmRegs;
+CREATE TABLE FcmRegs (
+     Topic VARCHAR(255) NOT NULL,
+     Token VARCHAR(255) NOT NULL,
+     User VARCHAR(22) NOT NULL,
+     Client VARCHAR(22) NOT NULL,
+     CreatedOn DATETIME(3) NOT NULL,
+     FcmEnabled BOOLEAN NOT NULL,
+     Primary KEY (User, Client),
+     UNIQUE INDEX (Client),
+     INDEX(Topic, FcmEnabled, Token),
+     INDEX(CreatedOn)
+);
+
+# cleanup old fcm tokens that were createdOn over 2 days ago
+SET GLOBAL event_scheduler=ON;
+DROP EVENT IF EXISTS FcmTokenCleanup;
+CREATE EVENT FcmTokenCleanup
+ON SCHEDULE EVERY 24 HOUR
+STARTS CURRENT_TIMESTAMP + INTERVAL 1 HOUR
+DO DELETE FROM FcmRegs WHERE CreatedOn < DATE_SUB(NOW(), INTERVAL 2 DAY);
+
+
 DROP TABLE IF EXISTS Counters;
 CREATE TABLE Counters (
     User CHAR(22) NOT NULL,

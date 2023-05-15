@@ -18,8 +18,9 @@ public static class DnskEps
                     (List<IRpcEndpoint>)
                         new AuthEps<DnskDb>(
                             5,
-                            (db, ses) =>
-                                db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync()
+                            (ctx, db, ses) =>
+                                db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync(),
+                            (ctx, db, ses, topic) => Task.CompletedTask
                         ).Eps;
                 eps.AddRange(CounterEps.Eps);
                 _eps = eps;

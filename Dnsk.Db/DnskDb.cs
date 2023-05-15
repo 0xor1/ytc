@@ -10,6 +10,8 @@ public class DnskDb : DbContext, IAuthDb
         : base(opts) { }
 
     public DbSet<Auth> Auths { get; set; } = null!;
+
+    public DbSet<FcmReg> FcmRegs { get; set; } = null!;
     public DbSet<Counter> Counters { get; set; } = null!;
 }
 
