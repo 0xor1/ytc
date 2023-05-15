@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/material-base.css">
     <link href="css/global.css" rel="stylesheet" />
     <link href="Dnsk.Client.styles.css" rel="stylesheet" />
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getMessaging  } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js";
+        const fbConfig = {
+            apiKey: "AIzaSyDfIF8ZL7vXdfXn7ClZfkQj39_2COCnjus",
+            projectId: "dnsk-test",
+            messagingSenderId: "165691055432",
+            appId: "1:165691055432:web:10d77deccb69ed9530a77d",
+        };
+        window.fbVapidKey = "BPj_f1O2tz8ueAPiq1cbBPNVK7vqBD9X8v6XjL2UTk7Jlx7-MvsKliLPepsAW5V6Pt2LX3E72WY2Aamk6BggZU4";
+        const fbApp = initializeApp(fbConfig);
+        window.fbMsg = getMessaging(fbApp);
+    </script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </head>

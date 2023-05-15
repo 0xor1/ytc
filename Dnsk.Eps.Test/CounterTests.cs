@@ -18,7 +18,8 @@ public class CounterTests : IDisposable
     public async Task Counter_Success()
     {
         var (ali, _, _) = await _rpcTestRig.NewApi("ali");
-        var counter = await ali.Counter.Get();
+        var aliSes = await ali.Auth.GetSession();
+        var counter = await ali.Counter.Get(new(aliSes.Id));
         Assert.Equal(0u, counter.Value);
         counter = await ali.Counter.Increment();
         Assert.Equal(1u, counter.Value);

@@ -10,14 +10,18 @@
         <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" class="m-t-0 ta-c f-b">
             @ApiCounter.Value
         </RadzenText>    
-        
-        <RadzenButton ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
-        <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
+        @if (Session.Id == User)
+        {
+            <RadzenButton ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
+        }
     </RadzenCard>
 </div>
 
 @inject L L;
 @inject IApi Api;
+@inject IAuthService Auth;
+@implements IAsyncDisposable;
 @code{
 
     private bool _incrementing = false;
@@ -29,11 +33,21 @@
     [CascadingParameter]
     public ISession Session { get; set; } = Common.Shared.Auth.Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt);
 
-    private ApiCounter ApiCounter { get; set; } = new ApiCounter(0);
+    [Parameter]
+    [EditorRequired]
+    public string User { get; set; } = "";
 
+    private ApiCounter ApiCounter { get; set; } = new ApiCounter("", 0);
+    
+    public async ValueTask DisposeAsync()
+    {
+        await Auth.FcmUnregister();
+    }
+    
     protected override async Task OnInitializedAsync()
     {
-        ApiCounter = await Api.Counter.Get();
+        await Auth.FcmRegister(new () { User });
+        ApiCounter = await Api.Counter.Get(new (User));
     }
 
     private async void Increment()

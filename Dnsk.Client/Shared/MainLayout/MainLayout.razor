@@ -24,7 +24,7 @@
                 <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/"/>
                 @if (_session.IsAuthed)
                 {
-                    <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="/counter"/>
+                    <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")"/>
                 }
             </RadzenPanelMenu>
         </RadzenSidebar>

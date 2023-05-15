@@ -23,6 +23,6 @@ public class Counter
 
     public ApiCounter ToApi()
     {
-        return new ApiCounter(Value);
+        return new ApiCounter(User, Value);
     }
 }

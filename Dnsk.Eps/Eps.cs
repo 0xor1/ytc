@@ -20,7 +20,11 @@ public static class DnskEps
                             5,
                             (ctx, db, ses) =>
                                 db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync(),
-                            (ctx, db, ses, topic) => Task.CompletedTask
+                            (ctx, db, ses, topic) =>
+                            {
+                                ctx.BadRequestIf(topic.Count != 1);
+                                return Task.CompletedTask;
+                            }
                         ).Eps;
                 eps.AddRange(CounterEps.Eps);
                 _eps = eps;

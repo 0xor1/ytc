@@ -9,8 +9,21 @@ namespace Dnsk.Eps;
 
 internal static class CounterEps
 {
-    private static async Task<Db.Counter> GetCounter(DnskDb db, Session ses)
+    private static async Task<Db.Counter> GetCounter(
+        IRpcCtx ctx,
+        DnskDb db,
+        Session ses,
+        Get? req = null
+    )
     {
+        if (req != null && ses.Id != req.User)
+        {
+            // getting arbitrary users counter
+            var c = await db.Counters.SingleOrDefaultAsync(x => x.User == req.User);
+            ctx.NotFoundIf(c == null, model: new { Name = "Counter" });
+            return c.NotNull();
+        }
+        // getting my counter
         var counter = await db.Counters.SingleOrDefaultAsync(x => x.User == ses.Id);
         if (counter == null)
         {
@@ -24,15 +37,16 @@ internal static class CounterEps
     public static IReadOnlyList<IRpcEndpoint> Eps { get; } =
         new List<IRpcEndpoint>()
         {
-            new RpcEndpoint<Nothing, Counter>(
+            new RpcEndpoint<Get, Counter>(
                 CounterRpcs.Get,
-                async (ctx, _) =>
+                async (ctx, req) =>
                     await ctx.DbTx<DnskDb, Counter>(
                         async (db, ses) =>
                         {
-                            var counter = await GetCounter(db, ses);
+                            var counter = await GetCounter(ctx, db, ses, req);
                             return counter.ToApi();
-                        }
+                        },
+                        false
                     )
             ),
             new RpcEndpoint<Nothing, Counter>(
@@ -41,12 +55,15 @@ internal static class CounterEps
                     await ctx.DbTx<DnskDb, Counter>(
                         async (db, ses) =>
                         {
-                            var counter = await GetCounter(db, ses);
+                            var counter = await GetCounter(ctx, db, ses);
                             if (counter.Value < uint.MaxValue)
                             {
                                 counter.Value++;
                             }
-                            return counter.ToApi();
+                            var fcm = ctx.Get<IFcmClient>();
+                            var res = counter.ToApi();
+                            await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
+                            return res;
                         }
                     )
             ),
@@ -56,12 +73,15 @@ internal static class CounterEps
                     await ctx.DbTx<DnskDb, Counter>(
                         async (db, ses) =>
                         {
-                            var counter = await GetCounter(db, ses);
+                            var counter = await GetCounter(ctx, db, ses);
                             if (counter.Value > uint.MinValue)
                             {
                                 counter.Value--;
                             }
-                            return counter.ToApi();
+                            var fcm = ctx.Get<IFcmClient>();
+                            var res = counter.ToApi();
+                            await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
+                            return res;
                         }
                     )
             )

@@ -1,6 +1,13 @@
-﻿@page "/counter"
+﻿@page "/{user}/counter"
 @using Dnsk.I18n
 @using Common.Client
 @inject L L;
 <PageTitle>@L.S(S.Counter)</PageTitle>
-<Counter/>
+<Counter User="@User"/>
+
+@code {
+
+    [Parameter]
+    public string User { get; set; } = "";
+
+}
