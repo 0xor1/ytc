@@ -21,33 +21,47 @@
         const fcmVapidKey = "BPj_f1O2tz8ueAPiq1cbBPNVK7vqBD9X8v6XjL2UTk7Jlx7-MvsKliLPepsAW5V6Pt2LX3E72WY2Aamk6BggZU4";
         const fcmApp = initializeApp(fcmConfig);
         const fcmMsg = getMessaging(fcmApp);
-        let fcmToken = '';
-        let fcmGranted = function(dnObj, callbackMethod){
-            if(fcmToken === '') {
-                getToken(fcmMsg, {vapidKey: fcmVapidKey}).then((token) => {
-                    fcmToken = token;
-                    dnObj.invokeMethodAsync(callbackMethod, token);
-                });
-            } else {
-                dnObj.invokeMethodAsync(callbackMethod, fcmToken);
-            }
-        };
-        let fcmDenied = function(dnObj, callbackMethod){
-            dnObj.invokeMethodAsync(callbackMethod, null);
-        };
-        window.fcmEnable = function(dnObj, callbackMethod){
-            if(Notification.permission === 'granted'){
-                fcmGranted(dnObj, callbackMethod);
-                return;
-            }
-            Notification.requestPermission().then((p) => {
-                if(p === 'granted'){
-                    fcmGranted(dnObj, callbackMethod);
+        const fcmTokenCallback = 'FcmTokenCallback';
+        const fcmNotificationPermissionRemoved = 'FcmNotificationPermissionRemoved';
+        let fcmToken = null;
+        let authService = null;
+        let lastNotificationPermission = Notification.permission;
+        let postPermissionRequest = () => {
+            if(Notification.permission === 'granted') {
+                if (fcmToken === null) {
+                    getToken(fcmMsg, {vapidKey: fcmVapidKey}).then((token) => {
+                        fcmToken = token;
+                        authService.invokeMethodAsync(fcmTokenCallback, token);
+                    });
                 } else {
-                    fcmDenied(dnObj, callbackMethod)
+                    authService.invokeMethodAsync(fcmTokenCallback, fcmToken);
                 }
-            });
+            }
         };
+        
+        window.fcmGetToken = function(dnObj){
+            authService = dnObj;
+            if(Notification.permission === 'granted'){
+                postPermissionRequest();
+            } else {
+                Notification.requestPermission().then((p) => {
+                    postPermissionRequest();
+                }).catch((e)=>{
+                    console.log(e);
+                });
+            }
+        };
+        
+        let pollNotificationPermission = null;
+        pollNotificationPermission = () => {
+            let currentNotificationPermission = Notification.permission;
+            if(authService !== null && lastNotificationPermission === 'granted' && currentNotificationPermission !== 'granted') {
+                lastNotificationPermission = currentNotificationPermission;
+                authService.invokeMethodAsync(fcmNotificationPermissionRemoved);
+            }
+            setTimeout(pollNotificationPermission, 1000);
+        };
+        pollNotificationPermission();
     </script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
