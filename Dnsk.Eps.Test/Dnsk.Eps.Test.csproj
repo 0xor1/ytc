@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-<!--        <PackageReference Include="0xor1.Common.Server" Version="2.1.25" />-->
+        <PackageReference Include="0xor1.Common.Server" Version="2.1.26" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -31,10 +31,6 @@
         <ProjectReference Include="..\Dnsk.Eps\Dnsk.Eps.csproj" />
         <ProjectReference Include="..\Dnsk.I18n\Dnsk.I18n.csproj" />
         <ProjectReference Include="..\Dnsk.Api\Dnsk.Api.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\Common\Common.Server\Common.Server.csproj" />
     </ItemGroup>
 
     <ItemGroup>

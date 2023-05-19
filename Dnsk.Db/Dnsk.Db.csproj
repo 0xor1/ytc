@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-<!--        <PackageReference Include="0xor1.Common.Server" Version="2.1.25" />-->
-<!--        <PackageReference Include="0xor1.Common.Shared" Version="2.1.25" />-->
+        <PackageReference Include="0xor1.Common.Server" Version="2.1.26" />
+        <PackageReference Include="0xor1.Common.Shared" Version="2.1.26" />
         <PackageReference Include="CSharpier.MsBuild" Version="0.22.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,11 +20,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Dnsk.Api\Dnsk.Api.csproj" />
       <ProjectReference Include="..\Dnsk.I18n\Dnsk.I18n.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\Common\Common.Server\Common.Server.csproj" />
-        <ProjectReference Include="..\..\Common\Common.Shared\Common.Shared.csproj" />
     </ItemGroup>
 
 </Project>
