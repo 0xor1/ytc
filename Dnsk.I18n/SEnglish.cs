@@ -12,7 +12,7 @@ public static partial class S
         {
             Dnsk,
             new(
-                "<h1>Hello, Dnsk!</h1><p>Welcome to your new dotnet starter kit.</p><p>You will find:</p><ul><li>Client: a blazor wasm app using radzen ui library</li><li>Server: aspnet with grpc api and entity framework db interface</li></ul>"
+                "<h1>Hello, Dnsk!</h1><p>Welcome to your new dotnet starter kit.</p><p>You will find:</p><ul><li>Client: a blazor wasm app using radzen ui library</li><li>Server: aspnet with rpc pattern api and entity framework db interface</li></ul>"
             )
         },
         { Invalid, new("Invalid") },
