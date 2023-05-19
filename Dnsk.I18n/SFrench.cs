@@ -74,6 +74,7 @@ public static partial class S
         { AuthFcmTopicInvalid, new("Sujet Fcm invalide Min: {{Min}}, Max: {{Max}}") },
         { AuthFcmTokenInvalid, new("Jeton Fcm invalide") },
         { AuthFcmNotEnabled, new("FCM non activé") },
+        { AuthFcmMessageInvalid, new("Message Fcm invalide") },
         { Home, new("Maison") },
         { L10n, new("Localisation") },
         { ToggleLiveUpdates, new("Basculer les mises à jour en direct") },

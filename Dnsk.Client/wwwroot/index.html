@@ -11,7 +11,7 @@
     <link href="Dnsk.Client.styles.css" rel="stylesheet" />
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getMessaging, getToken  } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js";
+        import { getMessaging, getToken, onMessage   } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging.js";
         const fcmConfig = {
             apiKey: "AIzaSyDfIF8ZL7vXdfXn7ClZfkQj39_2COCnjus",
             projectId: "dnsk-test",
@@ -22,6 +22,7 @@
         const fcmApp = initializeApp(fcmConfig);
         const fcmMsg = getMessaging(fcmApp);
         const fcmTokenCallback = 'FcmTokenCallback';
+        const fcmOnMessage = 'FcmOnMessage';
         const fcmNotificationPermissionRemoved = 'FcmNotificationPermissionRemoved';
         let fcmToken = null;
         let authService = null;
@@ -39,8 +40,14 @@
             }
         };
         
-        window.fcmGetToken = function(dnObj){
+        window.fcmInit = (dnObj) => {
             authService = dnObj;
+            onMessage(fcmMsg, (msg) => {
+                authService.invokeMethodAsync(fcmOnMessage, msg);
+            });
+        };
+        
+        window.fcmGetToken = () => {
             if(Notification.permission === 'granted'){
                 postPermissionRequest();
             } else {

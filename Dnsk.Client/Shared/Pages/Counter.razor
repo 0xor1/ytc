@@ -1,6 +1,7 @@
 ﻿@using Common.Client
 @using Common.Shared
 @using Common.Shared.Auth
+@using Newtonsoft.Json
 @using ApiCounter = Api.Counter.Counter
 @using IApi = Dnsk.Api.IApi
 @using S = Dnsk.I18n.S
@@ -46,7 +47,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        await Auth.FcmRegister(new () { User });
+        await Auth.FcmRegister(new () { User }, FcmHandler);
         ApiCounter = await Api.Counter.Get(new (User));
     }
 
@@ -79,6 +80,13 @@
             // call StatHasChanged on errors
         }
         _decrementing = false;
+        StateHasChanged();
+    }
+
+    private void FcmHandler(string data)
+    {
+        ApiCounter = JsonConvert.DeserializeObject<Dnsk.Api.Counter.Counter>(data).NotNull();
+        Console.WriteLine(data);
         StateHasChanged();
     }
 }

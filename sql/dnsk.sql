@@ -51,8 +51,9 @@ CREATE TABLE FcmRegs (
      Client VARCHAR(22) NOT NULL,
      CreatedOn DATETIME(3) NOT NULL,
      FcmEnabled BOOLEAN NOT NULL,
-     Primary KEY (User, Client),
+     Primary KEY (Topic, Token),
      UNIQUE INDEX (Client),
+     INDEX (User, CreatedOn),
      INDEX(Topic, FcmEnabled, Token),
      INDEX(CreatedOn)
 );

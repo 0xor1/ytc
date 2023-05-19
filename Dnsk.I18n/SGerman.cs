@@ -74,6 +74,7 @@ public static partial class S
         { AuthFcmTopicInvalid, new("FCM-Thema ungültig Min: {{Min}}, Max: {{Max}}") },
         { AuthFcmTokenInvalid, new("Fcm-Token ungültig") },
         { AuthFcmNotEnabled, new("FCM nicht aktiviert") },
+        { AuthFcmMessageInvalid, new("Fcm-Nachricht ungültig") },
         { Home, new("Heim") },
         { L10n, new("Lokalisierung") },
         { ToggleLiveUpdates, new("Live-Updates umschalten") },

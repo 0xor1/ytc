@@ -74,6 +74,7 @@ public static partial class S
         { AuthFcmTopicInvalid, new("Argomento Fcm non valido Min: {{Min}}, Max: {{Max}}") },
         { AuthFcmTokenInvalid, new("Token Fcm non valido") },
         { AuthFcmNotEnabled, new("Fcm non abilitato") },
+        { AuthFcmMessageInvalid, new("Messaggio Fcm non valido") },
         { Home, new("Casa") },
         { L10n, new("Localizzazione") },
         { ToggleLiveUpdates, new("Attiva/disattiva gli aggiornamenti in tempo reale") },
