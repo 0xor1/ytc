@@ -19,6 +19,8 @@ public class CounterTests : IDisposable
     {
         var (ali, _, _) = await _rpcTestRig.NewApi("ali");
         var aliSes = await ali.Auth.GetSession();
+        var (bob, _, _) = await _rpcTestRig.NewApi("bob");
+        var bobSes = await bob.Auth.GetSession();
         var counter = await ali.Counter.Get(new(aliSes.Id));
         Assert.Equal(0u, counter.Value);
         counter = await ali.Counter.Increment();
@@ -27,6 +29,12 @@ public class CounterTests : IDisposable
         Assert.Equal(0u, counter.Value);
         counter = await ali.Counter.Decrement();
         Assert.Equal(0u, counter.Value);
+        counter = await bob.Counter.Get(new(aliSes.Id));
+        Assert.Equal(0u, counter.Value);
+        await bob.Auth.FcmEnabled(new(true));
+        await bob.Auth.FcmRegister(new(new List<string>() { aliSes.Id }, "abc", null));
+        counter = await ali.Counter.Increment();
+        Assert.Equal(1u, counter.Value);
     }
 
     public void Dispose()
