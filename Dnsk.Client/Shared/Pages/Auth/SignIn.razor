@@ -1,6 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @using Common.Client
 @using Common.Shared
+@using Common.Shared.Auth
 @using S = Dnsk.I18n.S
 @using AuthValidator = Common.Client.AuthValidator
 <div class="root jc-c ai-c">
@@ -41,6 +42,18 @@
 @inject L L;
 @code{
 
+    
+    [CascadingParameter]
+    public ISession Session { get; set; } = Common.Shared.Auth.Session.Default(S.DefaultLang, S.DefaultDateFmt, S.DefaultTimeFmt);
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (Session.IsAuthed)
+        {
+            Nav.NavigateTo("/");
+        }
+    }
+    
     class Model
     {
         public string Email { get; set; } = "";

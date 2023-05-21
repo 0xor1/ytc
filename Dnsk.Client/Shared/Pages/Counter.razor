@@ -38,17 +38,24 @@
     [EditorRequired]
     public string User { get; set; } = "";
 
+    private string _prevUser = ""; 
+
     private ApiCounter ApiCounter { get; set; } = new ApiCounter("", 0);
     
     public async ValueTask DisposeAsync()
     {
         await Auth.FcmUnregister();
     }
-    
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnAfterRenderAsync(bool isFirst)
     {
-        await Auth.FcmRegister(new () { User }, FcmHandler);
-        ApiCounter = await Api.Counter.Get(new (User));
+        if (User != _prevUser)
+        {
+            _prevUser = User;
+            await Auth.FcmRegister(new() { User }, FcmHandler);
+            ApiCounter = await Api.Counter.Get(new(User));
+            StateHasChanged();
+        }
     }
 
     private async void Increment()
