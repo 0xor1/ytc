@@ -27,7 +27,11 @@ $sub_divs: '', '.25', '.5', '.75';
     }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap');
+
+* {
+    box-sizing: border-box;
+}
 
 html, body, .fill {
     width: 100%;
@@ -37,6 +41,7 @@ html, body, .fill {
     overflow: auto;
     font-family: 'Open Sans', sans-serif;
 }
+
 .root{
     @include genVars(a, rem);
     @include genVars(r, em);
@@ -67,16 +72,29 @@ html, body, .fill {
     .f-b {
         font-weight: 800;
     }
-    .ta-c {
-        text-align: center;
+}
+
+img{
+    &.res-q {
+        width: 25%;
+        height: auto;
     }
-    .ta-s {
-        text-align: start;
+    &.res-h {
+        width: 50%;
+        height: auto;
     }
-    .ta-e {
-        text-align: end;
+    &.res-t {
+        width: 75%;
+        height: auto;
     }
-    .ta-j {
+    &.res-f {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.txt{
+    &.j{
         text-align: justify;
     }
 }
@@ -229,4 +247,17 @@ input.invalid:not(:disabled):not(.rz-state-disabled) {
 // hide profile menu dropdown arrow icon
 div.header > ul.rz-profile-menu > li.rz-navigation-item > div.rz-navigation-item-wrapper > div.rz-navigation-item-link > i.rz-navigation-item-icon-children {
     display: none;
+}
+
+.row-clickable{
+    .rz-data-row{
+        cursor: pointer;
+    }
+}
+.rz-grid-table thead th .rz-column-title{
+    font-weight: 600;
+}
+
+.rz-data-grid{
+    max-width: 100%;
 }
