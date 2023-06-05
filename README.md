@@ -17,5 +17,5 @@ To build and run the app:
 ```bash
 ./bin/run
 ```
-If there has been a db schema change you can pass parameter `nuke` to either `./bin/pre` or `./bin/run` to delete
+You can pass parameter `nuke` to either `./bin/pre` or `./bin/run` to delete
 docker containers and rebuild them, this is typically useful if there has been a db schema change.
