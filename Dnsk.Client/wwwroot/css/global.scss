@@ -93,10 +93,11 @@ img{
     }
 }
 
-.txt{
-    &.j{
-        text-align: justify;
-    }
+.ta-j{
+    text-align: justify;
+}
+.ta-c{
+    text-align: center;
 }
 
 // flex rules
