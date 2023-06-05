@@ -8,7 +8,23 @@ revolving around the primary technologies:
 * Server - Aspnet core Grpc
 * DB - Ef core
 
+
+To build and run unit tests:
 ```bash
 ./bin/pre
 ```
-to start docker containers
+or:
+```bash
+./bin/pre nuke
+```
+to delete all containers and start again, useful if there is a db schema change
+
+To build and run the app:
+```bash
+./bin/run
+```
+or:
+```bash
+./bin/run nuke
+```
+to delete all containers and start again, useful if there is a db schema change
