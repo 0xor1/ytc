@@ -5,7 +5,7 @@ This project is the basic starting point for my dotnet based projects,
 revolving around the primary technologies:
 
 * Client - Blazor WASM
-* Server - Aspnet core Grpc
+* Server - Aspnet core with RPC pattern
 * DB - Ef core
 
 
