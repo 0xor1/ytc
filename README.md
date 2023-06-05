@@ -13,18 +13,9 @@ To build and run unit tests:
 ```bash
 ./bin/pre
 ```
-or:
-```bash
-./bin/pre nuke
-```
-to delete all containers and start again, useful if there is a db schema change
-
 To build and run the app:
 ```bash
 ./bin/run
 ```
-or:
-```bash
-./bin/run nuke
-```
-to delete all containers and start again, useful if there is a db schema change
+If there has been a db schema change you can pass parameter `nuke` to either `./bin/pre` or `./bin/run` to delete
+docker containers and rebuild them, this is typically useful if there has been a db schema change.
