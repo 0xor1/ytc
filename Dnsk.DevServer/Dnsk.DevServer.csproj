@@ -6,12 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
-
-    <ItemGroup>
-        <ProjectReference Include="..\Dnsk.Db\Dnsk.Db.csproj" />
-        <ProjectReference Include="..\Dnsk.Eps\Dnsk.Eps.csproj" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="0xor1.Common.Server" Version="2.1.36" />
         <PackageReference Include="CSharpier.MsBuild" Version="0.22.1">
