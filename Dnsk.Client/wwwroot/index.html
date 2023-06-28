@@ -39,14 +39,14 @@
                 }
             }
         };
-        
+
         window.fcmInit = (dnObj) => {
             authService = dnObj;
             onMessage(fcmMsg, (msg) => {
                 authService.invokeMethodAsync(fcmOnMessage, msg);
             });
         };
-        
+
         window.fcmGetToken = () => {
             if(Notification.permission === 'granted'){
                 postPermissionRequest();
@@ -58,7 +58,7 @@
                 });
             }
         };
-        
+
         let pollNotificationPermission = null;
         pollNotificationPermission = () => {
             let currentNotificationPermission = Notification.permission;
@@ -69,6 +69,10 @@
             setTimeout(pollNotificationPermission, 1000);
         };
         pollNotificationPermission();
+
+        window.writeTextToClipboard = function(text) {
+            navigator.clipboard.writeText(text);
+        };
     </script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
@@ -77,7 +81,7 @@
 <body>
     <div id="app" class="root">
         <div class="root jc-c ai-c">
-            <svg width="25%" height="25%" xmlns="http://www.w3.org/2000/svg"><style>.bar{animation:bar-anim .9s linear infinite;}.bar-a{fill:#f66;animation-delay:0s}.bar-b{fill:#fc5;animation-delay:.1s}.bar-c{fill:#ff6;animation-delay:.2s}.bar-d{fill:#ae5;animation-delay:.3s}.bar-e{fill:#8df;animation-delay:.4s}@keyframes bar-anim{0%,66.66%{animation-timing-function:cubic-bezier(0.36,.61,.3,.98);y:33%;height:33%}33.33%{animation-timing-function:cubic-bezier(0.36,.61,.3,.98);y:0%;height:100%}}</style><rect class="bar bar-a" x="0%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-b" x="21.25%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-c" x="42.5%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-d" x="63.75%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-e" x="85%" y="33%" width="15%" height="33%"></rect></svg>    
+            <svg width="25%" height="25%" xmlns="http://www.w3.org/2000/svg"><style>.bar{animation:bar-anim .9s linear infinite;}.bar-a{fill:#f66;animation-delay:0s}.bar-b{fill:#fc5;animation-delay:.1s}.bar-c{fill:#ff6;animation-delay:.2s}.bar-d{fill:#ae5;animation-delay:.3s}.bar-e{fill:#8df;animation-delay:.4s}@keyframes bar-anim{0%,66.66%{animation-timing-function:cubic-bezier(0.36,.61,.3,.98);y:33%;height:33%}33.33%{animation-timing-function:cubic-bezier(0.36,.61,.3,.98);y:0%;height:100%}}</style><rect class="bar bar-a" x="0%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-b" x="21.25%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-c" x="42.5%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-d" x="63.75%" y="33%" width="15%" height="33%"></rect><rect class="bar bar-e" x="85%" y="33%" width="15%" height="33%"></rect></svg>
         </div>
     </div>
 </body>
