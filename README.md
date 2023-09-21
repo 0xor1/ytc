@@ -8,6 +8,9 @@ revolving around the primary technologies:
 * Server - Aspnet core with RPC pattern
 * DB - Ef core
 
+### Prerequisits
+
+To build and run this project you need `.net core 7`, `docker` and `docker-compose` installed.
 
 To build and run unit tests:
 ```bash
