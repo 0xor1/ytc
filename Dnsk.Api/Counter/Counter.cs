@@ -4,9 +4,9 @@ namespace Dnsk.Api.Counter;
 
 public interface ICounterApi
 {
-    public Task<Counter> Get(Get get);
-    public Task<Counter> Increment();
-    public Task<Counter> Decrement();
+    public Task<Counter> Get(Get get, CancellationToken ctkn = default);
+    public Task<Counter> Increment(CancellationToken ctkn = default);
+    public Task<Counter> Decrement(CancellationToken ctkn = default);
 }
 
 public class CounterApi : ICounterApi
@@ -18,16 +18,19 @@ public class CounterApi : ICounterApi
         _client = client;
     }
 
-    public Task<Counter> Get(Get req) => _client.Do(CounterRpcs.Get, req);
+    public Task<Counter> Get(Get req, CancellationToken ctkn = default) =>
+        _client.Do(CounterRpcs.Get, req, ctkn);
 
-    public Task<Counter> Increment() => _client.Do(CounterRpcs.Increment, Nothing.Inst);
+    public Task<Counter> Increment(CancellationToken ctkn = default) =>
+        _client.Do(CounterRpcs.Increment, Nothing.Inst, ctkn);
 
-    public Task<Counter> Decrement() => _client.Do(CounterRpcs.Decrement, Nothing.Inst);
+    public Task<Counter> Decrement(CancellationToken ctkn = default) =>
+        _client.Do(CounterRpcs.Decrement, Nothing.Inst, ctkn);
 }
 
 public static class CounterRpcs
 {
-    public static readonly Rpc<Get, Counter> Get = new("/counter/get", 1);
+    public static readonly Rpc<Get, Counter> Get = new("/counter/get");
     public static readonly Rpc<Nothing, Counter> Increment = new("/counter/increment");
     public static readonly Rpc<Nothing, Counter> Decrement = new("/counter/decrement");
 }
