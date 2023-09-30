@@ -27,7 +27,7 @@ public class CounterApi : ICounterApi
 
 public static class CounterRpcs
 {
-    public static readonly Rpc<Get, Counter> Get = new("/counter/get");
+    public static readonly Rpc<Get, Counter> Get = new("/counter/get", 1);
     public static readonly Rpc<Nothing, Counter> Increment = new("/counter/increment");
     public static readonly Rpc<Nothing, Counter> Decrement = new("/counter/decrement");
 }
