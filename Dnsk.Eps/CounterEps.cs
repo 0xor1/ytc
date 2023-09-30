@@ -19,16 +19,16 @@ internal static class CounterEps
         if (req != null && ses.Id != req.User)
         {
             // getting arbitrary users counter
-            var c = await db.Counters.SingleOrDefaultAsync(x => x.User == req.User);
+            var c = await db.Counters.SingleOrDefaultAsync(x => x.User == req.User, ctx.Ctkn);
             ctx.NotFoundIf(c == null, model: new { Name = "Counter" });
             return c.NotNull();
         }
         // getting my counter
-        var counter = await db.Counters.SingleOrDefaultAsync(x => x.User == ses.Id);
+        var counter = await db.Counters.SingleOrDefaultAsync(x => x.User == ses.Id, ctx.Ctkn);
         if (counter == null)
         {
             counter = new() { User = ses.Id, Value = 0 };
-            await db.AddAsync(counter);
+            await db.AddAsync(counter, ctx.Ctkn);
         }
 
         return counter;

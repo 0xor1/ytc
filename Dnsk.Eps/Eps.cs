@@ -19,7 +19,9 @@ public static class DnskEps
                         new AuthEps<DnskDb>(
                             5,
                             (ctx, db, ses) =>
-                                db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync(),
+                                db.Counters
+                                    .Where(x => x.User == ses.Id)
+                                    .ExecuteDeleteAsync(ctx.Ctkn),
                             (ctx, db, ses, topic) =>
                             {
                                 ctx.BadRequestIf(topic.Count != 1);
