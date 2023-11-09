@@ -1,5 +1,9 @@
 ﻿{
   "env": "lcl",
+  "client": {
+    "demoMode": true,
+    "repoUrl": "https://github.com/0xor1/dnsk"
+  },
   "server": {
     "listen": "https://localhost:9500"
   },
