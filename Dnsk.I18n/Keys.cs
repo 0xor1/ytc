@@ -35,6 +35,8 @@ public static partial class S
     public const string AuthFcmTokenInvalid = Common.Shared.S.AuthFcmTokenInvalid;
     public const string AuthFcmNotEnabled = Common.Shared.S.AuthFcmNotEnabled;
     public const string AuthFcmMessageInvalid = Common.Shared.S.AuthFcmMessageInvalid;
+    public const string Demo = "demo";
+    public const string DemoTitle = "demo_title";
     public const string Dnsk = "dnsk";
     public const string Home = "home";
     public const string L10n = "l10n";

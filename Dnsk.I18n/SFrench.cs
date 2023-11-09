@@ -9,6 +9,8 @@ public static partial class S
         TemplatableString
     >()
     {
+        { Demo, new("Démo") },
+        { DemoTitle, new("Cette application est uniquement à des fins de démonstration.") },
         {
             Dnsk,
             new(

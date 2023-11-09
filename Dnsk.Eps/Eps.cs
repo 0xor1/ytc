@@ -1,7 +1,6 @@
 ﻿using Common.Server;
 using Common.Server.Auth;
 using Dnsk.Db;
-using Microsoft.EntityFrameworkCore;
 
 namespace Dnsk.Eps;
 
@@ -18,16 +17,11 @@ public static class DnskEps
                     (List<IRpcEndpoint>)
                         new AuthEps<DnskDb>(
                             5,
-                            (ctx, db, ses) =>
-                                db.Counters
-                                    .Where(x => x.User == ses.Id)
-                                    .ExecuteDeleteAsync(ctx.Ctkn),
-                            (ctx, db, ses, topic) =>
-                            {
-                                ctx.BadRequestIf(topic.Count != 1);
-                                return Task.CompletedTask;
-                            }
+                            AppEps.OnAuthActivation,
+                            AppEps.OnAuthDelete,
+                            AppEps.AuthValidateFcmTopic
                         ).Eps;
+                eps.AddRange(AppEps.Eps);
                 eps.AddRange(CounterEps.Eps);
                 _eps = eps;
             }

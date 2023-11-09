@@ -1,6 +1,5 @@
 using Common.Server.Test;
 using Dnsk.Db;
-using IApi = Dnsk.Api.IApi;
 using S = Dnsk.I18n.S;
 
 namespace Dnsk.Eps.Test;
