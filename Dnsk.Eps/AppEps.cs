@@ -15,13 +15,13 @@ internal static class AppEps
         {
             new RpcEndpoint<Nothing, Config>(
                 AppRpcs.GetConfig,
-                async (ctx, req) =>
+                async (ctx, _) =>
                 {
                     await Task.CompletedTask;
                     var conf = ctx.Get<IConfig>();
                     return new Config(conf.Client.DemoMode, conf.Client.RepoUrl);
                 }
-            ),
+            )
         };
 
     public static Task OnAuthActivation(IRpcCtx ctx, DnskDb db, string id, string email) =>
