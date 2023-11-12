@@ -86,4 +86,21 @@ internal static class CounterEps
                     )
             )
         };
+
+    public static Task OnAuthActivation(IRpcCtx ctx, DnskDb db, string id, string email) =>
+        Task.CompletedTask;
+
+    public static Task OnAuthDelete(IRpcCtx ctx, DnskDb db, Session ses) =>
+        db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync(ctx.Ctkn);
+
+    public static Task AuthValidateFcmTopic(
+        IRpcCtx ctx,
+        DnskDb db,
+        Session ses,
+        IReadOnlyList<string> topic
+    )
+    {
+        ctx.BadRequestIf(topic.Count != 1);
+        return Task.CompletedTask;
+    }
 }

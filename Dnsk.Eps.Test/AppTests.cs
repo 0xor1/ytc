@@ -18,7 +18,7 @@ public class AppTests : IDisposable
     {
         var (ali, _, _) = await Rig.NewApi("ali");
         var c = await ali.App.GetConfig();
-        Assert.True(c.IsDemo);
+        Assert.True(c.DemoMode);
         Assert.Equal("https://github.com/0xor1/dnsk", c.RepoUrl);
     }
 

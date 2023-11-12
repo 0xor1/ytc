@@ -15,13 +15,12 @@ public static class DnskEps
             {
                 var eps =
                     (List<IRpcEndpoint>)
-                        new AuthEps<DnskDb>(
+                        new CommonEps<DnskDb>(
                             5,
-                            AppEps.OnAuthActivation,
-                            AppEps.OnAuthDelete,
-                            AppEps.AuthValidateFcmTopic
+                            CounterEps.OnAuthActivation,
+                            CounterEps.OnAuthDelete,
+                            CounterEps.AuthValidateFcmTopic
                         ).Eps;
-                eps.AddRange(AppEps.Eps);
                 eps.AddRange(CounterEps.Eps);
                 _eps = eps;
             }
