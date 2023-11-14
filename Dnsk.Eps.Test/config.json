@@ -4,6 +4,9 @@
     "demoMode": true,
     "repoUrl": "https://github.com/0xor1/dnsk"
   },
+  "auth": {
+    "baseHref": "http://localhost:9500"
+  },
   "server": {
     "listen": "http://localhost:9500",
     "useHttpsRedirection": false
