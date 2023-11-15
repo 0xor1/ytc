@@ -58,10 +58,10 @@
         </RadzenHeader>
         <RadzenSidebar @bind-Expanded="@_leftExpanded">
             <RadzenPanelMenu>
-                <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/"/>
+                <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/" Click="CollapseIfNarrow"/>
                 @if (_session.IsAuthed)
                 {
-                    <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")"/>
+                    <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")" Click="CollapseIfNarrow"/>
                 }
             </RadzenPanelMenu>
         </RadzenSidebar>
@@ -80,7 +80,6 @@
         <RadzenComponents/>
     </RadzenLayout>
 </div>
-@using Common.Client
 @using Common.Shared
 @using Common.Shared.Auth
 @using IApi = Dnsk.Api.IApi
@@ -90,6 +89,7 @@
 @inject IAuthService Auth;
 @inject IApi Api;
 @inject L L;
+@inject IJSRuntime Js;
 @code{
 
     private bool _leftExpanded;
@@ -113,6 +113,13 @@
     private async void ToggleLiveUI()
     {
         await Auth.FcmEnabled(!_session.FcmEnabled);
+    }
+
+    private async Task CollapseIfNarrow(MouseEventArgs args)
+    {
+        var width = await Js.InvokeAsync<decimal>("getWidth");
+        if(width < 50)
+            _leftExpanded = false;
     }
 
 }
