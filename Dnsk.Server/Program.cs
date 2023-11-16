@@ -3,4 +3,4 @@ using Dnsk.Db;
 using Dnsk.Eps;
 using Dnsk.I18n;
 
-Server.Run<DnskDb>(args, S.Inst, DnskEps.Eps);
+Server.Run<DnskDb, Dnsk.Client.Host>(args, S.Inst, DnskEps.Eps);

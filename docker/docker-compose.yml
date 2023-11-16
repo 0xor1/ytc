@@ -16,7 +16,7 @@ services:
 
   dnsk-testall-redis:
     container_name: dnsk-testall-redis
-    image: redis:7.0.4-alpine
+    image: redis:7.2.3-alpine
     networks:
       - dnsk
     ports:
@@ -24,7 +24,7 @@ services:
 
   dnsk-testall-minio:
     container_name: dnsk-testall-minio
-    image: minio/minio:RELEASE.2022-09-17T00-09-45Z
+    image: minio/minio:RELEASE.2023-11-15T20-43-25Z
     networks:
       - dnsk
     environment:

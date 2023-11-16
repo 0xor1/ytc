@@ -1,3 +1,3 @@
 using Common.Server;
 
-DevServer.Run(args);
+DevServer.Run<Dnsk.Client.Host>(args);
