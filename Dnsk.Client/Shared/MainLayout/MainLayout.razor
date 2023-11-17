@@ -13,14 +13,14 @@
                 </RadzenPanelMenu>
             </RadzenSidebar>
             <RadzenBody class="root rz-background-color-base-100">
-                    @if (_ready)
-                    {
-                        @Body
-                    }
-                    else
-                    {
-                        <p>@L.S(CS.LoadingSession)</p>
-                    }
+                @if (_ready)
+                {
+                    @Body
+                }
+                else
+                {
+                    <p>@L.S(CS.LoadingSession)</p>
+                }
             </RadzenBody>
             <RadzenComponents/>
         </CascadingValue>
