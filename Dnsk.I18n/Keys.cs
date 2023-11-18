@@ -4,7 +4,7 @@
 namespace Dnsk.I18n;
 
 public static partial class S
-{ 
+{
     public const string Counter = "counter";
     public const string Decrement = "decrement";
     public const string Decrementing = "decrementing";
