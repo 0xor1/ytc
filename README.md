@@ -1,6 +1,8 @@
 Dnsk - dotnet starter kit
 =========================
 
+[LIVE DEMO](https://dnsk.dans-demos.com)
+
 This project is the basic starting point for my dotnet based projects, 
 revolving around the primary technologies:
 
@@ -10,7 +12,7 @@ revolving around the primary technologies:
 
 ### Prerequisites
 
-To build and run this project you need `.net core 7`, `docker` and `docker-compose` installed.
+To build and run this project you need `.net core 8`, `docker` and `docker-compose` installed.
 
 To build and run unit tests:
 ```bash
