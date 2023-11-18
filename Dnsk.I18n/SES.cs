@@ -7,10 +7,7 @@ namespace Dnsk.I18n;
 
 public static partial class S
 {
-    private static readonly IReadOnlyDictionary<string, TemplatableString> ES_Strings = new Dictionary<
-        string,
-        TemplatableString
-    >()
+    private static readonly Dictionary<string, TemplatableString> ES_Strings = new ()
     { 
         { Counter, new("Contador") },
         { Decrement, new("Decremento") },
