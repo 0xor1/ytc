@@ -1,30 +1,30 @@
 ﻿<div class="root col">
-    <DemoBanner/>
-    <RadzenLayout class="rz-shadow-3 grow-1">
-        <CascadingValue Value="@_session">
-            <AppHeader @bind-LeftExpanded="_leftExpanded"/>
-            <RadzenSidebar @bind-Expanded="@_leftExpanded">
-                <RadzenPanelMenu>
-                    <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/" Click="CollapseIfNarrow"/>
-                    @if (_session.IsAuthed)
+    <CascadingValue Value="@_session">
+        <DemoBanner/>
+        <RadzenLayout class="rz-shadow-3 grow-1">
+                <AppHeader @bind-LeftExpanded="_leftExpanded"/>
+                <RadzenSidebar @bind-Expanded="@_leftExpanded">
+                    <RadzenPanelMenu>
+                        <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/" Click="CollapseIfNarrow"/>
+                        @if (_session.IsAuthed)
+                        {
+                            <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")" Click="CollapseIfNarrow"/>
+                        }
+                    </RadzenPanelMenu>
+                </RadzenSidebar>
+                <RadzenBody class="root rz-background-color-base-100">
+                    @if (_ready)
                     {
-                        <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")" Click="CollapseIfNarrow"/>
+                        @Body
                     }
-                </RadzenPanelMenu>
-            </RadzenSidebar>
-            <RadzenBody class="root rz-background-color-base-100">
-                @if (_ready)
-                {
-                    @Body
-                }
-                else
-                {
-                    <p>@L.S(CS.LoadingSession)</p>
-                }
-            </RadzenBody>
-            <RadzenComponents/>
-        </CascadingValue>
-    </RadzenLayout>
+                    else
+                    {
+                        <p>@L.S(CS.LoadingSession)</p>
+                    }
+                </RadzenBody>
+                <RadzenComponents/>
+        </RadzenLayout>
+    </CascadingValue>
 </div>
 @using Common.Client.Layout
 @using Common.Shared.Auth
