@@ -17,7 +17,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 if [ "$1" == "gh-actions" ]; then 
   curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz
-  coveralls report
+  ./coveralls report
 else
   dotnet tool install -g dotnet-reportgenerator-globaltool
   rm -r test_coverage
