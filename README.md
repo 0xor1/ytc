@@ -1,6 +1,7 @@
 Dnsk - dotnet starter kit
 =========================
-
+![Build Status](https://github.com/0xor1/dnsk/actions/workflows/build_and_test.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/0xor1/dnsk/badge.svg)](https://coveralls.io/github/0xor1/dnsk)
 [LIVE DEMO](https://dnsk.dans-demos.com)
 
 This project is the basic starting point for my dotnet based projects, 
