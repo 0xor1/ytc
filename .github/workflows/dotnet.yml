@@ -20,5 +20,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+    - name: Chmod +x
+      run: chmod +x ./bin/pre
     - name: Run
       run: ./bin/pre gh-actions
