@@ -15,7 +15,10 @@ docker-compose -f docker/docker-compose.yml up -d
 dotnet build
 dotnet test --collect:"XPlat Code Coverage"
 
-if [ "$1" != "gh-actions" ]; then 
+if [ "$1" == "gh-actions" ]; then 
+  curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz
+  coveralls report
+else
   dotnet tool install -g dotnet-reportgenerator-globaltool
   rm -r test_coverage
   reportgenerator -reports:"*\TestResults\*\coverage.cobertura.xml " -classfilters:"-System.Text.RegularExpressions.Generated" -targetdir:"test_coverage" -reporttypes:Html
