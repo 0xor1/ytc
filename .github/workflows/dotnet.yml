@@ -21,7 +21,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Chmod +x
-      run: chmod +x ./bin/pre
+      run: chmod +x ./bin/pre && chmod +x ./bin/wait-for-it
     - name: Run
       run: ./bin/pre gh-actions
       env:
