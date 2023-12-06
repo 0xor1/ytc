@@ -17,9 +17,8 @@ dotnet test --no-build --blame-hang-timeout 600000 -v n -p:CollectCoverage="true
 
 if [ "$1" == "gh-actions" ]; then 
   curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz
-  ./coveralls report Dnsk.Client.Test/coverage.cobertura.xml --parallel --build-number 1
-  ./coveralls report Dnsk.Eps.Test/coverage.cobertura.xml --parallel --build-number 1
-  ./coveralls done --build-number 1
+  #./coveralls report Dnsk.Client.Test/coverage.cobertura.xml
+  ./coveralls report Dnsk.Eps.Test/coverage.cobertura.xml
 else
   dotnet tool install -g dotnet-reportgenerator-globaltool
   rm -r test_coverage
