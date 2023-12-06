@@ -1,5 +1,6 @@
 ﻿using Common.Server;
 using Common.Shared;
+using Common.Shared.Auth;
 using Dnsk.Api.Counter;
 using Dnsk.Db;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ internal static class CounterEps
     private static async Task<Db.Counter> GetCounter(
         IRpcCtx ctx,
         DnskDb db,
-        Session ses,
+        ISession ses,
         Get? req = null
     )
     {
@@ -90,13 +91,13 @@ internal static class CounterEps
     public static Task OnAuthActivation(IRpcCtx ctx, DnskDb db, string id, string email) =>
         Task.CompletedTask;
 
-    public static Task OnAuthDelete(IRpcCtx ctx, DnskDb db, Session ses) =>
+    public static Task OnAuthDelete(IRpcCtx ctx, DnskDb db, ISession ses) =>
         db.Counters.Where(x => x.User == ses.Id).ExecuteDeleteAsync(ctx.Ctkn);
 
     public static Task AuthValidateFcmTopic(
         IRpcCtx ctx,
         DnskDb db,
-        Session ses,
+        ISession ses,
         IReadOnlyList<string> topic
     )
     {

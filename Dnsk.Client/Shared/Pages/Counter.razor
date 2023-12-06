@@ -8,13 +8,13 @@
 
 <div class="root jc-c ai-c">
     <RadzenCard class="p-3 w-25 flx col ai-stretch g-1">
-        <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" class="m-t-0 txt-c f-b">
+        <RadzenText TextStyle="TextStyle.H1" TagName="TagName.H2" class="val m-t-0 txt-c f-b">
             @L.I((int)ApiCounter.Value)
         </RadzenText>    
         @if (Session.Id == User)
         {
-            <RadzenButton ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
-            <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
+            <RadzenButton class="increment" ButtonStyle="ButtonStyle.Info" ButtonType="ButtonType.Button" BusyText="@L.S(S.Incrementing)" IsBusy="_incrementing" Text="@L.S(S.Increment)" Disabled="!CanIncrement" Click="Increment"/>
+            <RadzenButton class="decrement" ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" BusyText="@L.S(S.Decrementing)" IsBusy="_decrementing" Text="@L.S(S.Decrement)" Disabled="!CanDecrement" Click="Decrement"/>
         }
     </RadzenCard>
 </div>
@@ -65,13 +65,11 @@
         {
             ApiCounter = await Api.Counter.Increment();
         }
-        catch
+        finally
         {
-            // use empty catch to avoid having to
-            // call StatHasChanged on errors
+            _incrementing = false;
+            StateHasChanged();
         }
-        _incrementing = false;
-        StateHasChanged();
     }
     
     private async void Decrement()
@@ -81,13 +79,11 @@
         {
             ApiCounter = await Api.Counter.Decrement();
         }
-        catch
+        finally
         {
-            // use empty catch to avoid having to
-            // call StatHasChanged on errors
+            _decrementing = false;
+            StateHasChanged();
         }
-        _decrementing = false;
-        StateHasChanged();
     }
 
     private void FcmHandler(string data)
