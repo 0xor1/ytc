@@ -5,10 +5,10 @@
                 <AppHeader @bind-LeftExpanded="_leftExpanded"/>
                 <RadzenSidebar @bind-Expanded="@_leftExpanded">
                     <RadzenPanelMenu>
-                        <RadzenPanelMenuItem Text="@L.S(S.Home)" Icon="home" Path="/" Click="CollapseIfNarrow"/>
+                        <RadzenPanelMenuItem class="goto-home" Text="@L.S(S.Home)" Icon="home" Path="/" Click="CollapseIfNarrow"/>
                         @if (_session.IsAuthed)
                         {
-                            <RadzenPanelMenuItem Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")" Click="CollapseIfNarrow"/>
+                            <RadzenPanelMenuItem class="goto-my-counter" Text="@L.S(S.Counter)" Icon="star" Path="@($"/{_session.Id}/counter")" Click="CollapseIfNarrow"/>
                         }
                     </RadzenPanelMenu>
                 </RadzenSidebar>
@@ -49,7 +49,7 @@
     private void OnSessionChanged(ISession s)
     {
         _session = s;
-        StateHasChanged();
+        InvokeAsync(StateHasChanged).Wait();
     }
 
     private async Task CollapseIfNarrow(MouseEventArgs args)

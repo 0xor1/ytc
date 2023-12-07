@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Dnsk.Client.Test;
 
-public class CounterTests : BaseTests
+public class CounterTest : TestBase
 {
     [Fact]
     public async Task Increment_And_Decrement_Success()
