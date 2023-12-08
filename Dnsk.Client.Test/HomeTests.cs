@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Dnsk.Client.Test;
 
-public class HomeTest : TestBase
+public class HomeTests : TestBase
 {
     [Fact]
     public async Task Anon_Success()
