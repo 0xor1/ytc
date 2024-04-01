@@ -35,10 +35,10 @@ internal static class CounterEps
         return counter;
     }
 
-    public static IReadOnlyList<IRpcEndpoint> Eps { get; } =
-        new List<IRpcEndpoint>()
+    public static IReadOnlyList<IEp> Eps { get; } =
+        new List<IEp>()
         {
-            new RpcEndpoint<Get, Counter>(
+            new Ep<Get, Counter>(
                 CounterRpcs.Get,
                 async (ctx, req) =>
                     await ctx.DbTx<DnskDb, Counter>(
@@ -50,7 +50,7 @@ internal static class CounterEps
                         false
                     )
             ),
-            new RpcEndpoint<Nothing, Counter>(
+            new Ep<Nothing, Counter>(
                 CounterRpcs.Increment,
                 async (ctx, _) =>
                     await ctx.DbTx<DnskDb, Counter>(
@@ -68,7 +68,7 @@ internal static class CounterEps
                         }
                     )
             ),
-            new RpcEndpoint<Nothing, Counter>(
+            new Ep<Nothing, Counter>(
                 CounterRpcs.Decrement,
                 async (ctx, _) =>
                     await ctx.DbTx<DnskDb, Counter>(

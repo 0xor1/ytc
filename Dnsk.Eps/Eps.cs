@@ -6,15 +6,15 @@ namespace Dnsk.Eps;
 
 public static class DnskEps
 {
-    private static IReadOnlyList<IRpcEndpoint>? _eps;
-    public static IReadOnlyList<IRpcEndpoint> Eps
+    private static IReadOnlyList<IEp>? _eps;
+    public static IReadOnlyList<IEp> Eps
     {
         get
         {
             if (_eps == null)
             {
                 var eps =
-                    (List<IRpcEndpoint>)
+                    (List<IEp>)
                         new CommonEps<DnskDb>(
                             5,
                             CounterEps.OnAuthActivation,
