@@ -38,53 +38,44 @@ internal static class CounterEps
     public static IReadOnlyList<IEp> Eps { get; } =
         new List<IEp>()
         {
-            new Ep<Get, Counter>(
+            Ep<Get, Counter>.DbTx<DnskDb>(
                 CounterRpcs.Get,
-                async (ctx, req) =>
-                    await ctx.DbTx<DnskDb, Counter>(
-                        async (db, ses) =>
-                        {
-                            var counter = await GetCounter(ctx, db, ses, req);
-                            return counter.ToApi();
-                        },
-                        false
-                    )
+                async (ctx, db, ses, req) =>
+                {
+                    var counter = await GetCounter(ctx, db, ses, req);
+                    return counter.ToApi();
+                },
+                false
             ),
-            new Ep<Nothing, Counter>(
+            Ep<Nothing, Counter>.DbTx<DnskDb>(
                 CounterRpcs.Increment,
-                async (ctx, _) =>
-                    await ctx.DbTx<DnskDb, Counter>(
-                        async (db, ses) =>
-                        {
-                            var counter = await GetCounter(ctx, db, ses);
-                            if (counter.Value < uint.MaxValue)
-                            {
-                                counter.Value++;
-                            }
-                            var fcm = ctx.Get<IFcmClient>();
-                            var res = counter.ToApi();
-                            await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
-                            return res;
-                        }
-                    )
+                async (ctx, db, ses, _) =>
+                {
+                    var counter = await GetCounter(ctx, db, ses);
+                    if (counter.Value < uint.MaxValue)
+                    {
+                        counter.Value++;
+                    }
+                    var fcm = ctx.Get<IFcmClient>();
+                    var res = counter.ToApi();
+                    await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
+                    return res;
+                }
             ),
-            new Ep<Nothing, Counter>(
+            Ep<Nothing, Counter>.DbTx<DnskDb>(
                 CounterRpcs.Decrement,
-                async (ctx, _) =>
-                    await ctx.DbTx<DnskDb, Counter>(
-                        async (db, ses) =>
-                        {
-                            var counter = await GetCounter(ctx, db, ses);
-                            if (counter.Value > uint.MinValue)
-                            {
-                                counter.Value--;
-                            }
-                            var fcm = ctx.Get<IFcmClient>();
-                            var res = counter.ToApi();
-                            await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
-                            return res;
-                        }
-                    )
+                async (ctx, db, ses, req) =>
+                {
+                    var counter = await GetCounter(ctx, db, ses);
+                    if (counter.Value > uint.MinValue)
+                    {
+                        counter.Value--;
+                    }
+                    var fcm = ctx.Get<IFcmClient>();
+                    var res = counter.ToApi();
+                    await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
+                    return res;
+                }
             )
         };
 
