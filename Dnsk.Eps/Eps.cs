@@ -17,6 +17,8 @@ public static class DnskEps
                     (List<IEp>)
                         new CommonEps<DnskDb>(
                             5,
+                            true,
+                            5,
                             CounterEps.OnAuthActivation,
                             CounterEps.OnAuthDelete,
                             CounterEps.AuthValidateFcmTopic
