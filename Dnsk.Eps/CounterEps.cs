@@ -10,6 +10,51 @@ namespace Dnsk.Eps;
 
 internal static class CounterEps
 {
+    public static IReadOnlyList<IEp> Eps { get; } =
+        new List<IEp>()
+        {
+            Ep<Get, Counter>.DbTx<DnskDb>(CounterRpcs.Get, Get, false),
+            Ep<Nothing, Counter>.DbTx<DnskDb>(CounterRpcs.Increment, Increment),
+            Ep<Nothing, Counter>.DbTx<DnskDb>(CounterRpcs.Decrement, Decrement)
+        };
+
+    private static async Task<Counter> Get(IRpcCtx ctx, DnskDb db, ISession ses, Get req)
+    {
+        var counter = await GetCounter(ctx, db, ses, req);
+        return counter.ToApi();
+    }
+
+    private static async Task<Counter> Increment(
+        IRpcCtx ctx,
+        DnskDb db,
+        ISession ses,
+        Nothing req
+    ) => await Crement(ctx, db, ses, true);
+
+    private static async Task<Counter> Decrement(
+        IRpcCtx ctx,
+        DnskDb db,
+        ISession ses,
+        Nothing req
+    ) => await Crement(ctx, db, ses, false);
+
+    private static async Task<Counter> Crement(IRpcCtx ctx, DnskDb db, ISession ses, bool up)
+    {
+        var counter = await GetCounter(ctx, db, ses);
+        if (up && counter.Value < uint.MaxValue)
+        {
+            counter.Value++;
+        }
+        else if (!up && counter.Value > uint.MinValue)
+        {
+            counter.Value--;
+        }
+        var fcm = ctx.Get<IFcmClient>();
+        var res = counter.ToApi();
+        await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
+        return res;
+    }
+
     private static async Task<Db.Counter> GetCounter(
         IRpcCtx ctx,
         DnskDb db,
@@ -34,50 +79,6 @@ internal static class CounterEps
 
         return counter;
     }
-
-    public static IReadOnlyList<IEp> Eps { get; } =
-        new List<IEp>()
-        {
-            Ep<Get, Counter>.DbTx<DnskDb>(
-                CounterRpcs.Get,
-                async (ctx, db, ses, req) =>
-                {
-                    var counter = await GetCounter(ctx, db, ses, req);
-                    return counter.ToApi();
-                },
-                false
-            ),
-            Ep<Nothing, Counter>.DbTx<DnskDb>(
-                CounterRpcs.Increment,
-                async (ctx, db, ses, _) =>
-                {
-                    var counter = await GetCounter(ctx, db, ses);
-                    if (counter.Value < uint.MaxValue)
-                    {
-                        counter.Value++;
-                    }
-                    var fcm = ctx.Get<IFcmClient>();
-                    var res = counter.ToApi();
-                    await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
-                    return res;
-                }
-            ),
-            Ep<Nothing, Counter>.DbTx<DnskDb>(
-                CounterRpcs.Decrement,
-                async (ctx, db, ses, req) =>
-                {
-                    var counter = await GetCounter(ctx, db, ses);
-                    if (counter.Value > uint.MinValue)
-                    {
-                        counter.Value--;
-                    }
-                    var fcm = ctx.Get<IFcmClient>();
-                    var res = counter.ToApi();
-                    await fcm.SendTopic(ctx, db, ses, new List<string>() { ses.Id }, res);
-                    return res;
-                }
-            )
-        };
 
     public static Task OnAuthActivation(IRpcCtx ctx, DnskDb db, string id, string email) =>
         Task.CompletedTask;
