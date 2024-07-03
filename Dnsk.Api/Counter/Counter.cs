@@ -1,4 +1,5 @@
 ﻿using Common.Shared;
+using MessagePack;
 
 namespace Dnsk.Api.Counter;
 
@@ -35,6 +36,8 @@ public static class CounterRpcs
     public static readonly Rpc<Nothing, Counter> Decrement = new("/counter/decrement");
 }
 
-public record Counter(string User, uint Value);
+[MessagePackObject]
+public record Counter([property: Key(0)] string User, [property: Key(1)] uint Value);
 
-public record Get(string User);
+[MessagePackObject]
+public record Get([property: Key(0)] string User);
