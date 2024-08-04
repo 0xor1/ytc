@@ -1,6 +1,6 @@
 // Generated Code File, Do Not Edit.
-// This file is generated with Common.Cmds.
-// see https://github.com/0xor1/common/blob/main/Common.Cmds/I18n.cs
+// This file is generated with Common.Cli.
+// see https://github.com/0xor1/common/blob/main/Common.Cli/I18n.cs
 // executed with arguments: i18n <abs_file_path_to>/Dnsk.I18n Dnsk.I18n false 
 
 namespace Dnsk.I18n;
