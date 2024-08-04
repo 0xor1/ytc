@@ -21,8 +21,5 @@ public class Counter
     public string User { get; set; }
     public uint Value { get; set; }
 
-    public ApiCounter ToApi()
-    {
-        return new ApiCounter(User, Value);
-    }
+    public ApiCounter ToApi() => new(User, Value);
 }

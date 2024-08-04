@@ -62,7 +62,7 @@ internal static class CounterEps
         Get? req = null
     )
     {
-        if (req != null && ses.Id != req.User)
+        if (req != null && req.User != null && ses.Id != req.User)
         {
             // getting arbitrary users counter
             var c = await db.Counters.SingleOrDefaultAsync(x => x.User == req.User, ctx.Ctkn);

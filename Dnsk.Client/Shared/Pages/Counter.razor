@@ -38,9 +38,9 @@
     [EditorRequired]
     public string User { get; set; } = "";
 
-    private string _prevUser = ""; 
+    private string _prevUser = "";
 
-    private ApiCounter ApiCounter { get; set; } = new ApiCounter("", 0);
+    private ApiCounter ApiCounter { get; set; } = new ("", 0);
     
     public async ValueTask DisposeAsync()
     {
