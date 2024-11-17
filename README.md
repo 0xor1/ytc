@@ -1,15 +1,16 @@
-Dnsk - dotnet starter kit
-=========================
-[![Build Status](https://github.com/0xor1/dnsk/actions/workflows/build.yml/badge.svg)](https://github.com/0xor1/dnsk/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/github/0xor1/dnsk/badge.svg)](https://coveralls.io/github/0xor1/dnsk)
-[![Demo Live](https://img.shields.io/badge/demo-live-4ec820)](https://dnsk.dans-demos.com)
+Ytc - YouTubeContained
+======================
+[![Build Status](https://github.com/0xor1/ytc/actions/workflows/build.yml/badge.svg)](https://github.com/0xor1/ytc/actions/workflows/build.yml)
+[![Coverage Status](https://coveralls.io/repos/github/0xor1/ytc/badge.svg)](https://coveralls.io/github/0xor1/ytc)
+[![Demo Live](https://img.shields.io/badge/demo-live-4ec820)](https://ytc.dans-demos.com)
 
-This project is the basic starting point for my dotnet based projects, 
-revolving around the primary technologies:
+YouTubeContained is a YT wrapper app that aims to make YT a safer healthier app to use:
 
-* Client - Blazor WASM
-* Server - Aspnet core with RPC pattern
-* DB - Ef core
+* Whilst watching a video no other UI is shown, this prevents getting distracted whilst watching, by either comments or other video suggestions
+* Comments and Shorts will never be shown
+* Search results UI can be configured to hide any info the user doesn't want including thumbnails to reduce clickbait exposure
+* Search will have ability to filter on time ranges as well as key words
+* no homescreen with "suggestions"
 
 ### Prerequisites
 
